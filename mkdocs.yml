@@ -1,0 +1,36 @@
+site_name: PyRho Documentation
+site_description: Documentation for pyRho
+copyright: Built by The Materials Project
+
+theme:
+  name: 'material'
+
+nav:
+  - Home: index.md
+  - Core Concepts: concepts.md
+  - Getting Started:
+    - Jupyter Setup: getting_started/jupyter_setup.md
+  - Reference:
+      core: reference/core.md
+      vis: reference/vis.md
+
+repo_url: https://github.com/jmmshn/pyRho/
+docs_dir: ./src/docs
+markdown_extensions:
+  - admonition
+  - codehilite
+  - attr_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex
+
+plugins:
+  - search
+  - minify
+  - mkdocstrings
+
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'

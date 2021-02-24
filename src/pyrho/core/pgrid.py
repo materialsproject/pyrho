@@ -5,7 +5,6 @@ from typing import List, Union
 import numpy as np
 from monty.json import MSONable
 from pyrho.core.utils import (
-    roll_array,
     get_sc_interp,
     interpolate_fourier,
     get_ucell_frac_fit_sphere,
@@ -33,7 +32,11 @@ class PGrid(MSONable):
         self.ngridpts = np.prod(self.grid_shape)
 
     def get_transformed_data(
-        self, sc_mat: np.ndarray, frac_shift: np.ndarray, grid_out: List[int]
+        self,
+        sc_mat: np.ndarray,
+        frac_shift: np.ndarray,
+        grid_out: List[int],
+        up_sample: int = 1,
     ) -> np.ndarray:
         """
         Apply a transformation to the grid data
@@ -41,7 +44,8 @@ class PGrid(MSONable):
         is applied to the lattice vectors.
         Args:
             sc_mat: matrix transformation applied to the lattice vectors
-            frac_shift: shift the lattice in fractional coordinates of the output cell
+            frac_shift: shift the lattice in fractional coordinates of the input cell
+            up_sample: the factor to scale up the sampling of the grid data
 
         sc_mat  --->  [2, 1]    trans  --->  [0.1, 0.3]
                       [0, 1]
@@ -53,31 +57,50 @@ class PGrid(MSONable):
             transformed data
 
         """
-        _, new_rho = get_sc_interp(self.grid_data, sc_mat, grid_sizes=grid_out)
+        if up_sample == 1:
+            interp_grid_data = self.grid_data
+        else:
+            interp_grid_data = interpolate_fourier(
+                arr_in=self.grid_data,
+                shape=[g_dim_ * up_sample for g_dim_ in self.grid_data.shape],
+            )
+
+        _, new_rho = get_sc_interp(
+            interp_grid_data, sc_mat, grid_sizes=grid_out, origin=frac_shift
+        )
         new_rho = new_rho.reshape(grid_out)
 
-        grid_shifts = [
-            int(t * g) for t, g in zip(frac_shift - np.round(frac_shift), grid_out)
-        ]
-
-        new_rho = roll_array(new_rho, grid_shifts)
+        # TODO make this part of the original transformation
+        # grid_shifts = [
+        #     int(t * g) for t, g in zip(frac_shift - np.round(frac_shift), grid_out)
+        # ]
+        #
+        # new_rho = roll_array(new_rho, grid_shifts)
 
         return new_rho
 
     def get_transformed_obj(
-        self, sc_mat: np.ndarray, frac_shift: List[float], grid_out: List[int]
+        self,
+        sc_mat: np.ndarray,
+        frac_shift: List[float],
+        grid_out: List[int],
+        up_sample: int = 1,
     ) -> "PGrid":
         """
         Get a new PGrid object for the new transformed data
         Args:
             sc_mat: matrix transformation applied to the lattice vectors
             frac_shift: shift the lattice in fractional coordinates of the output cell
+            grid_out: The size of the output grid to interpolate on
+            up_sample: the factor to scale up the sampling of the grid data
 
         Returns:
             New PGrid object
         """
-        new_data = self.get_transformed_data(sc_mat, frac_shift, grid_out=grid_out)
-        new_lattice = np.matmul(sc_mat, np.array(self.lattice).T)
+        new_data = self.get_transformed_data(
+            sc_mat, frac_shift, grid_out=grid_out, up_sample=up_sample
+        )
+        new_lattice = np.dot(sc_mat, self.lattice)
         return PGrid(grid_data=new_data, lattice=new_lattice)
 
     def gaussian_smear(

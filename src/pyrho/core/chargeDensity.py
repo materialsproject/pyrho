@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Main module."""
+"""Chang Density Objects: Periodic Grid + Lattice / Atoms"""
 import math
 from abc import ABCMeta, abstractmethod
 from typing import Dict, List, Union, Iterable

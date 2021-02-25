@@ -4,6 +4,7 @@ from typing import Iterable, List, Tuple
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
+
 def pad_arr(arr_in: np.ndarray, shape: List[int]) -> np.ndarray:
     """
     Padding a function on a hypercube.
@@ -49,10 +50,7 @@ def pad_arr(arr_in: np.ndarray, shape: List[int]) -> np.ndarray:
 
     dimensions = arr_in.shape
     boundaries = [
-        (
-            int(np.ceil(min(i_dim, j_dim) + 1) / 2.0),
-            int(np.floor(min(i_dim, j_dim)) / 2.0),
-        )
+        (int(np.ceil(min(i_dim, j_dim) + 1) / 2.0), int(np.floor(min(i_dim, j_dim)) / 2.0),)
         for i_dim, j_dim in zip(dimensions, shape)
     ]
     dim = len(dimensions)
@@ -118,11 +116,7 @@ def roll_array(arr: np.ndarray, roll_vec: List[int]) -> np.ndarray:
 
 
 def get_sc_interp(
-    data_in: np.ndarray,
-    sc_mat: np.ndarray,
-    grid_sizes: List[int],
-    scipy_interp_method="linear",
-    origin: tuple = None,
+    data_in: np.ndarray, sc_mat: np.ndarray, grid_sizes: List[int], scipy_interp_method="linear", origin: tuple = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Take a data array defined on a regular lattice and a new set of lattice
@@ -163,9 +157,7 @@ def get_sc_interp(
         uc_vecs, padded_data, method=scipy_interp_method
     )  # input data from CHGCAR requires transpose
     grid_vec = [np.linspace(0, 1, isize, endpoint=False) for isize in grid_sizes]
-    frac_coords = np.meshgrid(
-        *grid_vec, indexing="ij"
-    )  # indexing to match the labeled array
+    frac_coords = np.meshgrid(*grid_vec, indexing="ij")  # indexing to match the labeled array
     frac_coords = np.vstack([icoord.flatten() for icoord in frac_coords])
 
     sc_coord = np.dot(np.array(sc_mat).T, frac_coords)  # shape (dim, NGRID)
@@ -193,9 +185,7 @@ def get_padded_array(data_in: np.ndarray) -> np.ndarray:
         for i in range(len(data_in.shape))
     ]
     for idim, islice in enumerate(slice_arr):
-        padded_data = np.concatenate(
-            (padded_data, padded_data[tuple(islice)]), axis=idim
-        )
+        padded_data = np.concatenate((padded_data, padded_data[tuple(islice)]), axis=idim)
     return padded_data
 
 
@@ -218,10 +208,7 @@ def get_plane_spacing(lattice: np.ndarray) -> Iterable[float]:
     ndim = len(lattice)
     idx_pairs = [*combinations(range(ndim), 2)]
     latt_len = [np.linalg.norm(lattice[i]) for i in range(ndim)]
-    pproj = {
-        (i, j): np.dot(lattice[i], lattice[j]) / latt_len[i] / latt_len[j]
-        for i, j in idx_pairs
-    }
+    pproj = {(i, j): np.dot(lattice[i], lattice[j]) / latt_len[i] / latt_len[j] for i, j in idx_pairs}
     # get the spacing in each direction:
     spacing = []
     for idir in range(ndim):

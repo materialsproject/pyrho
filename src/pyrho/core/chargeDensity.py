@@ -90,14 +90,10 @@ class ChargeDensity(PGrid, ChargeABC):
         if self.normalization[0].lower() == "v":
             return self.grid_data * self.structure.volume
         else:
-            raise NotImplementedError(
-                "Charge density normalization scheme not implemented"
-            )
+            raise NotImplementedError("Charge density normalization scheme not implemented")
 
     @classmethod
-    def from_pmg_volumetric_data(
-        cls, vdata: VolumetricData, data_key="total"
-    ) -> "ChargeDensity":
+    def from_pmg_volumetric_data(cls, vdata: VolumetricData, data_key="total") -> "ChargeDensity":
         """
         Read a single key from the data field of a VolumetricData object
         Args:
@@ -107,16 +103,10 @@ class ChargeDensity(PGrid, ChargeABC):
         Returns:
             ChargeDensity object
         """
-        return cls(
-            grid_data=vdata.data[data_key],
-            structure=vdata.structure,
-            normalization="vasp",
-        )
+        return cls(grid_data=vdata.data[data_key], structure=vdata.structure, normalization="vasp",)
 
     @classmethod
-    def from_rho(
-        cls, rho: np.ndarray, structure: Structure, normalization: str = "vasp"
-    ):
+    def from_rho(cls, rho: np.ndarray, structure: Structure, normalization: str = "vasp"):
         new_obj = cls(grid_data=rho, structure=structure, normalization="none")
         new_obj.normalization = normalization
         return new_obj
@@ -181,9 +171,7 @@ class ChargeDensity(PGrid, ChargeABC):
 
         """
         new_structure = self.structure.copy()
-        new_structure.translate_sites(
-            list(range(len(new_structure))), -np.array(frac_shift)
-        )
+        new_structure.translate_sites(list(range(len(new_structure))), -np.array(frac_shift))
         new_structure = new_structure * sc_mat
 
         # determine the output grid
@@ -195,9 +183,7 @@ class ChargeDensity(PGrid, ChargeABC):
         else:
             grid_out = new_grid
 
-        new_rho = self.get_transformed_data(
-            sc_mat, frac_shift, grid_out=grid_out, up_sample=up_sample
-        )
+        new_rho = self.get_transformed_data(sc_mat, frac_shift, grid_out=grid_out, up_sample=up_sample)
         return ChargeDensity.from_rho(new_rho, new_structure, self.normalization)
 
     #
@@ -228,9 +214,7 @@ class SpinChargeDensity(MSONable, ChargeABC):
         )  # get one key in the dictionary to make writing the subsequent code easier
 
     @classmethod
-    def from_pmg_volumetric_data(
-        cls, vdata: VolumetricData, data_keys=("total", "diff")
-    ):
+    def from_pmg_volumetric_data(cls, vdata: VolumetricData, data_keys=("total", "diff")):
         chargeden_dict = {}
         data_aug = getattr(vdata, "data_aug", None)
         for k in data_keys:
@@ -262,8 +246,7 @@ class SpinChargeDensity(MSONable, ChargeABC):
         for k, v in self.chargeden_dict.items():
             new_spin_charge[k] = v.get_reshaped_cell(sc_mat, frac_shift, new_grid)
         factor = int(
-            new_spin_charge[self._tmp_key].structure.num_sites
-            / self.chargeden_dict[self._tmp_key].structure.num_sites
+            new_spin_charge[self._tmp_key].structure.num_sites / self.chargeden_dict[self._tmp_key].structure.num_sites
         )
         new_aug = {}
         if self.aug_charge is not None:
@@ -285,9 +268,7 @@ def multiply_aug(data_aug, factor):
             if cur_block:
                 for j in range(factor):
                     cnt += 1
-                    cur_block[
-                        0
-                    ] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
+                    cur_block[0] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
                     res.extend(cur_block)
             cur_block = [ll]
         else:
@@ -295,8 +276,6 @@ def multiply_aug(data_aug, factor):
     else:
         for j in range(factor):
             cnt += 1
-            cur_block[
-                0
-            ] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
+            cur_block[0] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
             res.extend(cur_block)
     return res

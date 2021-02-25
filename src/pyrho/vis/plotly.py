@@ -42,9 +42,7 @@ def get_plotly_scatter_plot_3d(
     av = np.linspace(0, 1, trimmed_data.shape[0], endpoint=False)
     bv = np.linspace(0, 1, trimmed_data.shape[1], endpoint=False)
     cv = np.linspace(0, 1, trimmed_data.shape[2], endpoint=False)
-    AA, BB, CC = np.meshgrid(
-        av, bv, cv, indexing="ij"
-    )  # indexing to match the labeled array
+    AA, BB, CC = np.meshgrid(av, bv, cv, indexing="ij")  # indexing to match the labeled array
     res = np.dot(lat_mat.T, [AA.flatten(), BB.flatten(), CC.flatten()])
 
     if logcolor:

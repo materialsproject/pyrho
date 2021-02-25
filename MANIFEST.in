@@ -2,6 +2,7 @@ include *.txt
 include *.yaml
 include *.yml
 include .coveragerc
+exclude test_files/*
 recursive-include notebooks *.ipynb
 recursive-include notebooks *.png
 recursive-include src *.md

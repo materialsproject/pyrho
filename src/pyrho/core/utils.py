@@ -1,8 +1,9 @@
 from itertools import combinations
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Tuple, Union
 
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
+import numpy.typing as npt
 
 
 def pad_arr(arr_in: np.ndarray, shape: List[int]) -> np.ndarray:
@@ -116,7 +117,11 @@ def roll_array(arr: np.ndarray, roll_vec: List[int]) -> np.ndarray:
 
 
 def get_sc_interp(
-    data_in: np.ndarray, sc_mat: np.ndarray, grid_sizes: List[int], scipy_interp_method="linear", origin: tuple = None,
+    data_in: np.ndarray,
+    sc_mat: npt.ArrayLike,
+    grid_sizes: List[int,],
+    scipy_interp_method="linear",
+    origin: Union[np.ndarray, List[float,], Tuple[float,]] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Take a data array defined on a regular lattice and a new set of lattice

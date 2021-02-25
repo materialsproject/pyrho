@@ -3,21 +3,22 @@
 """Chang Density Objects: Periodic Grid + Lattice / Atoms"""
 import math
 from abc import ABCMeta, abstractmethod
-from typing import Dict, List, Union, Iterable
+from typing import Dict, List, Union
 
 import numpy as np
 from monty.json import MSONable
 from pymatgen import Lattice, Structure
 from pymatgen.io.vasp import VolumetricData, Chgcar, Poscar
 from pyrho.core.pgrid import PGrid
+import numpy.typing as npt
 
 
 class ChargeABC(metaclass=ABCMeta):
     @abstractmethod
     def get_reshaped_cell(
         self,
-        sc_mat: Iterable = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
-        frac_shift: Iterable = (0, 0, 0),
+        sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
+        frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
         new_grid: Union[List, int] = int(1e9),
     ):
         pass
@@ -28,7 +29,7 @@ class ChargeABC(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def lattice(self) -> Lattice:
+    def lattice(self) -> np.ndarray:
         pass
 
 
@@ -67,7 +68,7 @@ class ChargeDensity(PGrid, ChargeABC):
         else:
             raise NotImplementedError("Not a valid normalization scheme")
 
-        super().__init__(grid_data=scaled_data, lattice=None)
+        super().__init__(grid_data=scaled_data, lattice_vecs=None)
 
     @property
     def rho(self) -> np.ndarray:
@@ -77,14 +78,14 @@ class ChargeDensity(PGrid, ChargeABC):
         return self.grid_data
 
     @property
-    def lattice(self) -> Lattice:
+    def lattice(self) -> np.ndarray:
         """
         Override the lattice definition in PGrid
         """
         return self.structure.lattice.matrix
 
     @property
-    def renormalized_data(self) -> None:
+    def renormalized_data(self) -> np.ndarray:
         if self.normalization[0].lower() == "n":
             return self.grid_data
         if self.normalization[0].lower() == "v":
@@ -152,9 +153,9 @@ class ChargeDensity(PGrid, ChargeABC):
     #
     def get_reshaped_cell(
         self,
-        sc_mat: Iterable = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
-        frac_shift: Iterable = (0, 0, 0),
-        new_grid: Union[List, int] = int(1e9),
+        sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
+        frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
+        new_grid: Union[List[int,], int] = int(1e9),
         up_sample: int = 1,
     ) -> "ChargeDensity":
         """
@@ -238,8 +239,8 @@ class SpinChargeDensity(MSONable, ChargeABC):
 
     def get_reshaped_cell(
         self,
-        sc_mat: Iterable = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
-        frac_shift: Iterable = (0, 0, 0),
+        sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
+        frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
         new_grid: Union[List, int] = int(1e9),
     ) -> "SpinChargeDensity":
         new_spin_charge = {}

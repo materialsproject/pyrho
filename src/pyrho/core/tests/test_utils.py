@@ -70,7 +70,6 @@ def test_interpolate_fourier_hyp2(a, b, c):
     def f(x, y):
         return a * np.sin(b * x) ** 2 + np.cos(c * y) + 1
 
-    print(a, b, c)
     xx = np.linspace(0, 2 * np.pi, 500, endpoint=False)
     yy = np.linspace(0, 2 * np.pi, 504, endpoint=False)
     X, Y = np.meshgrid(xx, yy, indexing="ij")

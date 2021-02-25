@@ -4,13 +4,13 @@
 
 # Calculate the fourier transform
 from typing import List, Callable
-
+import numpy.typing as npt
 from monty.json import MSONable
 import numpy as np
 
 
 class PFourier(MSONable):
-    def __init__(self, fourier_data: np.ndarray, lattice: List[List[float]]):
+    def __init__(self, fourier_data: np.ndarray, lattice: npt.ArrayLike):
         """
         Fourier transform defined for a periodic function. The representation must be
         SC agnostic, (i.e. if we double the size of the unit cell)
@@ -38,14 +38,14 @@ class PFourier(MSONable):
         return np.vstack([icoord.flatten() for icoord in frac_coords])
 
     @property
-    def fft_pos_centered(self) -> List:
+    def fft_pos_centered(self) -> np.ndarray:
         """
         Return the fft positions where the N-k is changed to -k
         """
         return np.array([ipos - np.round(ipos) for ipos in self.fractional_reciprocal_pos])
 
     @property
-    def fft_pos_centered_s(self) -> List:
+    def fft_pos_centered_s(self) -> np.ndarray:
         """
         Return the fft positions where the N-k is changed to -k
         """

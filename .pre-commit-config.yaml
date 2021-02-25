@@ -24,5 +24,5 @@ repos:
     rev: stable
     hooks:
     - id: black
-      args: [--line-length=89]
+      args: [--line-length=120]
       language_version: python3.7

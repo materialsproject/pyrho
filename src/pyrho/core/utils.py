@@ -4,7 +4,6 @@ from typing import Iterable, List, Tuple
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
-
 def pad_arr(arr_in: np.ndarray, shape: List[int]) -> np.ndarray:
     """
     Padding a function on a hypercube.
@@ -123,7 +122,7 @@ def get_sc_interp(
     sc_mat: np.ndarray,
     grid_sizes: List[int],
     scipy_interp_method="linear",
-    origin: tuple = (0, 0, 0),
+    origin: tuple = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Take a data array defined on a regular lattice and a new set of lattice
@@ -169,8 +168,9 @@ def get_sc_interp(
     )  # indexing to match the labeled array
     frac_coords = np.vstack([icoord.flatten() for icoord in frac_coords])
 
-    sc_coord = np.dot(np.array(sc_mat).T, frac_coords)  # shape (3, NGRID)
-    sc_coord += np.array([[_] for _ in origin])
+    sc_coord = np.dot(np.array(sc_mat).T, frac_coords)  # shape (dim, NGRID)
+    if origin is not None:
+        sc_coord += np.array([[_] for _ in origin])
 
     mapped_coords = sc_coord - np.floor(sc_coord)
 

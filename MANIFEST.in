@@ -7,4 +7,3 @@ recursive-include notebooks *.png
 recursive-include src *.md
 recursive-include src *.py
 recursive-include src *.typed
-recursive-include test_files *.hdf5

@@ -155,7 +155,7 @@ class ChargeDensity(PGrid, ChargeABC):
         self,
         sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
         frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
-        new_grid: Union[List[int,], int] = int(1e9),
+        new_grid: Union[List[int], int] = int(1e9),
         up_sample: int = 1,
     ) -> "ChargeDensity":
         """

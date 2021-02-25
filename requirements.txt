@@ -1,2 +1,2 @@
-pymatgen==2021.2.3
+pymatgen==2021.2.16
 plotly==4.14.3

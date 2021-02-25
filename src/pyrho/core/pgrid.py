@@ -13,9 +13,7 @@ from scipy.ndimage import convolve
 
 
 class PGrid(MSONable):
-    def __init__(
-        self, grid_data: np.ndarray, lattice: Union[np.ndarray, List[List[float]]] = None
-    ):
+    def __init__(self, grid_data: np.ndarray, lattice: Union[np.ndarray, List[List[float]]] = None):
         """
         Base class for N-dimensional Regular period grid data.
         The core code should be valid in N-dimensions and not depend on pymatgen
@@ -32,11 +30,7 @@ class PGrid(MSONable):
         self.ngridpts = np.prod(self.grid_shape)
 
     def get_transformed_data(
-        self,
-        sc_mat: np.ndarray,
-        frac_shift: np.ndarray,
-        grid_out: List[int],
-        up_sample: int = 1,
+        self, sc_mat: np.ndarray, frac_shift: np.ndarray, grid_out: List[int], up_sample: int = 1,
     ) -> np.ndarray:
         """
         Apply a transformation to the grid data
@@ -61,13 +55,10 @@ class PGrid(MSONable):
             interp_grid_data = self.grid_data
         else:
             interp_grid_data = interpolate_fourier(
-                arr_in=self.grid_data,
-                shape=[g_dim_ * up_sample for g_dim_ in self.grid_data.shape],
+                arr_in=self.grid_data, shape=[g_dim_ * up_sample for g_dim_ in self.grid_data.shape],
             )
 
-        _, new_rho = get_sc_interp(
-            interp_grid_data, sc_mat, grid_sizes=grid_out, origin=frac_shift
-        )
+        _, new_rho = get_sc_interp(interp_grid_data, sc_mat, grid_sizes=grid_out, origin=frac_shift)
         new_rho = new_rho.reshape(grid_out)
 
         # TODO make this part of the original transformation
@@ -80,11 +71,7 @@ class PGrid(MSONable):
         return new_rho
 
     def get_transformed_obj(
-        self,
-        sc_mat: np.ndarray,
-        frac_shift: List[float],
-        grid_out: List[int],
-        up_sample: int = 1,
+        self, sc_mat: np.ndarray, frac_shift: List[float], grid_out: List[int], up_sample: int = 1,
     ) -> "PGrid":
         """
         Get a new PGrid object for the new transformed data
@@ -97,15 +84,11 @@ class PGrid(MSONable):
         Returns:
             New PGrid object
         """
-        new_data = self.get_transformed_data(
-            sc_mat, frac_shift, grid_out=grid_out, up_sample=up_sample
-        )
+        new_data = self.get_transformed_data(sc_mat, frac_shift, grid_out=grid_out, up_sample=up_sample)
         new_lattice = np.dot(sc_mat, self.lattice)
         return PGrid(grid_data=new_data, lattice=new_lattice)
 
-    def gaussian_smear(
-        self, sigma: float = 0.2, arr_in: np.ndarray = None
-    ) -> np.ndarray:
+    def gaussian_smear(self, sigma: float = 0.2, arr_in: np.ndarray = None) -> np.ndarray:
         """
         Applies an isotropic Gaussian smear of width (standard deviation) r to
         the potential field. This is necessary to avoid finding paths through
@@ -127,18 +110,11 @@ class PGrid(MSONable):
             arr = arr_in
         r_frac = get_ucell_frac_fit_sphere(lattice=self.lattice, r=sigma * 5)
         filter_shape = [
-            int(
-                np.ceil(itr_rf * itr_dim / 2) * 2
-            )  # dimension of the filter should be even
+            int(np.ceil(itr_rf * itr_dim / 2) * 2)  # dimension of the filter should be even
             for itr_rf, itr_dim in zip(r_frac, arr.shape)
         ]
 
-        filter_latt = np.array(
-            [
-                (filter_shape[_] + 1) / (arr.shape[_] + 1) * self.lattice[_]
-                for _ in range(self._dim)
-            ]
-        )
+        filter_latt = np.array([(filter_shape[_] + 1) / (arr.shape[_] + 1) * self.lattice[_] for _ in range(self._dim)])
 
         # Get the fractional positions
         filter_frac_c = [np.linspace(0, 1, _, endpoint=False) for _ in filter_shape]
@@ -154,10 +130,7 @@ class PGrid(MSONable):
             mid_point = tmp / 2  # type: Union[List, np.ndarray]
         else:
             mid_point = [tmp / 2]
-        disp2mid2 = [
-            (i_coord.reshape(filter_shape) - mp_coord) ** 2
-            for mp_coord, i_coord in zip(mid_point, cart_pos)
-        ]
+        disp2mid2 = [(i_coord.reshape(filter_shape) - mp_coord) ** 2 for mp_coord, i_coord in zip(mid_point, cart_pos)]
         dist2mid = np.sqrt(sum(disp2mid2))
         # make sure the mask is zero?
         mm = dist2mid <= sigma * 4
@@ -165,9 +138,7 @@ class PGrid(MSONable):
         gauss = gauss / gauss.sum()
         return convolve(input=arr, weights=gauss, mode="wrap"), gauss
 
-    def lossy_smooth_compression(
-        self, grid_out: List, smear_std: float = 0.2
-    ) -> np.ndarray:
+    def lossy_smooth_compression(self, grid_out: List, smear_std: float = 0.2) -> np.ndarray:
         """
         Perform Fourier interpolation then Gaussian smoothing.
         the smoothing makes sure that simple operation like max and min filters still

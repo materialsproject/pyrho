@@ -1,3 +1,4 @@
+from __future__ import annotations
 from itertools import combinations
 from typing import Iterable, List, Tuple, Union
 
@@ -119,9 +120,9 @@ def roll_array(arr: np.ndarray, roll_vec: List[int]) -> np.ndarray:
 def get_sc_interp(
     data_in: np.ndarray,
     sc_mat: npt.ArrayLike,
-    grid_sizes: List[int,],
+    grid_sizes: List[int],
     scipy_interp_method="linear",
-    origin: Union[np.ndarray, List[float,], Tuple[float,]] = None,
+    origin: Union[np.ndarray, List[float], Tuple[float]] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Take a data array defined on a regular lattice and a new set of lattice

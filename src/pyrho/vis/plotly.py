@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
+"""
+Helper functions to visualize the data in plotly
+"""
+
 import plotly.graph_objs as go
 import numpy as np
 
 """Visualizaiton functions do the scatter plots in plotly since it seems to be more efficient."""
 
-# TODO consider dropping large chunks of the data
 
-
-def get_plotly_scatter_plot_3d(
+def get_plotly_scatter_plot(
     data_in: np.ndarray,
     lat_mat: np.ndarray,
     factor: int = 5,
@@ -31,19 +33,22 @@ def get_plotly_scatter_plot_3d(
         plotly Figure object
 
     """
+    ndim = len(data_in.shape)
+    if ndim > 3:
+        raise NotImplementedError("Can only render data of 1, 2, or 3 dimensions.")
 
     ss = slice(0, None, factor)
     trimmed_data = np.real(data_in).copy()
-    trimmed_data = trimmed_data[ss, ss, ss]
+    trimmed_data = trimmed_data[(ss,) * ndim]
+
     if mask is not None:
-        flat_mask = mask[ss, ss, ss].flatten()
+        flat_mask = mask[(ss,) * ndim].flatten()
     else:
         flat_mask = np.ones_like(trimmed_data, dtype=bool).flatten()
-    av = np.linspace(0, 1, trimmed_data.shape[0], endpoint=False)
-    bv = np.linspace(0, 1, trimmed_data.shape[1], endpoint=False)
-    cv = np.linspace(0, 1, trimmed_data.shape[2], endpoint=False)
-    AA, BB, CC = np.meshgrid(av, bv, cv, indexing="ij")  # indexing to match the labeled array
-    res = np.dot(lat_mat.T, [AA.flatten(), BB.flatten(), CC.flatten()])
+
+    vecs = [np.linspace(0, 1, trimmed_data.shape[0], endpoint=False) for _ in range(ndim)]
+    gridded = np.meshgrid(*vecs, indexing="ij")  # indexing to match the labeled array
+    res = np.dot(lat_mat.T, [g_.flatten() for g_ in gridded])
 
     if logcolor:
         cc = np.log(trimmed_data.flatten())
@@ -51,31 +56,40 @@ def get_plotly_scatter_plot_3d(
         cc = trimmed_data.flatten()
 
     xx = res[0, flat_mask]
-    yy = res[1, flat_mask]
-    zz = res[2, flat_mask]
+    if ndim > 1:
+        yy = res[1, flat_mask]
+    if ndim > 2:
+        zz = res[2, flat_mask]
+
     cc = cc[flat_mask]
-    # df = pandas.DataFrame({'x':xx, 'y':yy, 'z':zz, 'cc': cc})
-    # fig = px.scatter_3d(df, x='x', y='y', z='z', color='cc', opacity=opacity, size_max=2)
 
-    fig = go.Figure(
-        data=[
-            go.Scatter3d(
-                x=xx,
-                y=yy,
-                z=zz,
-                mode="markers",
-                marker=dict(
-                    size=marker_size,
-                    color=cc,  # set color to an array/list of desired values
-                    colorscale="Viridis",  # choose a colorscale
-                    opacity=opacity,
-                ),
-            )
-        ]
-    )
+    if ndim == 1:
+        data = go.Scatter(x=xx, y=cc, mode="markers", marker=dict(size=marker_size, color="red",))
+    if ndim == 2:
+        data = go.Scatter(
+            x=xx,
+            y=yy,
+            mode="markers",
+            marker=dict(
+                size=marker_size,
+                color=cc,  # set color to an array/list of desired values
+                colorscale="Viridis",  # choose a colorscale
+                opacity=opacity,
+            ),
+        )
+    if ndim == 3:
+        data = go.Scatter3d(
+            x=xx,
+            y=yy,
+            z=zz,
+            mode="markers",
+            marker=dict(size=marker_size, color=cc, colorscale="Viridis", opacity=opacity,),
+        )
+    fig = go.Figure(data=[data])
 
-    # fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))
-    fig.update_layout(width=700, margin={"r": 10, "l": 10, "b": 10, "t": 10})
-    # fix the ratio in the top left subplot to be a cube
-    fig.update_layout(scene_aspectmode="data")
+    fig.update_layout(template="plotly_white")
+    if ndim == 2:
+        fig.update_layout(width=800, height=800, yaxis=dict(scaleanchor="x", scaleratio=1))
+    if ndim == 3:
+        fig.update_layout(width=800, height=800, scene_aspectmode="data")
     return fig

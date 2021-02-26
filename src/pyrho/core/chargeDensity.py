@@ -72,7 +72,7 @@ class ChargeDensity(PGrid, ChargeABC):
         return self.grid_data
 
     @property
-    def lattice(self) -> np.ndarray:
+    def lattice(self) -> np.ndarray:  # type: ignore
         """
         Override the lattice definition in PGrid, this makes getting the reoriented charge density easier.
         """
@@ -255,12 +255,14 @@ class SpinChargeDensity(MSONable, ChargeABC):
 
 def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
     """
-    The original idea here was to use to to speed up some vasp calculations for supercells by initializing the entire CHGCAR file.
+    The original idea here was to use to to speed up some vasp calculations for
+    supercells by initializing the entire CHGCAR file.
     The current code does not deal with transformation of the Augemetation charges after regridding.
 
     This is a naive way to multiply the Augmentation data in the CHGCAR,
     a real working implementation will require analysis of the PAW projection operators.
-    However, even with such an implementation, the speed up will be minimal due to VASP's interal minimization algorithms.
+    However, even with such an implementation, the speed up will be minimal due to VASP's interal
+    minimization algorithms.
     Args:
         data_aug: The original augmentation data from a CHGCAR
         factor: The multiplication factor (some integer number of times it gets repeated)

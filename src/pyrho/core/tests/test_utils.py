@@ -1,4 +1,4 @@
-from hypothesis import given, seed, strategies as st
+from hypothesis import given, seed, settings, strategies as st
 from pyrho.core.utils import pad_arr, interpolate_fourier, get_sc_interp
 import numpy as np
 
@@ -59,6 +59,7 @@ def test_interpolate_fourier_hyp1(a, b, c):
     assert abs(max(res[::2] - ref)) < 1e-10
 
 
+@settings(deadline=None)
 @seed(1337)
 @given(
     a=st.integers(min_value=-10, max_value=10),

@@ -50,7 +50,7 @@ get_plotly_scatter_plot(pg_2x.grid_data, pg_2x.lattice, skips=1, opacity=1, mark
 ```
 Which looks like this:
 ![2d_pgrid_ex2](https://raw.github.com/materialsproject/pyrho/master/src/docs/_images/2d_pgrid_ex2.png)
-/src/docs/_images/
+
 ## The ChargeDensity class
 
 The `ChargeDensity` object inherits from `PGrid` but also understands `pymatgen`'s definition of `VolumetricData`.
@@ -81,8 +81,10 @@ get_plotly_scatter_plot(chgcar_x2.grid_data, lat_mat=chgcar_x2.lattice, skips=4,
 Note that we have shifted the origin to the center of unit cell which should be empty after the filering.
 In the final transformed supercell, the new origin is indicated with a star.
 
-![chgcar_ex2](https://github.com/materialsproject/pyrho/blob/master./src/docs/_images/chgcar_ex2.png)
+![chgcar_ex2](https://raw.github.com/materialsproject/pyrho/master/src/docs/_images/chgcar_ex2.png)
 
 ## Credits
 
-Jimmy-Xuan Shen: project lead
+Jimmy-Xuan Shen: Project lead
+
+Wennie Wang: For naming the package

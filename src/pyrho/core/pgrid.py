@@ -14,17 +14,17 @@ import numpy.typing as npt
 
 
 class PGrid(MSONable):
-    def __init__(self, grid_data: np.ndarray, lattice_vecs: np.ndarray = None):
+    def __init__(self, grid_data: np.ndarray, lattice: Union[np.ndarray, None] = None):
         """
         Base class for N-dimensional Regular period grid data.
         The core code should be valid in N-dimensions and not depend on pymatgen
 
         Args:
             grid_data: Data stored on the regular rid
-            lattice_vecs: list of lattice vectors
+            lattice: list of lattice vectors
         """
-        if lattice_vecs is not None:  # Some children will set the lattice
-            self.lattice_vecs = np.array(lattice_vecs)
+        if self.lattice is not None:  # type: ignore
+            self.lattice = np.array(lattice)
         self.grid_data = grid_data
         self._dim = len(self.grid_data.shape)
         self.grid_shape = self.grid_data.shape
@@ -90,7 +90,7 @@ class PGrid(MSONable):
         """
         new_data = self.get_transformed_data(sc_mat, frac_shift, grid_out=grid_out, up_sample=up_sample)
         new_lattice = np.dot(sc_mat, self.lattice)
-        return PGrid(grid_data=new_data, lattice_vecs=new_lattice)
+        return PGrid(grid_data=new_data, lattice=new_lattice)
 
     def gaussian_smear(self, sigma: float = 0.2, arr_in: np.ndarray = None) -> Tuple[np.ndarray, np.ndarray]:
         """

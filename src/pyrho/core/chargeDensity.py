@@ -27,11 +27,6 @@ class ChargeABC(metaclass=ABCMeta):
     def reorient_axis(self) -> None:
         pass
 
-    @property
-    @abstractmethod
-    def lattice(self) -> np.ndarray:
-        pass
-
 
 class ChargeDensity(PGrid, ChargeABC):
     def __init__(
@@ -68,7 +63,7 @@ class ChargeDensity(PGrid, ChargeABC):
         else:
             raise NotImplementedError("Not a valid normalization scheme")
 
-        super().__init__(grid_data=scaled_data, lattice_vecs=None)
+        super().__init__(grid_data=scaled_data, lattice=None)
 
     @property
     def rho(self) -> np.ndarray:
@@ -80,7 +75,7 @@ class ChargeDensity(PGrid, ChargeABC):
     @property
     def lattice(self) -> np.ndarray:
         """
-        Override the lattice definition in PGrid
+        Override the lattice definition in PGrid, this makes getting the reoriented charge density easier.
         """
         return self.structure.lattice.matrix
 
@@ -111,18 +106,6 @@ class ChargeDensity(PGrid, ChargeABC):
         new_obj = cls(grid_data=rho, structure=structure, normalization="none")
         new_obj.normalization = normalization
         return new_obj
-
-    # @classmethod
-    # def from_hdf5(cls, filename):
-    #     """
-    #     Reads VolumetricData from HDF5 file.
-    #     """
-    #     import h5py
-    #
-    #     with h5py.File(filename, "r") as f:
-    #         data = {k: np.array(v) for k, v in f["vdata"].items()}
-    #         structure = Structure.from_dict(json.loads(f.attrs["structure_json"]))
-    #         return cls(structure=structure, data=data)
 
     def reorient_axis(self) -> None:
         """
@@ -260,9 +243,22 @@ class SpinChargeDensity(MSONable, ChargeABC):
             v.reorient_axis()
 
 
-def multiply_aug(data_aug, factor):
-    res = []
-    cur_block = None
+def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
+    """
+    The original idea here was to use to to speed up some vasp calculations for supercells by initializing the entire CHGCAR file.
+    The current code does not deal with transformation of the Augemetation charges after regridding.
+
+    This is a naive way to multiply the Augmentation data in the CHGCAR,
+    a real working implementation will require analysis of the PAW projection operators.
+    However, even with such an implementation, the speed up will be minimal due to VASP's interal minimization algorithms.
+    Args:
+        data_aug: The original augmentation data from a CHGCAR
+        factor: The multiplication factor (some integer number of times it gets repeated)
+    Returns:
+        List of strings for each line of the Augmentation data.
+    """
+    res = []  # type: List[str]
+    cur_block = []  # type: List[str]
     cnt = 0
     for ll in data_aug:
         if "augmentation" in ll:

@@ -13,9 +13,7 @@ with open("HISTORY.md") as history_file:
 
 requirements = []  # type: List[str]
 
-setup_requirements = [
-    "pytest-runner",
-]
+setup_requirements = ["pytest-runner", "setuptools_scm"]
 
 test_requirements = [
     "pytest>=3.7",
@@ -44,7 +42,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
-    url="https://github.com/materialsproject/pyRho",
-    version="0.0.11",
+    url="https://github.com/materialsproject/pyrho",
+    use_scm_version=True,
     zip_safe=False,
 )

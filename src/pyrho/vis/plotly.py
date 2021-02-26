@@ -12,7 +12,7 @@ import numpy as np
 def get_plotly_scatter_plot(
     data_in: np.ndarray,
     lat_mat: np.ndarray,
-    factor: int = 5,
+    skips: int = 5,
     logcolor: bool = False,
     mask: np.ndarray = None,
     opacity: float = 0.5,
@@ -23,7 +23,7 @@ def get_plotly_scatter_plot(
     Args:
         data_in: Structured grid data to be plotted
         lat_mat: Lattice vectors of the cell
-        factor: reduction factor of the grid points for plotting, only show [::factor] in each direction
+        skips: reduction factor of the grid points for plotting, only show [::skips] in each direction
         logcolor: If True, assign the color in log scale
         mask: Filter the points to plot
         opacity: opacity of each point being plotted
@@ -37,7 +37,7 @@ def get_plotly_scatter_plot(
     if ndim > 3:
         raise NotImplementedError("Can only render data of 1, 2, or 3 dimensions.")
 
-    ss = slice(0, None, factor)
+    ss = slice(0, None, skips)
     trimmed_data = np.real(data_in).copy()
     trimmed_data = trimmed_data[(ss,) * ndim]
 
@@ -46,7 +46,7 @@ def get_plotly_scatter_plot(
     else:
         flat_mask = np.ones_like(trimmed_data, dtype=bool).flatten()
 
-    vecs = [np.linspace(0, 1, trimmed_data.shape[0], endpoint=False) for _ in range(ndim)]
+    vecs = [np.linspace(0, 1, trimmed_data.shape[_], endpoint=False) for _ in range(ndim)]
     gridded = np.meshgrid(*vecs, indexing="ij")  # indexing to match the labeled array
     res = np.dot(lat_mat.T, [g_.flatten() for g_ in gridded])
 

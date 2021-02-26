@@ -23,7 +23,7 @@ class PGrid(MSONable):
             grid_data: Data stored on the regular rid
             lattice: list of lattice vectors
         """
-        if self.lattice is not None:  # type: ignore
+        if lattice is not None:  # type: ignore
             self.lattice = np.array(lattice)
         self.grid_data = grid_data
         self._dim = len(self.grid_data.shape)

@@ -62,7 +62,6 @@ class ChargeDensity(PGrid, ChargeABC):
             scaled_data = grid_data / self.structure.volume
         else:
             raise NotImplementedError("Not a valid normalization scheme")
-
         super().__init__(grid_data=scaled_data, lattice=None)
 
     @property

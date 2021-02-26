@@ -19,8 +19,8 @@ class ChargeABC(metaclass=ABCMeta):
         self,
         sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
         frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
-        new_grid: Union[List, int] = int(1e9),
-    ):
+        grid_out: Union[List, int] = int(1e9),
+    ) -> "ChargeABC":
         pass
 
     @abstractmethod
@@ -133,11 +133,12 @@ class ChargeDensity(PGrid, ChargeABC):
     #     _, res = get_sc_interp(self.rho, sc_mat, grid_out)
     #     return res.reshape(grid_out)
     #
-    def get_reshaped_cell(
+
+    def get_transformed_obj(
         self,
         sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
         frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
-        new_grid: Union[List[int], int] = int(1e9),
+        grid_out: Union[List[int], int] = int(1e9),
         up_sample: int = 1,
     ) -> "ChargeDensity":
         """
@@ -147,7 +148,7 @@ class ChargeDensity(PGrid, ChargeABC):
             sc_mat: Matrix to create the new cell
             frac_shift: translation to be applied on the cell after the matrix
             transformation
-            new_grid: density of the new grid, can also just take the desired
+            grid_out: density of the new grid, can also just take the desired
             dimension as a list.
 
         Returns:
@@ -159,15 +160,24 @@ class ChargeDensity(PGrid, ChargeABC):
 
         # determine the output grid
         lengths = new_structure.lattice.abc
-        if isinstance(new_grid, int):
-            ngrid = new_grid / new_structure.volume
+        if isinstance(grid_out, int):
+            ngrid = grid_out / new_structure.volume
             mult = (np.prod(lengths) / ngrid) ** (1 / 3)
             grid_out = [int(math.floor(max(l_ / mult, 1))) for l_ in lengths]
         else:
-            grid_out = new_grid
+            grid_out = grid_out
 
         new_rho = self.get_transformed_data(sc_mat, frac_shift, grid_out=grid_out, up_sample=up_sample)
         return ChargeDensity.from_rho(new_rho, new_structure, self.normalization)
+
+    def get_reshaped_cell(
+        self,
+        sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
+        frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
+        grid_out: Union[List, int] = int(1e9),
+        up_sample: int = 1,
+    ) -> "ChargeDensity":
+        return self.get_transformed_obj(sc_mat=sc_mat, frac_shift=frac_shift, grid_out=grid_out, up_sample=up_sample)
 
     #
     #     _, new_rho = get_sc_interp(self.rho, sc_mat, grid_sizes=grid_out)
@@ -223,11 +233,12 @@ class SpinChargeDensity(MSONable, ChargeABC):
         self,
         sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
         frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
-        new_grid: Union[List, int] = int(1e9),
+        grid_out: Union[List, int] = int(1e9),
+        up_sample: int = 1,
     ) -> "SpinChargeDensity":
         new_spin_charge = {}
         for k, v in self.chargeden_dict.items():
-            new_spin_charge[k] = v.get_reshaped_cell(sc_mat, frac_shift, new_grid)
+            new_spin_charge[k] = v.get_reshaped_cell(sc_mat, frac_shift, grid_out)
         factor = int(
             new_spin_charge[self._tmp_key].structure.num_sites / self.chargeden_dict[self._tmp_key].structure.num_sites
         )

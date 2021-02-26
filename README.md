@@ -15,6 +15,8 @@ Tools for re-griding volumetric quantum chemistry data for machine-learning purp
 
 # Example Usage
 
+## Basic usage of the PGrid class
+
 The `PGrid` object is defined by an N-dimensional numpy array `grid_data` and a N lattice vectors given as a matrix `lattice`.
 The input array is a scalar field that is defined on a regularly spaced set of grid points starting at the origin.
 For example, you can construct a periodic field as follows:
@@ -44,24 +46,42 @@ with a 30 by 32 grid, we can run:
 
 ```python
 pg_2x = pg.get_transformed_obj([[1,1], [1,-1]], frac_shift=[0.5, 0.5], grid_out=[30,32])
-print(f"After doubling, rorating and shifting the (max, min) "
-      "of the data changed from ({pg.grid_data.max():0.2f}, {pg.grid_data.min():0.2f}) "
-      "to ({pg_2x.grid_data.max():0.2f}, {pg_2x.grid_data.min():0.2f})")
 get_plotly_scatter_plot(pg_2x.grid_data, pg_2x.lattice, skips=1, opacity=1, marker_size=10)
 ```
-
+Which looks like this:
 ![2d_pgrid_ex2](./src/docs/_images/2d_pgrid_ex2.png)
+
+## The ChargeDensity class
+
+The `ChargeDensity` object inherits from `PGrid` but also understands `pymatgen`'s definition of `VolumetricData`.
+This allows us to actually read in CHGCAR objects either directly using `Chgcar.from_file` or read in the same data stored via `hdf5` as shown below:
 
 ```python
 from pymatgen.io.vasp import Chgcar
 from pyrho.core.chargeDensity import ChargeDensity
-chgcar = Chgcar.from_hdf5("../test_files/Si.uc.hdf5")
+chgcar = Chgcar.from_hdf5("./test_files/Si.uc.hdf5")
 chgcar = ChargeDensity.from_pmg_volumetric_data(chgcar)
 get_plotly_scatter_plot(chgcar.grid_data,
                         lat_mat=chgcar.lattice,
                         factor=4,
                         mask=chgcar.grid_data > 0.3)
 ```
+
+Here the plotting function slices the data using `[::4]` in each direction and filters out the data points below 0.3.
+This makes the final plot less busy, so we can examing the data.
+
+![chgcar_ex1](./src/docs/_images/chgcar_ex1.png)
+
+This charge density can also be transformed:
+```python
+chgcar_x2 = chgcar.get_transformed_obj(sc_mat = [[1,1,0],[1,-1,0],[0,0,1]], frac_shift=[0.5,0.5,0.5], grid_out=[120,120,60])
+get_plotly_scatter_plot(chgcar_x2.grid_data, lat_mat=chgcar_x2.lattice, skips=4, mask=chgcar_x2.grid_data > 0.5, marker_size=10)
+```
+
+Note that we have shifted the origin to the center of unit cell which should be empty after the filering.
+In the final transformed supercell, the new origin is indicated with a star.
+
+![chgcar_ex2](./src/docs/_images/chgcar_ex2.png)
 
 ## Credits
 

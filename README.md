@@ -35,7 +35,7 @@ pg = PGrid(grid_data=data, lattice=[[np.pi,0], [0,np.pi]])
 get_plotly_scatter_plot(pg.grid_data, pg.lattice, skips=1, opacity=1, marker_size=15)
 ```
 The data can be examined using the helper plotting function.
-![2d_pgrid_ex1](./src/docs/_images/2d_pgrid_ex1.png)
+![2d_pgrid_ex1](https://raw.github.com/materialsproject/pyrho/master/src/docs/_images/2d_pgrid_ex1.png)
 
 The PGrid object has no concept of normalization so if you half the number of points in the domain, the range of the data will stay the same.
 This is different from how change density is stored in codes like VASP where the values at each point depends on the number of grid points used to store the data.
@@ -49,8 +49,8 @@ pg_2x = pg.get_transformed_obj([[1,1], [1,-1]], frac_shift=[0.5, 0.5], grid_out=
 get_plotly_scatter_plot(pg_2x.grid_data, pg_2x.lattice, skips=1, opacity=1, marker_size=10)
 ```
 Which looks like this:
-![2d_pgrid_ex2](./src/docs/_images/2d_pgrid_ex2.png)
-
+![2d_pgrid_ex2](https://raw.github.com/materialsproject/pyrho/master/src/docs/_images/2d_pgrid_ex2.png)
+/src/docs/_images/
 ## The ChargeDensity class
 
 The `ChargeDensity` object inherits from `PGrid` but also understands `pymatgen`'s definition of `VolumetricData`.
@@ -70,7 +70,7 @@ get_plotly_scatter_plot(chgcar.grid_data,
 Here the plotting function slices the data using `[::4]` in each direction and filters out the data points below 0.3.
 This makes the final plot less busy, so we can examing the data.
 
-![chgcar_ex1](./src/docs/_images/chgcar_ex1.png)
+![chgcar_ex1](https://raw.github.com/materialsproject/pyrho/master/src/docs/_images/chgcar_ex1.png)
 
 This charge density can also be transformed:
 ```python
@@ -81,7 +81,7 @@ get_plotly_scatter_plot(chgcar_x2.grid_data, lat_mat=chgcar_x2.lattice, skips=4,
 Note that we have shifted the origin to the center of unit cell which should be empty after the filering.
 In the final transformed supercell, the new origin is indicated with a star.
 
-![chgcar_ex2](./src/docs/_images/chgcar_ex2.png)
+![chgcar_ex2](https://github.com/materialsproject/pyrho/blob/master./src/docs/_images/chgcar_ex2.png)
 
 ## Credits
 

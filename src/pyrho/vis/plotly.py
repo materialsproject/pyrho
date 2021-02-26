@@ -15,7 +15,7 @@ def get_plotly_scatter_plot(
     factor: int = 5,
     logcolor: bool = False,
     mask: np.ndarray = None,
-    opacity: float = 0.25,
+    opacity: float = 0.5,
     marker_size: int = 5,
 ) -> go.Figure:
     """
@@ -55,8 +55,10 @@ def get_plotly_scatter_plot(
     else:
         cc = trimmed_data.flatten()
 
-    xx = res[0, flat_mask]
-    if ndim > 1:
+    if ndim == 1:
+        xx = res[flat_mask]
+    elif ndim > 1:
+        xx = res[0, flat_mask]
         yy = res[1, flat_mask]
     if ndim > 2:
         zz = res[2, flat_mask]

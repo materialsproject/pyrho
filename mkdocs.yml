@@ -13,9 +13,10 @@ nav:
   - Reference:
       core: reference/core.md
       vis: reference/vis.md
+  - Changelog: CHANGELOG.md
 
-repo_url: https://github.com/jmmshn/pyRho/
-docs_dir: ./docs
+site_url: https://materialsproject.github.io/pyrho/
+repo_url: https://github.com/materialsproject/pyrho
 markdown_extensions:
   - admonition
   - codehilite

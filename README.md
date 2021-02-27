@@ -5,7 +5,7 @@
 Tools for re-griding volumetric quantum chemistry data for machine-learning purposes.
 
 - Free software: BSD license
-- Documentation: <https://src.readthedocs.io>.
+- Documentation: https://materialsproject.github.io/pyrho/
 
 ## Features
 

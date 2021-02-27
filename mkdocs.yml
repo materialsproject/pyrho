@@ -15,7 +15,7 @@ nav:
       vis: reference/vis.md
 
 repo_url: https://github.com/jmmshn/pyRho/
-docs_dir: ./src/docs
+docs_dir: ./docs
 markdown_extensions:
   - admonition
   - codehilite

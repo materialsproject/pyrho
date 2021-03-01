@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
-     <loc>None</loc>
-     <lastmod>2020-05-25</lastmod>
+     <loc>https://materialsproject.github.io/pyrho/</loc>
+     <lastmod>2021-03-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>None</loc>
-     <lastmod>2020-05-25</lastmod>
+     <loc>https://materialsproject.github.io/pyrho/concepts/</loc>
+     <lastmod>2021-03-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>None</loc>
-     <lastmod>2020-05-25</lastmod>
+     <loc>https://materialsproject.github.io/pyrho/getting_started/jupyter_setup/</loc>
+     <lastmod>2021-03-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>None</loc>
-     <lastmod>2020-05-25</lastmod>
+     <loc>https://materialsproject.github.io/pyrho/reference/core/</loc>
+     <lastmod>2021-03-01</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>None</loc>
-     <lastmod>2020-05-25</lastmod>
+     <loc>https://materialsproject.github.io/pyrho/reference/vis/</loc>
+     <lastmod>2021-03-01</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://materialsproject.github.io/pyrho/CHANGELOG/</loc>
+     <lastmod>2021-03-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

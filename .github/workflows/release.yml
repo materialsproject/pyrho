@@ -27,6 +27,7 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPY_API_TOKEN }}
+        verbose: true
 
   docs:
     runs-on: ubuntu-latest

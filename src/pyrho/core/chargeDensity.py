@@ -7,7 +7,8 @@ from typing import Dict, List, Union
 
 import numpy as np
 from monty.json import MSONable
-from pymatgen import Lattice, Structure
+from pymatgen.core.lattice import Lattice
+from pymatgen.core.structure import Structure
 from pymatgen.io.vasp import VolumetricData, Chgcar, Poscar
 from pyrho.core.pgrid import PGrid
 import numpy.typing as npt

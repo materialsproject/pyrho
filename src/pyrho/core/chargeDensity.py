@@ -3,7 +3,7 @@
 """Chang Density Objects: Periodic Grid + Lattice / Atoms"""
 import math
 from abc import ABCMeta, abstractmethod
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Tuple
 
 import numpy as np
 from monty.json import MSONable
@@ -109,11 +109,12 @@ class ChargeDensity(PGrid, ChargeABC):
 
     def reorient_axis(self) -> None:
         """
-        Change the orgientation of the lattice vector so that:
+        Change the orientation of the lattice vector so that:
         a points along the x-axis, b is in the xy-plane, c is in the positive-z halve of space
         """
+        args = self.structure.lattice.abc + self.structure.lattice.angles # type: Tuple[float, float, float, float, float, float]
         self.structure.lattice = Lattice.from_parameters(
-            *self.structure.lattice.abc, *self.structure.lattice.angles, vesta=True
+            *args, vesta=True
         )
 
     # def get_data_in_cube(self, s: float, ngrid: int) -> np.ndarray:

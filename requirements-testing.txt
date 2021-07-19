@@ -9,4 +9,4 @@ pydocstyle==5.0.2
 flake8==3.8.4
 mypy==0.812
 mypy-extensions==0.4.3
-hypothesis==6.3.4
+hypothesis==6.14.3

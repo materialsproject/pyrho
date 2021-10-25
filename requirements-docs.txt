@@ -1,6 +1,6 @@
 mkdocs==1.2.3
 mkdocs-material==7.3.3
 mkdocs-minify-plugin==0.5.0
-mkdocstrings==0.15.0
+mkdocstrings==0.16.2
 pymdown-extensions==9.0
 livereload==2.6.3

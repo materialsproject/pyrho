@@ -63,7 +63,7 @@ chgcar = Chgcar.from_hdf5("./test_files/Si.uc.hdf5")
 chgcar = ChargeDensity.from_pmg_volumetric_data(chgcar)
 get_plotly_scatter_plot(chgcar.grid_data,
                         lat_mat=chgcar.lattice,
-                        factor=4,
+                        skips=4,
                         mask=chgcar.grid_data > 0.3)
 ```
 

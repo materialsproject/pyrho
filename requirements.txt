@@ -1,2 +1,2 @@
 pymatgen==2022.0.14
-plotly==4.14.3
+plotly==5.3.1

@@ -147,7 +147,6 @@ class ChargeDensity(PGrid, ChargeABC):
     #     sc_mat = np.linalg.inv(self.structure.lattice.matrix) @ target_sc_lat_vecs
     #     _, res = get_sc_interp(self.rho, sc_mat, grid_out)
     #     return res.reshape(grid_out)
-    #
 
     def get_transformed_obj(
         self,
@@ -199,6 +198,10 @@ class ChargeDensity(PGrid, ChargeABC):
         return self.get_transformed_obj(
             sc_mat=sc_mat, frac_shift=frac_shift, grid_out=grid_out, up_sample=up_sample
         )
+
+    def to_Chgcar(self) -> Chgcar:
+        struct = self.structure.copy()
+        return Chgcar(Poscar(struct), {"total": np.self.renormalized_data})
 
     #
     #     _, new_rho = get_sc_interp(self.rho, sc_mat, grid_sizes=grid_out)

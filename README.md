@@ -1,6 +1,6 @@
 # mp-pyrho
 [![testing](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml/badge.svg)](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml)
-[![codecov](https://codecov.io/gh/materialsproject/pyrho/branch/master/graph/badge.svg?token=YoFMXzpeKI)](https://codecov.io/gh/materialsproject/pyrho)
+[![codecov](https://codecov.io/gh/materialsproject/pyrho/branch/main/graph/badge.svg?token=YoFMXzpeKI)](https://codecov.io/gh/materialsproject/pyrho)
 
 Tools for re-griding volumetric quantum chemistry data for machine-learning purposes.
 

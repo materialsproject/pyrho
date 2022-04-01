@@ -1,117 +1,103 @@
-name: testing
-
 on:
   push:
     branches:
       - main
 
+    tags:
+      - 'v*'
+
   pull_request:
     branches:
       - main
+
 
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2.2.2
-      with:
-        python-version: 3.8
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements-testing.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-ci.txt
+          pip install -e .
+          pre-commit install
 
-    - name: Lint with pycodestyle
-      run: |
-        pip install pycodestyle
-        pycodestyle src/pyrho
 
-    - name: Lint with mypy
-      run: |
-        pip install mypy mypy-boto3
-        mypy src/pyrho
-
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 --count --show-source --statistics src/pyrho
-        # exit-zero treats all errors as warnings.
-        flake8 --count --exit-zero --max-complexity=20 --statistics src/pyrho
+      - name: Lint
+        run: |
+          pre-commit run --all-files --show-diff-on-failure
 
   test:
-    services:
-      local_mongodb:
-        image: mongo:4.0
-        ports:
-          - 27017:27017
-
-    strategy:
-      max-parallel: 6
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.8]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-    - uses: actions/checkout@v1
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2.2.2
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements-testing.txt
-
-    - name: Test with pytest
-      env:
-        CONTINUOUS_INTEGRATION: True
-        MONGODB_SRV_URI: ${{ secrets.MONGODB_SRV_URI }}
-      run: |
-        pip install -e .
-        pytest --cov=pyrho --cov-report=xml
-    - uses: codecov/codecov-action@v2.1.0
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
-  docs:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ 3.8, 3.9 ]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
 
     - uses: actions/setup-python@v2.2.2
       with:
-        python-version: 3.8
+        python-version:  ${{ matrix.python-version }}
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/setup.py') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.python-version }}-pip-
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements-docs.txt
+        pip install -r requirements.txt
+        pip install -r requirements-ci.txt
         pip install -e .
-    - name: Build
-      run: mkdocs build
 
-  merge-deps:
-    needs:
-      - lint
-      - test
-      - docs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Merge me!
-        uses: ridedott/merge-me-action@master
-        with:
-          GITHUB_LOGIN: dependabot[bot]
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Test
+      run: pytest --cov=pyrho --cov-report=xml
+
+    - uses: codecov/codecov-action@v1
+      if: matrix.python-version == 3.8
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+
+  # docs:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - uses: actions/setup-python@v2.2.2
+  #     with:
+  #       python-version: 3.8
+
+  #   - name: Install dependencies
+  #     run: |
+  #       python -m pip install --upgrade pip
+  #       pip install -r requirements-docs.txt
+  #       pip install -e .
+  #   - name: Build
+  #     run: mkdocs build
+
+  # merge-deps:
+  #   needs:
+  #     - lint
+  #     - test
+  #     - docs
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Merge me!
+  #       uses: ridedott/merge-me-action@master
+  #       with:
+  #         GITHUB_LOGIN: dependabot[bot]
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

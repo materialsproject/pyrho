@@ -141,7 +141,7 @@ def get_sc_interp(
         sc_mat: lattice vectors of new cell in the units of the old cell
         grid_sizes: number of grid points in each direction in the new cell
         scipy_interp_method: interpolation method to be used
-        origin: shift applyed to the origin in franctional coordinates
+        origin: shift applyed to the origin in fractional coordinates
     Returns:
         size (ndim x prod(grid_size)) the cartesian coordinates of each point in the new data
         size (prod(grid_size)) the regridded data
@@ -153,7 +153,7 @@ def get_sc_interp(
 
     Suggestion:
         This algorithm can be used in real space and fourier space
-        For real space we expect the data to be smooth, so we should use "real"
+        For real space we expect the data to be smooth, so we should use "linear" interpolation
         For fourier space we expect the position of the exact fourier component is important so use "nearest"
 
     We have to include the boundaries of the UC since the mapped grid must lie between the existing points
@@ -176,7 +176,7 @@ def get_sc_interp(
     frac_coords = np.vstack([icoord.flatten() for icoord in frac_coords])
 
     sc_coord = np.dot(np.array(sc_mat).T, frac_coords)  # shape (dim, NGRID)
-    print(origin)
+
     if origin is not None:
         sc_coord += np.array([[_] for _ in origin])
 

@@ -1,28 +1,49 @@
 import numpy as np
-import pytest
+from hypothesis import given, seed
+from hypothesis import strategies as st
 
 from pyrho.core.pgrid import PGrid
 
 
-@pytest.fixture
-def pgrid_example_2d() -> PGrid:
-    A, B = 1, 2
-    NX, NY = 3, 2
+@seed(1337)
+@given(
+    nx=st.integers(min_value=40, max_value=80),
+    ny=st.integers(min_value=40, max_value=80),
+    A=st.integers(min_value=1, max_value=10),
+    B=st.integers(min_value=1, max_value=10),
+)  # value cannot be
+def test_pgrid(checker_2D, nx, ny, A, B):
+    checker = checker_2D()
+    XX, YY = checker.get_xy(np.eye(2), [nx, ny])
+    ZZ = checker.function(XX, YY)
+    # create PGrid
+    pgrid = PGrid(ZZ, [[A, 0], [0, B]])
+    assert pgrid.grid_shape == (nx, ny)
 
-    def f(x, y):
-        return np.sin(NX * x * 2 * np.pi) + np.cos(NY * y * 2 * np.pi)
-
-    xx = np.linspace(0, A, 20, endpoint=False)
-    yy = np.linspace(0, B, 40, endpoint=False)
-    X, Y = np.meshgrid(xx, yy, indexing="ij")
-    Z = f(X, Y)
-    return PGrid(Z, [[A, 0], [0, B]])
-
-
-def test_pgrid(pgrid_example_2d: PGrid):
-    pgrid = pgrid_example_2d
-    assert pgrid.grid_data.shape == (20, 40)
+    # test reconstructing w/ upsampling
     transformed_data = pgrid.get_transformed_data(
-        np.eye(2), [0, 0], [100, 100], up_sample=4
+        np.eye(2), origin=(0.0, 0.0), grid_out=[nx, ny], up_sample=4
     )
-    assert transformed_data.shape == (100, 100)
+    assert np.max(np.abs(ZZ - transformed_data)) < 1e-4
+
+    # test reconstructing w/o upsampling
+    transformed_data = pgrid.get_transformed_data(
+        np.eye(2), origin=[0, 0], grid_out=[nx, ny]
+    )
+    assert np.max(transformed_data) > 0.1
+    assert np.max(np.abs(ZZ - transformed_data)) < 1e-4
+
+    transformed_data = np.real(
+        pgrid.get_transformed_data(
+            [[1, 1], [1, -1]], origin=[0.5, 0.5], grid_out=[54, 48], up_sample=8
+        )
+    )
+    XX_ref, YY_ref = checker.get_xy([[1, 1], [1, -1]], [54, 48], origin=[0.5, 0.5])
+    ZZ_ref = checker.function(XX_ref, YY_ref)
+    assert np.max(np.abs(ZZ_ref - transformed_data)) < 1e-4
+
+    # check transformed object
+    transformed_obj = pgrid.get_transformed(
+        sc_mat=[[1, 1], [1, -1]], grid_out=[54, 48], origin=[0.5, 0.5]
+    )
+    assert transformed_obj.grid_shape == (54, 48)

@@ -41,9 +41,9 @@ def test_interpolate_fourier1():
 
 @seed(1337)
 @given(
-    a=st.integers(min_value=-1000, max_value=1000),
-    b=st.integers(min_value=-1000, max_value=1000),
-    c=st.integers(min_value=-1000, max_value=1000),
+    a=st.integers(min_value=-40, max_value=40),
+    b=st.integers(min_value=-40, max_value=40),
+    c=st.integers(min_value=-40, max_value=40),
 )  # value cannot be
 def test_interpolate_fourier_hyp1(a, b, c):
     # same data grid out

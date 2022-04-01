@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Python class for ND grid data volumetric data"""
 from typing import List, Tuple, Union
 
@@ -14,7 +16,7 @@ from pyrho.core.utils import (
 
 
 class PGrid(MSONable):
-    def __init__(self, grid_data: np.ndarray, lattice: Union[np.ndarray, None] = None):
+    def __init__(self, grid_data: npt.NDArray, lattice: npt.NDArray | None = None):
         """
         Base class for N-dimensional Regular period grid data.
         The core code should be valid for any N-dimensional periodic data
@@ -33,7 +35,7 @@ class PGrid(MSONable):
     def get_transformed_data(
         self,
         sc_mat: npt.ArrayLike,
-        frac_shift: npt.ArrayLike,
+        origin: npt.ArrayLike,
         grid_out: List[int],
         up_sample: int = 1,
     ) -> np.ndarray:
@@ -42,18 +44,13 @@ class PGrid(MSONable):
         This function assumes that the data is fixed in place and the transformation
         is applied to the lattice vectors.
         Args:
-            sc_mat: matrix transformation applied to the lattice vectors
-            frac_shift: shift the lattice in fractional coordinates of the input cell
-            up_sample: the factor to scale up the sampling of the grid data
-
-        sc_mat  --->  [2, 1]    trans  --->  [0.1, 0.3]
-                      [0, 1]
-        new lattice vectors:
-            a = [0.2, 0.4] --> [2.2, 1.4]
-            b = [0.2, 0.4] --> [0.2, 1.1]
+            sc_mat: Matrix transformation applied to the lattice vectors
+            origin: Shift the lattice in fractional coordinates of the input cell
+            grid_out: The size of the output grid to interpolate on
+            up_sample: The factor to scale up the sampling of the grid data
 
         Returns:
-            transformed data
+            ndarray: The transformed data
 
         """
         if up_sample == 1:
@@ -63,7 +60,7 @@ class PGrid(MSONable):
                 arr_in=self.grid_data,
                 shape=[g_dim_ * up_sample for g_dim_ in self.grid_data.shape],
             )
-        _, new_rho = get_sc_interp(interp_grid_data, sc_mat, grid_sizes=grid_out, origin=frac_shift)  # type: ignore
+        _, new_rho = get_sc_interp(interp_grid_data, sc_mat, grid_sizes=grid_out, origin=origin)  # type: ignore
         new_rho = new_rho.reshape(grid_out)
 
         # TODO make this part of the original transformation
@@ -75,10 +72,10 @@ class PGrid(MSONable):
 
         return new_rho
 
-    def get_transformed_obj(
+    def get_transformed(
         self,
-        sc_mat: Union[List[List[int]], np.ndarray],
-        frac_shift: Union[np.ndarray, List[float], Tuple[float]],
+        sc_mat: Union[List[List[int]], npt.NDArray],
+        origin: Union[npt.NDArray, List[float], Tuple[float]],
         grid_out: List[int],
         up_sample: int = 1,
     ) -> "PGrid":
@@ -86,7 +83,7 @@ class PGrid(MSONable):
         Get a new PGrid object for the new transformed data
         Args:
             sc_mat: matrix transformation applied to the lattice vectors
-            frac_shift: shift the lattice in fractional coordinates of the output cell
+            origin: shift the lattice in fractional coordinates of the input cell
             grid_out: The size of the output grid to interpolate on
             up_sample: the factor to scale up the sampling of the grid data
 
@@ -94,14 +91,14 @@ class PGrid(MSONable):
             New PGrid object
         """
         new_data = self.get_transformed_data(
-            sc_mat, frac_shift, grid_out=grid_out, up_sample=up_sample
+            sc_mat, origin, grid_out=grid_out, up_sample=up_sample
         )
         new_lattice = np.dot(sc_mat, self.lattice)
         return PGrid(grid_data=new_data, lattice=new_lattice)
 
     def gaussian_smear(
-        self, sigma: float = 0.2, arr_in: np.ndarray = None
-    ) -> Tuple[np.ndarray, np.ndarray]:
+        self, sigma: float = 0.2, arr_in: npt.NDArray | None = None
+    ) -> Tuple[npt.NDArray, npt.NDArray]:
         """
         Applies an isotropic Gaussian smear of width (standard deviation) r to
         the potential field. This is necessary to avoid finding paths through
@@ -145,7 +142,7 @@ class PGrid(MSONable):
         cart_pos = np.matmul(filter_latt.T, np.vstack(frac_pos))
 
         # Distance the center if 1d we make  this iterable
-        tmp: Union[float, np.ndarray] = sum(filter_latt)
+        tmp: Union[float, npt.NDArray] = sum(filter_latt)
         if isinstance(tmp, np.ndarray):
             mid_point = tmp / 2
         else:
@@ -163,7 +160,7 @@ class PGrid(MSONable):
 
     def lossy_smooth_compression(
         self, grid_out: List, smear_std: float = 0.2
-    ) -> np.ndarray:
+    ) -> npt.NDArray:
         """
         Perform Fourier interpolation then Gaussian smoothing.
         the smoothing makes sure that simple operation like max and min filters still

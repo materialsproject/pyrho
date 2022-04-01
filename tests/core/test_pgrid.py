@@ -3,12 +3,12 @@ import pytest
 
 from pyrho.core.pgrid import PGrid
 
-A, B = 1, 2
-NX, NY = 3, 2
-
 
 @pytest.fixture
-def pgrid_example():
+def pgrid_example_2d() -> PGrid:
+    A, B = 1, 2
+    NX, NY = 3, 2
+
     def f(x, y):
         return np.sin(NX * x * 2 * np.pi) + np.cos(NY * y * 2 * np.pi)
 
@@ -19,5 +19,10 @@ def pgrid_example():
     return PGrid(Z, [[A, 0], [0, B]])
 
 
-def test_pgrid_init(pgrid_example):
-    assert pgrid_example.grid_data.shape == (20, 40)
+def test_pgrid(pgrid_example_2d: PGrid):
+    pgrid = pgrid_example_2d
+    assert pgrid.grid_data.shape == (20, 40)
+    transformed_data = pgrid.get_transformed_data(
+        np.eye(2), [0, 0], [100, 100], up_sample=4
+    )
+    assert transformed_data.shape == (100, 100)

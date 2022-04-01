@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-
 """Python class for ND grid data volumetric data"""
-from typing import List, Union, Tuple
+from typing import List, Tuple, Union
+
 import numpy as np
+import numpy.typing as npt
 from monty.json import MSONable
+from scipy.ndimage import convolve
+
 from pyrho.core.utils import (
     get_sc_interp,
-    interpolate_fourier,
     get_ucell_frac_fit_sphere,
+    interpolate_fourier,
 )
-from scipy.ndimage import convolve
-import numpy.typing as npt
 
 
 class PGrid(MSONable):
@@ -145,9 +145,9 @@ class PGrid(MSONable):
         cart_pos = np.matmul(filter_latt.T, np.vstack(frac_pos))
 
         # Distance the center if 1d we make  this iterable
-        tmp = sum(filter_latt)  # type: Union[float, np.ndarray]
+        tmp: Union[float, np.ndarray] = sum(filter_latt)
         if isinstance(tmp, np.ndarray):
-            mid_point = tmp / 2  # type: Union[List, np.ndarray]
+            mid_point = tmp / 2
         else:
             mid_point = [tmp / 2]
         disp2mid2 = [

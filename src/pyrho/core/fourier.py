@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
-
 """Fourier analysis functions."""
 
 # Calculate the fourier transform
-from typing import List, Callable
+from typing import Callable, List
+
+import numpy as np
 import numpy.typing as npt
 from monty.json import MSONable
-import numpy as np
 
 
 class PFourier(MSONable):
@@ -33,7 +32,10 @@ class PFourier(MSONable):
         Return fft position  structured grid
         Assuming standard fft format A[N-1] = A[-1]
         """
-        grid_vec = [np.linspace(0, 1, isize, endpoint=False) for isize in self.fourier_data.shape]
+        grid_vec = [
+            np.linspace(0, 1, isize, endpoint=False)
+            for isize in self.fourier_data.shape
+        ]
         frac_coords = np.meshgrid(*grid_vec, indexing="ij")
         return np.vstack([icoord.flatten() for icoord in frac_coords])
 
@@ -42,14 +44,21 @@ class PFourier(MSONable):
         """
         Return the fft positions where the N-k is changed to -k
         """
-        return np.array([ipos - np.round(ipos) for ipos in self.fractional_reciprocal_pos])
+        return np.array(
+            [ipos - np.round(ipos) for ipos in self.fractional_reciprocal_pos]
+        )
 
     @property
     def fft_pos_centered_s(self) -> np.ndarray:
         """
         Return the fft positions where the N-k is changed to -k
         """
-        return np.array([ipos * self.fourier_data.shape[itr] for itr, ipos in enumerate(self.fft_pos_centered)])
+        return np.array(
+            [
+                ipos * self.fourier_data.shape[itr]
+                for itr, ipos in enumerate(self.fft_pos_centered)
+            ]
+        )
 
     @property
     def fft_pos_centered_cartesian(self) -> List:
@@ -89,7 +98,9 @@ class PFourier(MSONable):
             filter_val: Filter function applied to the fourier data values (Example: Only keep large Fourier weights)
             ftiler_pos: Filter function applied to the reciprocal positions (Example: low pass filter)
         """
-        for cart_pos, val in zip(self.cartesian_reciprocal_pos.T, self.fourier_data.flatten()):
+        for cart_pos, val in zip(
+            self.cartesian_reciprocal_pos.T, self.fourier_data.flatten()
+        ):
             if filter_val is not None and not filter_val(val):
                 continue
             if filter_pos is not None and not filter_pos(cart_pos):

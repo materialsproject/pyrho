@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Helper functions to visualize the data in plotly
 """
 
-import plotly.graph_objs as go
 import numpy as np
+import plotly.graph_objs as go
 
 """Visualizaiton functions do the scatter plots in plotly since it seems to be more efficient."""
 
@@ -46,7 +45,9 @@ def get_plotly_scatter_plot(
     else:
         flat_mask = np.ones_like(trimmed_data, dtype=bool).flatten()
 
-    vecs = [np.linspace(0, 1, trimmed_data.shape[_], endpoint=False) for _ in range(ndim)]
+    vecs = [
+        np.linspace(0, 1, trimmed_data.shape[_], endpoint=False) for _ in range(ndim)
+    ]
     gridded = np.meshgrid(*vecs, indexing="ij")  # indexing to match the labeled array
     res = np.dot(lat_mat.T, [g_.flatten() for g_ in gridded])
 
@@ -66,7 +67,15 @@ def get_plotly_scatter_plot(
     cc = cc[flat_mask]
 
     if ndim == 1:
-        data = go.Scatter(x=xx, y=cc, mode="markers", marker=dict(size=marker_size, color="red",))
+        data = go.Scatter(
+            x=xx,
+            y=cc,
+            mode="markers",
+            marker=dict(
+                size=marker_size,
+                color="red",
+            ),
+        )
     if ndim == 2:
         data = go.Scatter(
             x=xx,
@@ -85,13 +94,20 @@ def get_plotly_scatter_plot(
             y=yy,
             z=zz,
             mode="markers",
-            marker=dict(size=marker_size, color=cc, colorscale="Viridis", opacity=opacity,),
+            marker=dict(
+                size=marker_size,
+                color=cc,
+                colorscale="Viridis",
+                opacity=opacity,
+            ),
         )
     fig = go.Figure(data=[data])
 
     fig.update_layout(template="plotly_white")
     if ndim == 2:
-        fig.update_layout(width=800, height=800, yaxis=dict(scaleanchor="x", scaleratio=1))
+        fig.update_layout(
+            width=800, height=800, yaxis=dict(scaleanchor="x", scaleratio=1)
+        )
     if ndim == 3:
         fig.update_layout(width=800, height=800, scene_aspectmode="data")
     return fig

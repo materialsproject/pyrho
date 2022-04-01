@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 import numpy as np
 
 from pyrho.vis.plotly import get_plotly_scatter_plot

@@ -1,6 +1,8 @@
-from hypothesis import given, seed, settings, strategies as st
-from pyrho.core.utils import pad_arr, interpolate_fourier, get_sc_interp
 import numpy as np
+from hypothesis import given, seed, settings
+from hypothesis import strategies as st
+
+from pyrho.core.utils import get_sc_interp, interpolate_fourier, pad_arr
 
 
 def test_pad_arr():

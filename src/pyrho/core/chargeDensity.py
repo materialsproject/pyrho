@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-
 """Chang Density Objects: Periodic Grid + Lattice / Atoms"""
 import math
 from abc import ABCMeta, abstractmethod
-from typing import Dict, List, Union, Tuple
+from typing import Dict, List, Tuple, Union
 
 import numpy as np
+import numpy.typing as npt
+from monty.dev import deprecated
 from monty.json import MSONable
 from pymatgen.core.lattice import Lattice
 from pymatgen.core.structure import Structure
-from pymatgen.io.vasp import VolumetricData, Chgcar, Poscar
+from pymatgen.io.vasp import Chgcar, Poscar, VolumetricData
+
 from pyrho.core.pgrid import PGrid
-import numpy.typing as npt
 
 
 class ChargeABC(metaclass=ABCMeta):
@@ -125,9 +125,9 @@ class ChargeDensity(PGrid, ChargeABC):
         Change the orientation of the lattice vector so that:
         a points along the x-axis, b is in the xy-plane, c is in the positive-z halve of space
         """
-        args = (
+        args: Tuple[float, float, float, float, float, float] = (
             self.structure.lattice.abc + self.structure.lattice.angles
-        )  # type:  Tuple[float, float, float, float, float, float]
+        )
         self.structure.lattice = Lattice.from_parameters(*args, vesta=True)
 
     # def get_data_in_cube(self, s: float, ngrid: int) -> np.ndarray:
@@ -282,6 +282,7 @@ class SpinChargeDensity(MSONable, ChargeABC):
             v.reorient_axis()
 
 
+@deprecated
 def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
     """
     The original idea here was to use to to speed up some vasp calculations for
@@ -298,8 +299,8 @@ def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
     Returns:
         List of strings for each line of the Augmentation data.
     """
-    res = []  # type: List[str]
-    cur_block = []  # type: List[str]
+    res: List[str] = []
+    cur_block: List[str] = []
     cnt = 0
     for ll in data_aug:
         if "augmentation" in ll:

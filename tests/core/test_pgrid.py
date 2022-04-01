@@ -1,5 +1,6 @@
-import pytest
 import numpy as np
+import pytest
+
 from pyrho.core.pgrid import PGrid
 
 A, B = 1, 2

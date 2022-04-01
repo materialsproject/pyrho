@@ -218,8 +218,8 @@ def get_plane_spacing(lattice: np.ndarray) -> Iterable[float]:
             lattice vectors EXCEPT the k-th one
 
         Examples:
-    >>> get_plane_spacing([[1,0,0], [1,1,0], [0,0,2]])
-    [0.7653668647301795, 1.0420107665599743, 2.0]
+    >>> get_plane_spacing([[1,0,0], [1,1,0], [0,0,2]]) # doctest: +ELLIPSIS
+    [0.7653..., 1.042..., 2.0]
 
     """
     # get all pairwise projections i must be smaller than j

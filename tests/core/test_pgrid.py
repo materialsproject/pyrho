@@ -17,3 +17,7 @@ def pgrid_example():
     X, Y = np.meshgrid(xx, yy, indexing="ij")
     Z = f(X, Y)
     return PGrid(Z, [[A, 0], [0, B]])
+
+
+def test_pgrid_init(pgrid_example):
+    assert pgrid_example.grid_data.shape == (20, 40)

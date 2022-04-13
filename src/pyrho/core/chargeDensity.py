@@ -37,7 +37,7 @@ class ChargeDensity(PGrid, ChargeABC):
         normalization: str = "vasp",
     ):
         """
-        Class that contains functions to featurize volumetic data with periodic
+        Class that contains functions to featurize volumetric data with periodic
         boundary conditions.
         Make sure the data being stored is grid-independent
 
@@ -160,8 +160,7 @@ class ChargeDensity(PGrid, ChargeABC):
         data
         Args:
             sc_mat: Matrix to create the new cell
-            frac_shift: translation to be applied on the cell after the matrix
-            transformation
+            frac_shift: translation to be applied on the cell after the matrix transformation
             grid_out: density of the new grid, can also just take the desired
             dimension as a list.
 
@@ -202,6 +201,7 @@ class ChargeDensity(PGrid, ChargeABC):
     def to_Chgcar(self) -> Chgcar:
         struct = self.structure.copy()
         return Chgcar(Poscar(struct), {"total": np.self.renormalized_data})
+
 
     #
     #     _, new_rho = get_sc_interp(self.rho, sc_mat, grid_sizes=grid_out)

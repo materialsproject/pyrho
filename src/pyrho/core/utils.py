@@ -255,16 +255,10 @@ def get_ucell_frac_fit_sphere(lattice: np.ndarray, r: float = 0.2) -> Iterable[f
             fraction of lattice vector in each direction need to fit the sphere
 
         Examples:
-    >>> get_ucell_frac_fit_sphere([[1,0,0], [1,-1, 0], [0,0,2]], 0.1)
-    [0.26131259297527537, 0.19193659645213346, 0.1]
+    >>> get_ucell_frac_fit_sphere([[1,0,0], [1,-1, 0], [0,0,2]], 0.1) # doctest: +ELLIPSIS
+    [0.2613..., 0.1919..., 0.1]
     """
     rfrac = []
     for ispace in get_plane_spacing(lattice=lattice):
         rfrac.append(2 * r / ispace)
     return rfrac
-
-
-if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()

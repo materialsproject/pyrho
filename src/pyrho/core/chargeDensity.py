@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import warnings
+
 """Chang Density Objects: Periodic Grid + Lattice / Atoms"""
 import math
 from abc import ABCMeta, abstractmethod
@@ -19,8 +23,8 @@ class ChargeABC(metaclass=ABCMeta):
     def get_reshaped_cell(
         self,
         sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
-        frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
-        grid_out: Union[List, int] = int(1e9),
+        origin: npt.ArrayLike = (0.0, 0.0, 0.0),
+        grid_out: npt.ArrayLike | int = int(1e9),
     ) -> "ChargeABC":
         pass
 
@@ -32,14 +36,12 @@ class ChargeABC(metaclass=ABCMeta):
 class ChargeDensity(PGrid, ChargeABC):
     def __init__(
         self,
-        grid_data: np.ndarray,
+        data: np.ndarray,
         structure: Structure,
         normalization: str = "vasp",
     ):
         """
-        Class that contains functions to featurize volumetic data with periodic
-        boundary conditions.
-        Make sure the data being stored is grid-independent
+        Defines a charge density with a PGrid object along with the atomic structure
 
         Args:
             grid_data: Volumetric data to read in
@@ -53,7 +55,7 @@ class ChargeDensity(PGrid, ChargeABC):
             """
             No rescaling
             """
-            scaled_data = grid_data
+            scaled_data = data
         elif normalization[0].lower() == "v":
             """
             the standard charge density from VASP is given as (rho*V) such that:
@@ -63,7 +65,7 @@ class ChargeDensity(PGrid, ChargeABC):
             where the second V account for the different number of electrons in
             different cells
             """
-            scaled_data = grid_data / self.structure.volume
+            scaled_data = data / self.structure.volume
         else:
             raise NotImplementedError("Not a valid normalization scheme")
         super().__init__(grid_data=scaled_data, lattice=None)
@@ -148,7 +150,7 @@ class ChargeDensity(PGrid, ChargeABC):
     #     _, res = get_sc_interp(self.rho, sc_mat, grid_out)
     #     return res.reshape(grid_out)
 
-    def get_transformed_obj(
+    def get_transformed(
         self,
         sc_mat: npt.ArrayLike = ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
         frac_shift: npt.ArrayLike = (0.0, 0.0, 0.0),
@@ -166,8 +168,18 @@ class ChargeDensity(PGrid, ChargeABC):
             dimension as a list.
 
         Returns:
+            (ChargeDensity) Transformed charge density object
 
         """
+
+        # warning if the sc_mat is not integer valued
+        if not np.allclose(np.round(sc_mat), sc_mat):
+            warnings.warn(
+                "The `sc_mat` is not integer valued.\n"
+                "Non-integer valued transformations are valid but will not product periodic structures, thus we cannot define a new Structure object.\n"
+                "We will round the sc_mat to integer values for now but can implement functionality that returns a Molecule object in the future.",
+            )
+        sc_mat = np.round(sc_mat).astype(int)
         new_structure = self.structure.copy()
         new_structure.translate_sites(
             list(range(len(new_structure))), -np.array(frac_shift)
@@ -195,7 +207,7 @@ class ChargeDensity(PGrid, ChargeABC):
         grid_out: Union[List, int] = int(1e9),
         up_sample: int = 1,
     ) -> "ChargeDensity":
-        return self.get_transformed_obj(
+        return self.get_transformed(
             sc_mat=sc_mat, frac_shift=frac_shift, grid_out=grid_out, up_sample=up_sample
         )
 

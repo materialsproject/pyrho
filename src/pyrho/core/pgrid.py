@@ -60,17 +60,9 @@ class PGrid(MSONable):
                 arr_in=self.grid_data,
                 shape=[g_dim_ * up_sample for g_dim_ in self.grid_data.shape],
             )
-        _, new_rho = get_sc_interp(interp_grid_data, sc_mat, grid_sizes=grid_out, origin=origin)  # type: ignore
-        new_rho = new_rho.reshape(grid_out)
-
-        # TODO make this part of the original transformation
-        # grid_shifts = [
-        #     int(t * g) for t, g in zip(frac_shift - np.round(frac_shift), grid_out)
-        # ]
-        #
-        # new_rho = roll_array(new_rho, grid_shifts)
-
-        return new_rho
+        _, new_data = get_sc_interp(interp_grid_data, sc_mat, grid_sizes=grid_out, origin=origin)  # type: ignore
+        new_data = new_data.reshape(grid_out)
+        return new_data
 
     def get_transformed(
         self,

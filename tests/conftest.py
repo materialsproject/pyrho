@@ -7,19 +7,28 @@ import pytest
 from matplotlib import pyplot as plt
 
 
+@pytest.fixture(scope="session")
+def test_dir():
+    from pathlib import Path
+
+    module_dir = Path(__file__).resolve().parent.parent
+    test_dir = module_dir / "test_files"
+    return test_dir.resolve()
+
+
 @dataclass
 class Checker2D:
-    """Check 2D regridding using an analytic 2D fucntion."""
+    """Check 2D regridding using an analytic 2D function."""
 
     mX: int = 1
     mY: int = 1
 
     def function(self, x, y):
-        """Analitical function in 2D"""
+        """Analytical function in 2D"""
         return np.sin(self.mX * x * 2 * np.pi)  # + np.cos(self.mY * y * 2 * np.pi)
 
     def get_xy(self, lat_mat, grids, origin=(0, 0)):
-        """Get the x and y coordinates for a given pair of lattice vectors ans grid size.
+        """Get the x and y coordinates for a given pair of lattice vectors and grid size.
 
         Args:
             lat_mat: lattice vectors

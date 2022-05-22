@@ -74,6 +74,38 @@ class PGrid(MSONable):
         new_data = new_data.reshape(grid_out)
         return new_data
 
+    def __mul__(self, factor: float) -> PGrid:
+        """Multiply the grid data by a factor
+
+        Parameters
+        ----------
+        factor:
+            The factor to multiply the grid data by
+
+        Returns
+        -------
+        PGrid:
+            The new PGrid object
+
+        """
+        return PGrid(grid_data=self.grid_data * factor, lattice=self.lattice)
+
+    def __truediv__(self, factor: float) -> PGrid:
+        """Divide the grid data by a factor
+
+        Parameters
+        ----------
+        factor:
+            The factor to divide the grid data by
+
+        Returns
+        -------
+        PGrid:
+            The new PGrid object
+
+        """
+        return PGrid(grid_data=self.grid_data / factor, lattice=self.lattice)
+
     def get_transformed(
         self,
         sc_mat: Union[List[List[int]], npt.NDArray],

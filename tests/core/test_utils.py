@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from hypothesis import given, seed, settings
 from hypothesis import strategies as st
 
@@ -29,14 +30,15 @@ def test_interpolate_fourier1():
         return 20 * np.sin(x) ** 2 * np.cos(x)
 
     xx = np.linspace(0, 2 * np.pi, 20, endpoint=False)
-    res = np.real(interpolate_fourier(f(xx), [len(xx)]))
+    xx2 = np.linspace(0, 2 * np.pi, 40, endpoint=False)
+    res = interpolate_fourier(f(xx), [len(xx)])
     ref = f(xx)
-    assert abs(max(res - ref)) < 1e-14
+    assert res == pytest.approx(ref)
 
     # double the grid size
-    res = np.real(interpolate_fourier(f(xx), [len(xx) * 2]))
-    ref = f(xx)
-    assert abs(max(res[::2] - ref)) < 1e-14
+    res = interpolate_fourier(f(xx), [len(xx) * 2])
+    ref = f(xx2)
+    assert res == pytest.approx(ref)
 
 
 @seed(1337)

@@ -90,21 +90,25 @@ def interpolate_fourier(arr_in: np.ndarray, shape: List[int]) -> np.ndarray:
     ...        [16.0, 10.0, 3.0, 5.0],
     ...        [16.0, 22.0, 16.0, 6.0],
     ...        [19.0, 20.0, 3.0, 7.0]])
-    >>> np.round(np.abs(interpolate_fourier(arr_in=arr, shape=[10,8])),2)
-    array([[ 5.  ,  7.31, 10.  , 10.84, 10.  ,  8.72,  7.  ,  5.2 ],
-           [12.02, 12.42, 11.22, 12.91, 12.72,  8.4 ,  4.71,  7.93],
-           [22.  , 19.8 , 12.  ,  9.54,  7.  ,  4.31,  3.  , 13.58],
-           [23.2 , 19.98, 10.33,  4.63,  0.64,  2.75,  3.36, 15.11],
-           [16.  , 14.9 , 10.  ,  5.76,  3.  ,  2.36,  5.  , 11.37],
-           [11.58, 14.08, 14.8 , 14.26, 11.82,  8.08,  6.05,  7.9 ],
-           [16.  , 20.68, 22.  , 20.68, 16.  ,  9.4 ,  6.  ,  9.4 ],
-           [21.86, 26.36, 24.64, 18.31, 10.48,  5.18,  6.05, 13.21],
-           [19.  , 22.54, 20.  , 11.26,  3.  ,  2.36,  7.  , 13.37],
-           [ 9.34, 12.5 , 13.01,  8.34,  3.33,  4.87,  7.84,  8.91]])
+    >>> np.round(interpolate_fourier(arr_in=arr, shape=[10,8]),2)
+    array([[ 5.  ,  7.29, 10.  , 10.83, 10.  ,  8.71,  7.  ,  5.17],
+           [12.02, 12.22, 11.22, 12.72, 12.72,  8.11,  4.71,  7.62],
+           [22.  , 19.49, 12.  ,  8.88,  7.  ,  2.51,  3.  , 13.12],
+           [23.2 , 19.82, 10.33,  3.87,  0.64, -1.05,  3.36, 14.9 ],
+           [16.  , 14.86, 10.  ,  5.67,  3.  ,  2.14,  5.  , 11.33],
+           [11.58, 14.07, 14.8 , 14.24, 11.82,  8.06,  6.05,  7.88],
+           [16.  , 20.66, 22.  , 20.66, 16.  ,  9.34,  6.  ,  9.34],
+           [21.86, 26.35, 24.64, 18.31, 10.48,  5.16,  6.05, 13.21],
+           [19.  , 22.5 , 20.  , 11.19,  3.  ,  2.  ,  7.  , 13.31],
+           [ 9.34, 12.33, 13.01,  8.08,  3.33,  4.42,  7.84,  8.67]])
+
     """
     fft_res = np.fft.fftn(arr_in)
     fft_res = pad_arr(fft_res, shape)
     results = np.fft.ifftn(fft_res) * np.size(fft_res) / np.size(arr_in)
+    # take the real value if the input array is real
+    if not np.iscomplexobj(arr_in):
+        return np.real(results)
     return results
 
 
@@ -141,7 +145,7 @@ def get_sc_interp(
         sc_mat: lattice vectors of new cell in the units of the old cell
         grid_sizes: number of grid points in each direction in the new cell
         scipy_interp_method: interpolation method to be used
-        origin: shift applyed to the origin in fractional coordinates
+        origin: shift applied to the origin in fractional coordinates
     Returns:
         size (ndim x prod(grid_size)) the cartesian coordinates of each point in the new data
         size (prod(grid_size)) the regridded data

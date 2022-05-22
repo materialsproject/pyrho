@@ -5,7 +5,6 @@ from dataclasses import dataclass
 
 """Chang Density Objects: Periodic Grid + Lattice / Atoms"""
 import math
-from abc import ABCMeta, abstractmethod
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
@@ -18,36 +17,6 @@ from pymatgen.io.vasp import Chgcar, Poscar, VolumetricData
 
 from pyrho.core.pgrid import PGrid
 from pyrho.core.utils import get_sc_interp
-
-
-class ChargeABC(metaclass=ABCMeta):
-    def __init__(self, pgrids: dict[str, PGrid], normalization: str):
-        self.pgrids = pgrids
-        self.normalization = normalization
-
-    def __post_init__(self):
-        """Post initialization:
-        Checks:
-            - Make sure all the lattices are identical
-        """
-        lattices = [self.pgrids[key].lattice for key in self.pgrids.keys()]
-        if not all(np.allclose(lattices[0], lattice) for lattice in lattices):
-            raise ValueError("Lattices are not identical")
-        self.lattice = lattices[0]
-
-    def get_reshaped(
-        self,
-        sc_mat: npt.ArrayLike,
-        grid_out: npt.ArrayLike | int,
-        origin: npt.ArrayLike = (0.0, 0.0, 0.0),
-    ) -> "ChargeABC":
-        """
-        Reshape the charge density data to a new grid.
-        """
-
-    @abstractmethod
-    def reorient_axis(self) -> None:
-        pass
 
 
 @dataclass
@@ -92,9 +61,33 @@ class ChargeDensity(MSONable):
         """
         return {
             k: _normalize_data(
-                grid_data=v,
+                grid_data=v.grid_data,
                 lattice=self.structure.lattice,
                 normalization=self.normalization,
+            )
+            for k, v in self.pgrids.items()
+        }
+
+    @property
+    def normalized_pgrids(self) -> dict[str, PGrid]:
+        """Get the normalized pgrids.
+
+        Since different codes use different normalization methods for
+        volumetric data we should convert them to the same units (electrons / Angstrom^3)
+
+        Returns
+        -------
+        dict[str, PGrid]:
+            The normalized pgrids in units of (electrons / Angstrom^3)
+        """
+        return {
+            k: PGrid(
+                grid_data=_normalize_data(
+                    grid_data=v.grid_data,
+                    lattice=self.structure.lattice,
+                    normalization=self.normalization,
+                ),
+                lattice=v.lattice,
             )
             for k, v in self.pgrids.items()
         }
@@ -209,12 +202,12 @@ class ChargeDensity(MSONable):
             grid_out = grid_out
 
         pgrids = {}
-        for k, pgrid in self.pgrids.items():
-            norm_data = pgrid.get_transformed(
+        for k, pgrid in self.normalized_pgrids.items():
+            new_pgrid = pgrid.get_transformed(
                 sc_mat=sc_mat, grid_out=grid_out, origin=origin, up_sample=up_sample
             )
             pgrids[k] = _scaled_data(
-                grid_data=norm_data,
+                grid_data=new_pgrid,
                 lattice=new_structure.lattice,
                 normalization=self.normalization,
             )

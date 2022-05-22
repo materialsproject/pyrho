@@ -105,7 +105,9 @@ class ChargeDensity(MSONable):
         return self.structure.lattice.matrix
 
     @classmethod
-    def from_pmg(cls, vdata: VolumetricData, data_key="total") -> "ChargeDensity":
+    def from_pmg(
+        cls, vdata: VolumetricData, data_key: str = "total", normalization: str = "vasp"
+    ) -> "ChargeDensity":
         """
         Read a single key from the data field of a VolumetricData object
         Args:
@@ -115,10 +117,10 @@ class ChargeDensity(MSONable):
         Returns:
             ChargeDensity object
         """
+        pgrids = {k: PGrid(v, vdata.structure.lattice) for k, v in vdata.data.items()}
+
         return cls(
-            grid_data=vdata.data[data_key],
-            structure=vdata.structure,
-            normalization="vasp",
+            pgrids=pgrids, structure=vdata.structure, normalization=normalization
         )
 
     def reorient_axis(self) -> None:

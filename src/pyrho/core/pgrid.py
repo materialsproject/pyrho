@@ -16,7 +16,7 @@ from pyrho.core.utils import (
 
 
 class PGrid(MSONable):
-    def __init__(self, grid_data: npt.NDArray, lattice: npt.NDArray | None = None):
+    def __init__(self, grid_data: npt.NDArray, lattice: npt.NDArray):
         """Base class for N-dimensional Regular period grid data.
 
         The core code is valid for any N-dimensional periodic data
@@ -28,9 +28,8 @@ class PGrid(MSONable):
         lattice:
             Lattice vectors of the grid
         """
-        if lattice is not None:  # type: ignore
-            self.lattice = np.array(lattice)
         self.grid_data = grid_data
+        self.lattice = np.array(lattice)
         self._dim = len(self.grid_data.shape)
         self.grid_shape = self.grid_data.shape
         self.ngridpts = np.prod(self.grid_shape)

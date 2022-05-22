@@ -17,13 +17,16 @@ from pyrho.core.utils import (
 
 class PGrid(MSONable):
     def __init__(self, grid_data: npt.NDArray, lattice: npt.NDArray | None = None):
-        """
-        Base class for N-dimensional Regular period grid data.
-        The core code should be valid for any N-dimensional periodic data
+        """Base class for N-dimensional Regular period grid data.
 
-        Args:
-            grid_data: Data stored on the regular rid
-            lattice: list of lattice vectors
+        The core code is valid for any N-dimensional periodic data
+
+        Parameters
+        ----------
+        grid_data:
+            Data stored on the regular rid
+        lattice:
+            Lattice vectors of the grid
         """
         if lattice is not None:  # type: ignore
             self.lattice = np.array(lattice)
@@ -32,25 +35,33 @@ class PGrid(MSONable):
         self.grid_shape = self.grid_data.shape
         self.ngridpts = np.prod(self.grid_shape)
 
-    def get_transformed_data(
+    def _transform_data(
         self,
         sc_mat: npt.ArrayLike,
-        origin: npt.ArrayLike,
         grid_out: List[int],
+        origin: npt.ArrayLike = (0, 0, 0),
         up_sample: int = 1,
-    ) -> np.ndarray:
-        """
-        Apply a transformation to the grid data
+    ) -> npt.NDArray:
+        """Apply a supercell transformation to the grid data
+
         This function assumes that the data is fixed in place and the transformation
         is applied to the lattice vectors.
-        Args:
-            sc_mat: Matrix transformation applied to the lattice vectors
-            origin: Shift the lattice in fractional coordinates of the input cell
-            grid_out: The size of the output grid to interpolate on
-            up_sample: The factor to scale up the sampling of the grid data
 
-        Returns:
-            ndarray: The transformed data
+        Parameters
+        ----------
+        sc_mat:
+            Matrix transformation applied to the lattice vectors
+        grid_out:
+            The dimensions of the output grid
+        origin:
+            Origin of the new lattice in fractional coordinates of the input cell
+        up_sample:
+            The factor to scale up the sampling of the grid data using Fourier interpolation
+
+        Returns
+        -------
+        NDArray:
+            The transformed data
 
         """
         if up_sample == 1:
@@ -67,49 +78,60 @@ class PGrid(MSONable):
     def get_transformed(
         self,
         sc_mat: Union[List[List[int]], npt.NDArray],
-        origin: Union[npt.NDArray, List[float], Tuple[float]],
         grid_out: List[int],
+        origin: npt.NDArray = (0, 0, 0),
         up_sample: int = 1,
     ) -> PGrid:
-        """
-        Get a new PGrid object for the new transformed data
-        Args:
-            sc_mat: matrix transformation applied to the lattice vectors
-            origin: shift the lattice in fractional coordinates of the input cell
-            grid_out: The size of the output grid to interpolate on
-            up_sample: the factor to scale up the sampling of the grid data
+        """Get a new PGrid object for the new transformed data
 
-        Returns:
-            New PGrid object
+        Parameters
+        ----------
+        sc_mat:
+            Matrix transformation applied to the lattice vectors
+        grid_out:
+            The dimensions of the output grid
+        origin:
+            Origin of the new lattice in fractional coordinates of the input cell
+        up_sample:
+            The factor to scale up the sampling of the grid data using Fourier interpolation
+
+        Returns
+        -------
+        PGrid:
+            The transformed PGrid object
+
         """
-        new_data = self.get_transformed_data(
-            sc_mat, origin, grid_out=grid_out, up_sample=up_sample
+        new_data = self._transform_data(
+            sc_mat=sc_mat, grid_out=grid_out, origin=origin, up_sample=up_sample
         )
         new_lattice = np.dot(sc_mat, self.lattice)
         return PGrid(grid_data=new_data, lattice=new_lattice)
 
     def gaussian_smear(
-        self, sigma: float = 0.2, arr_in: npt.NDArray | None = None
+        self,
+        arr_in: npt.NDArray | None = None,
+        sigma: float = 0.2,
     ) -> Tuple[npt.NDArray, npt.NDArray]:
-        """
-        Applies an isotropic Gaussian smear of width (standard deviation) r to
-        the potential field. This is necessary to avoid finding paths through
-        narrow minima or nodes that may exist in the field (although any
-        potential or charge distribution generated from GGA should be
-        relatively smooth anyway). The smearing obeys periodic
-        boundary conditions at the edges of the cell.
+        """Applies an isotropic Gaussian smear
 
-        Args:
-            sigma: Smearing width in cartesian coordinates, in the same units as the
-            structure lattice vectors
-            arr_in: input data array to smear, if None: smear self.grid_data
+        Apply a Gaussian smearing of width (standard deviation) `sigma` to
+        the periodic field.  The smearing obeys periodic boundary conditions at
+        the edges of the cell.
+
+        Parameters
+        ----------
+        arr_in:
+            input data array to smear, if None: smear self.grid_data
+        sigma:
+            Smearing width in cartesian coordinates, in the same units as the lattice vectors
         """
         # get the dimension of the filter needed for 1 std dev of gaussian mask
-        # Go 4 standard deviations away
+        # Go 5 standard deviations away
         if arr_in is None:
             arr = self.grid_data
         else:
             arr = arr_in
+
         r_frac = get_ucell_frac_fit_sphere(lattice=self.lattice, r=sigma * 5)
         filter_shape = [
             int(

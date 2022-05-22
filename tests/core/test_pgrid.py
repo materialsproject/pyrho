@@ -21,20 +21,20 @@ def test_pgrid(checker_2D, nx, ny, A, B):
     assert pgrid.grid_shape == (nx, ny)
 
     # test reconstructing w/ upsampling
-    transformed_data = pgrid.get_transformed_data(
+    transformed_data = pgrid._transform_data(
         np.eye(2), origin=(0.0, 0.0), grid_out=[nx, ny], up_sample=4
     )
     assert np.max(np.abs(ZZ - transformed_data)) < 1e-4
 
     # test reconstructing w/o upsampling
-    transformed_data = pgrid.get_transformed_data(
+    transformed_data = pgrid._transform_data(
         np.eye(2), origin=[0, 0], grid_out=[nx, ny]
     )
     assert np.max(transformed_data) > 0.1
     assert np.max(np.abs(ZZ - transformed_data)) < 1e-4
 
     transformed_data = np.real(
-        pgrid.get_transformed_data(
+        pgrid._transform_data(
             [[1, 1], [1, -1]], origin=[0.5, 0.5], grid_out=[54, 48], up_sample=8
         )
     )

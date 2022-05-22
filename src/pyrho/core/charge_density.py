@@ -17,6 +17,7 @@ from pymatgen.core.structure import Structure
 from pymatgen.io.vasp import Chgcar, Poscar, VolumetricData
 
 from pyrho.core.pgrid import PGrid
+from pyrho.core.utils import get_sc_interp
 
 
 class ChargeABC(metaclass=ABCMeta):
@@ -70,61 +71,37 @@ class ChargeDensity(MSONable):
         """Post initialization:
         Steps:
             - Make sure all the lattices are identical
-            - Perform the normalization of the grid data
-
         """
         lattices = [self.pgrids[key].lattice for key in self.pgrids.keys()]
         if not all(
             np.allclose(self.structure.lattice, lattice) for lattice in lattices
         ):
             raise ValueError("Lattices are not identical")
-        for k, v in self.pgrids.items():
-            self.pgrids[k] = self._normalize_data(v.grid_data)
-
-    def _normalize_data(self, grid_data: npt.NDArray) -> npt.NDArray:
-        """Normalize the data to the number of electrons
-
-        The standard charge density from VASP is given as (rho*V) such that:
-        sum(rho)/NGRID = NELECT/UC_vol
-        so the real rho is:
-        rho = (rho*UC_vol)*NGRID/UC_vol/UC_vol
-        where the second V account for the different number of electrons in
-        different cells
-
-        Args:
-            grid_data: The grid data to normalize
-
-        Returns:
-            NDArray: The normalized grid data
-        """
-        if self.normalization is None or self.normalization[0].lower() == "n":
-            return grid_data
-        elif self.normalization[0].lower() == "v":
-            return grid_data / self.structure.volume
-        else:
-            raise NotImplementedError("Not a valid normalization scheme")
-
-    def _scale_data(
-        self, data: npt.NDArray, normalization: str | None = "vasp"
-    ) -> npt.NDArray:
-        """
-        Undo the normalization of the data
-
-        Args:
-            data: The data to undo the normalization
-
-        Returns:
-            NDArray: The data with the normalization undone
-        """
-        if normalization is None or normalization[0].lower() == "n":
-            return data
-        elif normalization[0].lower() == "v":
-            return data * self.structure.volume
-        else:
-            raise NotImplementedError("Not a valid normalization scheme")
 
     @property
-    def lattice(self) -> np.ndarray:  # type: ignore
+    def normalized_data(self) -> dict[str, npt.NDArray]:
+        """Get the normalized data.
+
+        Since different codes use different normalization methods for
+        volumetric data we should convert them to the same units (electrons / Angstrom^3)
+
+        Returns
+        -------
+        dict[str, NDArray]:
+            The normalized data in units of (electrons / Angstrom^3)
+        """
+        return {
+            k: _normalize_data(
+                grid_data=v,
+                lattice=self.structure.lattice,
+                normalization=self.normalization,
+            )
+            for k, v in self.pgrids.items()
+        }
+
+    @property
+    def lattice(self) -> npt.NDArray:
+        """Lattice represented as an NDArray."""
         return self.structure.lattice.matrix
 
     @classmethod
@@ -154,43 +131,54 @@ class ChargeDensity(MSONable):
         )
         self.structure.lattice = Lattice.from_parameters(*args, vesta=True)
 
-    # def get_data_in_cube(self, s: float, ngrid: int) -> np.ndarray:
-    #     """
-    #     Return the charge density data sampled on a cube.
-    #
-    #     Args:
-    #         s: side lengthy in angstroms
-    #         ngrid: number of grid points in each direction
-    #
-    #     Returns:
-    #         ndarray: regridded data in a ngrid x ngrid x ngrid array
-    #
-    #     """
-    #     grid_out = [ngrid, ngrid, ngrid]
-    #     target_sc_lat_vecs = np.eye(3, 3) * s
-    #     sc_mat = np.linalg.inv(self.structure.lattice.matrix) @ target_sc_lat_vecs
-    #     _, res = get_sc_interp(self.rho, sc_mat, grid_out)
-    #     return res.reshape(grid_out)
+    def get_data_in_cube(self, s: float, ngrid: int, key: str = "total") -> npt.NDArray:
+        """Return the charge density data sampled on a cube.
+
+        Obtain a cubic basic cubic crop of the normalized charge density data.
+
+        Parameters
+        ----------
+        s:
+            The side length of the cube
+        ngrid:
+            Number of grid points in each direction
+
+        Returns
+        -------
+        NDArray:
+            Regridded data in a ngrid x ngrid x ngrid array
+
+        """
+        grid_out = [ngrid, ngrid, ngrid]
+        target_sc_lat_vecs = np.eye(3, 3) * s
+        sc_mat = np.linalg.inv(self.structure.lattice.matrix) @ target_sc_lat_vecs
+        _, res = get_sc_interp(self.normalized_data[key], sc_mat, grid_out)
+        return res.reshape(grid_out)
 
     def get_transformed(
         self,
-        sc_mat: npt.ArrayLike,
-        origin: npt.ArrayLike,
+        sc_mat: npt.NDArray,
         grid_out: Union[List[int], int],
+        origin: npt.ArrayLike = (0, 0, 0),
         up_sample: int = 1,
     ) -> "ChargeDensity":
-        """
-        Modify the structure and data and return a new object containing the reshaped
-        data
-        Args:
-            sc_mat: Matrix to create the new cell
-            frac_shift: translation to be applied on the cell after the matrix
-            transformation
-            grid_out: density of the new grid, can also just take the desired
-            dimension as a list.
+        """Modify the structure and data and return a new object containing the reshaped data.
 
-        Returns:
-            (ChargeDensity) Transformed charge density object
+        Parameters
+        ----------
+        sc_mat:
+            The transformation matrix to apply to the lattice vectors
+        grid_out:
+            The dimensions of the transformed grid
+        origin:
+            Origin of the new lattice in fractional coordinates of the input cell
+        up_sample:
+            The factor to scale up the sampling of the grid data using Fourier interpolation
+
+        Returns
+        -------
+        ChargeDensity:
+            The transformed ChargeDensity object
 
         """
 
@@ -217,20 +205,23 @@ class ChargeDensity(MSONable):
         else:
             grid_out = grid_out
 
-        new_rho = self.get_transformed_data(
-            sc_mat, origin, grid_out=grid_out, up_sample=up_sample
-        )
-        return ChargeDensity.from_rho(new_rho, new_structure, self.normalization)
+        pgrids = {}
+        for k, pgrid in self.pgrids.items():
+            norm_data = self._scale_data(
+                pgrid.get_transformed(
+                    sc_mat=sc_mat, grid_out=grid_out, origin=origin, up_sample=up_sample
+                )
+            )
+            pgrids[k] = _scaled_data(
+                grid_data=norm_data,
+                lattice=new_structure.lattice,
+                normalization=self.normalization,
+            )
 
-    def get_reshaped(
-        self,
-        sc_mat: npt.ArrayLike,
-        grid_out: Union[List, int],
-        origin: npt.ArrayLike = (0.0, 0.0, 0.0),
-        up_sample: int = 1,
-    ) -> "ChargeDensity":
-        return self.get_transformed(
-            sc_mat=sc_mat, origin=origin, grid_out=grid_out, up_sample=up_sample
+        return ChargeDensity(
+            pgrids=pgrids,
+            structure=new_structure,
+            normalization=self.normalization,
         )
 
     def to_Chgcar(self) -> Chgcar:
@@ -364,3 +355,68 @@ def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
             ] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
             res.extend(cur_block)
     return res
+
+
+def _normalize_data(
+    grid_data: npt.NDArray, lattice: Lattice, normalization: str | None = "vasp"
+) -> npt.NDArray:
+    """Normalize the data to the number of electrons
+
+    Since different codes use different normalization methods for
+    volumetric data we should convert them to the same units (electrons / Angstrom^3)
+
+    Parameters
+    ----------
+    grid_data:
+        The grid data to normalize
+    lattice:
+        The lattice that the grid data is represented on
+    normalization:
+        The normalization method defaults to vasp
+        - None: no normalization
+        - vasp:
+            The standard charge density from VASP is given as (rho*V) such that:
+                sum(rho)/NGRID = NELECT/vol
+            so the real normalized rho should be:
+                rho = (rho*vol)*NGRID/vol/vol
+            where the second `/vol` account for the different number of electrons in
+            different cells
+
+    Returns
+    -------
+    NDArray:
+        The normalized grid data
+    """
+    if normalization is None or normalization[0].lower() == "n":
+        return grid_data
+    elif normalization[0].lower() == "v":
+        return grid_data / lattice.volume
+    else:
+        raise NotImplementedError("Not a valid normalization scheme")
+
+
+def _scaled_data(
+    grid_data: npt.NDArray, lattice: Lattice, normalization: str | None = "vasp"
+) -> npt.NDArray:
+    """Undo the normalization of the data
+
+    Parameters
+    ----------
+    grid_data:
+        The grid data to unnormalize
+    lattice:
+        The lattice that the grid data is represented on
+    normalization:
+        The normalization method defaults to vasp
+
+    Returns
+    -------
+    NDArray:
+        The unnormalized grid data
+    """
+    if normalization is None or normalization[0].lower() == "n":
+        return grid_data
+    elif normalization[0].lower() == "v":
+        return grid_data * lattice.volume
+    else:
+        raise NotImplementedError("Not a valid normalization scheme")

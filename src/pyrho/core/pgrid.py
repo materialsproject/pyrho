@@ -70,7 +70,7 @@ class PGrid(MSONable):
         origin: Union[npt.NDArray, List[float], Tuple[float]],
         grid_out: List[int],
         up_sample: int = 1,
-    ) -> "PGrid":
+    ) -> PGrid:
         """
         Get a new PGrid object for the new transformed data
         Args:

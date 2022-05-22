@@ -10,8 +10,8 @@ Tools for re-griding volumetric quantum chemistry data for machine-learning purp
 ## Features
 
 - Restructuring of periodic grid data (mapping from one cell representation to another)
-- Up-sampling of periodic grid data using fourier interpolation
-- Helper functions to plot examine the data
+- Up-sampling of periodic grid data using Fourier interpolation
+- Helper functions to plot and examine the data
 
 # Example Usage
 
@@ -40,7 +40,7 @@ The data can be examined using the helper plotting function.
 The PGrid object has no concept of normalization so if you half the number of points in the domain, the range of the data will stay the same.
 This is different from how change density is stored in codes like VASP where the values at each point depends on the number of grid points used to store the data.
 
-The regridding capabilties allows the user to obtain the data in any arbitrary representation.
+The regridding capabilities allows the user to obtain the data in any arbitrary representation.
 For example if we want to shift to the middle of the unitcell and create a ((1,1), (1,-1)) supercell,
 with a 30 by 32 grid, we can run:
 
@@ -68,7 +68,7 @@ get_plotly_scatter_plot(chgcar.grid_data,
 ```
 
 Here the plotting function slices the data using `[::4]` in each direction and filters out the data points below 0.3.
-This makes the final plot less busy, so we can examing the data.
+This makes the final plot less busy, so we can examine the data.
 
 ![chgcar_ex1](https://raw.github.com/materialsproject/pyrho/master/docs/_images/chgcar_ex1.png)
 

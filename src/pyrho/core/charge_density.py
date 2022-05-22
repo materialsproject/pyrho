@@ -74,7 +74,7 @@ class ChargeDensity(MSONable):
         """
         lattices = [self.pgrids[key].lattice for key in self.pgrids.keys()]
         if not all(
-            np.allclose(self.structure.lattice, lattice) for lattice in lattices
+            np.allclose(self.structure.lattice._matrix, lattice) for lattice in lattices
         ):
             raise ValueError("Lattices are not identical")
 
@@ -117,8 +117,9 @@ class ChargeDensity(MSONable):
         Returns:
             ChargeDensity object
         """
-        pgrids = {k: PGrid(v, vdata.structure.lattice) for k, v in vdata.data.items()}
-
+        pgrids = {
+            k: PGrid(v, vdata.structure.lattice._matrix) for k, v in vdata.data.items()
+        }
         return cls(
             pgrids=pgrids, structure=vdata.structure, normalization=normalization
         )
@@ -209,10 +210,8 @@ class ChargeDensity(MSONable):
 
         pgrids = {}
         for k, pgrid in self.pgrids.items():
-            norm_data = self._scale_data(
-                pgrid.get_transformed(
-                    sc_mat=sc_mat, grid_out=grid_out, origin=origin, up_sample=up_sample
-                )
+            norm_data = pgrid.get_transformed(
+                sc_mat=sc_mat, grid_out=grid_out, origin=origin, up_sample=up_sample
             )
             pgrids[k] = _scaled_data(
                 grid_data=norm_data,

@@ -7,7 +7,7 @@ import numpy as np
 import numpy.typing as npt
 from monty.json import MSONable
 
-from pyrho.core.utils import get_sc_interp, interpolate_fourier
+from pyrho.core.utils import gaussian_smear, get_sc_interp, interpolate_fourier
 
 
 class PGrid(MSONable):
@@ -149,5 +149,7 @@ class PGrid(MSONable):
         """
         arr_interp = np.absolute(interpolate_fourier(self.grid_data, grid_out))
         if smear_std > 0:
-            arr_interp, _ = self.gaussian_smear(arr=arr_interp, sigma=smear_std)
+            arr_interp, _ = gaussian_smear(
+                arr=arr_interp, lattice=self.lattice, sigma=smear_std
+            )
         return arr_interp

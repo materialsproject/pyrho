@@ -308,9 +308,12 @@ def gaussian_smear(
         arr = arr.reshape(len(arr), 1)
         lattice = lattice.reshape(1, 1)
 
-    # get the dimension of the filter needed for 1 std dev of gaussian mask
-    # Go 4 standard deviations away
+    # get the dimension of the filter needed for to cover multiples of the smearing width
     r_frac = get_ucell_frac_fit_sphere(lattice=lattice, r=sigma * multiple)
+
+    # we want the center of the smearing mask to be the max value so there should an odd number
+    # however based on how periodic boundary conditions are implemented, we need to make sure
+    # to pad boundary with an extra layer so the masks should be even
     filter_shape = [
         int(
             np.ceil(itr_rf * itr_dim / 2) * 2

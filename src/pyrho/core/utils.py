@@ -333,7 +333,7 @@ def gaussian_smear(
     # convert to cartesian
     cart_pos = np.matmul(filter_latt.T, np.vstack(frac_pos))
 
-    mid_point = np.sum(filter_latt) / 2
+    mid_point = np.sum(filter_latt, axis=0) / 2
     disp2mid2 = [
         (i_coord.reshape(filter_shape) - mp_coord) ** 2
         for mp_coord, i_coord in zip(mid_point, cart_pos)

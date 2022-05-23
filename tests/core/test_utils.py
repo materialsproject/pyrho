@@ -3,7 +3,7 @@ import pytest
 from hypothesis import given, seed, settings
 from hypothesis import strategies as st
 
-from pyrho.core.utils import get_sc_interp, interpolate_fourier, pad_arr
+from pyrho.core.utils import gaussian_smear, get_sc_interp, interpolate_fourier, pad_arr
 
 
 def test_pad_arr():
@@ -132,3 +132,33 @@ def _get_sc_xy(lat_mat, grids):
     XX = XX.reshape(grids)
     YY = YY.reshape(grids)
     return XX, YY
+
+
+def test_smearing():
+    arr1 = np.array([0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0])
+    arr2 = np.array(
+        [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 100, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        ]
+    )
+    r, g = gaussian_smear(
+        arr=arr1,
+        lattice=np.array(
+            [
+                4,
+            ]
+        ),
+        sigma=0.2,
+    )
+    ind = np.argmax(r)
+    assert ind == 3
+
+    r, g = gaussian_smear(arr=arr2, lattice=np.array([[4, 0], [0, 4]]), sigma=0.2)
+    ind = np.unravel_index(np.argmax(r, axis=None), r.shape)
+    assert ind == (4, 4)

@@ -1,18 +1,13 @@
 """Python class for ND grid data volumetric data."""
 from __future__ import annotations
 
-from typing import List, Tuple, Union
+from typing import List, Union
 
 import numpy as np
 import numpy.typing as npt
 from monty.json import MSONable
-from scipy.ndimage import convolve
 
-from pyrho.core.utils import (
-    get_sc_interp,
-    get_ucell_frac_fit_sphere,
-    interpolate_fourier,
-)
+from pyrho.core.utils import get_sc_interp, interpolate_fourier
 
 
 class PGrid(MSONable):
@@ -138,71 +133,6 @@ class PGrid(MSONable):
         new_lattice = np.dot(sc_mat, self.lattice)
         return PGrid(grid_data=new_data, lattice=new_lattice)
 
-    def gaussian_smear(
-        self,
-        arr_in: npt.NDArray | None = None,
-        sigma: float = 0.2,
-    ) -> Tuple[npt.NDArray, npt.NDArray]:
-        """Applies an isotropic Gaussian smear
-
-        Apply a Gaussian smearing of width (standard deviation) `sigma` to
-        the periodic field.  The smearing obeys periodic boundary conditions at
-        the edges of the cell.
-
-        Parameters
-        ----------
-        arr_in:
-            input data array to smear, if None: smear self.grid_data
-        sigma:
-            Smearing width in cartesian coordinates, in the same units as the lattice vectors
-        """
-        # get the dimension of the filter needed for 1 std dev of gaussian mask
-        # Go 5 standard deviations away
-        if arr_in is None:
-            arr = self.grid_data
-        else:
-            arr = arr_in
-
-        r_frac = get_ucell_frac_fit_sphere(lattice=self.lattice, r=sigma * 5)
-        filter_shape = [
-            int(
-                np.ceil(itr_rf * itr_dim / 2) * 2
-            )  # dimension of the filter should be even
-            for itr_rf, itr_dim in zip(r_frac, arr.shape)
-        ]
-
-        filter_latt = np.array(
-            [
-                (filter_shape[_] + 1) / (arr.shape[_] + 1) * self.lattice[_]
-                for _ in range(self._dim)
-            ]
-        )
-
-        # Get the fractional positions
-        filter_frac_c = [np.linspace(0, 1, _, endpoint=False) for _ in filter_shape]
-        frac_pos = np.meshgrid(*filter_frac_c, indexing="ij")
-        frac_pos = [_.flatten() for _ in frac_pos]
-
-        # convert to cartesian
-        cart_pos = np.matmul(filter_latt.T, np.vstack(frac_pos))
-
-        # Distance the center if 1d we make  this iterable
-        tmp: Union[float, npt.NDArray] = sum(filter_latt)
-        if isinstance(tmp, np.ndarray):
-            mid_point = tmp / 2
-        else:
-            mid_point = [tmp / 2]
-        disp2mid2 = [
-            (i_coord.reshape(filter_shape) - mp_coord) ** 2
-            for mp_coord, i_coord in zip(mid_point, cart_pos)
-        ]
-        dist2mid = np.sqrt(sum(disp2mid2))
-        # make sure the mask is zero?
-        mm = dist2mid <= sigma * 4
-        gauss = np.exp(-1 / 2 * (dist2mid / sigma) ** 2) * mm
-        gauss = gauss / gauss.sum()
-        return convolve(input=arr, weights=gauss, mode="wrap"), gauss
-
     def lossy_smooth_compression(
         self, grid_out: List, smear_std: float = 0.2
     ) -> npt.NDArray:
@@ -219,5 +149,5 @@ class PGrid(MSONable):
         """
         arr_interp = np.absolute(interpolate_fourier(self.grid_data, grid_out))
         if smear_std > 0:
-            arr_interp, _ = self.gaussian_smear(arr_in=arr_interp, sigma=smear_std)
+            arr_interp, _ = self.gaussian_smear(arr=arr_interp, sigma=smear_std)
         return arr_interp

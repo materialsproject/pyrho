@@ -6,6 +6,7 @@ from typing import Iterable, List, Tuple, Union
 import numpy as np
 import numpy.typing as npt
 from scipy.interpolate import RegularGridInterpolator
+from scipy.ndimage import convolve
 
 
 def pad_arr(arr_in: np.ndarray, shape: List[int]) -> np.ndarray:
@@ -248,17 +249,25 @@ def get_plane_spacing(lattice: np.ndarray) -> Iterable[float]:
 
 
 def get_ucell_frac_fit_sphere(lattice: np.ndarray, r: float = 0.2) -> Iterable[float]:
-    """
-        The smallest you can make make the lattice parameter in each direction to fit a
-        sphere of radius r.  The sphere must be able to fit between the hyperplanes of
-        the subspace of all lattice vectors EXCEPT k for all k.
-        Args:
-            lattice: list of lattice vectors in cartesian coordinates
-            r: width of Gaussian
-        Returns:
-            fraction of lattice vector in each direction need to fit the sphere
+    """Lattice ffractions in each direction that are within r of the origin
 
-        Examples:
+    Get the smallest you can make make the lattice parameter in each direction to fit a
+    sphere of radius `r`. For lattice vector `k`, the sphere must be contained within
+    the hyperplanes defined by all lattice vectors except `k`.
+
+    Parameters
+    ----------
+    lattice:
+        List of lattice vectors in cartesian coordinates
+    r:
+        width of the sphere
+
+    Returns
+    -------
+    Iterable of floats
+        fraction of lattice vector in each direction need to fit the sphere
+
+    Examples:
     >>> get_ucell_frac_fit_sphere([[1,0,0], [1,-1, 0], [0,0,2]], 0.1) # doctest: +ELLIPSIS
     [0.2613..., 0.1919..., 0.1]
     """
@@ -266,3 +275,75 @@ def get_ucell_frac_fit_sphere(lattice: np.ndarray, r: float = 0.2) -> Iterable[f
     for ispace in get_plane_spacing(lattice=lattice):
         rfrac.append(2 * r / ispace)
     return rfrac
+
+
+def gaussian_smear(
+    arr: npt.NDArray,
+    lattice: npt.NDArray,
+    sigma: float = 0.2,
+    multiple: float = 4.0,
+) -> Tuple[npt.NDArray, npt.NDArray]:
+    """Applies an isotropic Gaussian smearing to periodic data
+
+    Apply a Gaussian smearing of width (standard deviation) `sigma` to
+    the periodic field.  The smearing obeys periodic boundary conditions at
+    the edges of the cell.
+
+    Parameters
+    ----------
+    arr_in:
+        input data array to smear, if None: smear self.grid_data
+    lattice:
+        lattice vectors in cartesian coordinates
+    sigma:
+        Smearing width in cartesian coordinates, in the same units as the lattice vectors
+    """
+    # Since smearing requires floating point, we need to make sure the input is floating point
+    arr = arr.astype(np.float64)
+
+    # if the input is 1 dimensional, we need to make it 2D but and transpose it so that the
+    # arr.shape[0] is the size of the first dimension
+    is_1d = len(arr.shape) == 1
+    if is_1d:
+        arr = arr.reshape(len(arr), 1)
+        lattice = lattice.reshape(1, 1)
+
+    # get the dimension of the filter needed for 1 std dev of gaussian mask
+    # Go 4 standard deviations away
+    r_frac = get_ucell_frac_fit_sphere(lattice=lattice, r=sigma * multiple)
+    filter_shape = [
+        int(
+            np.ceil(itr_rf * itr_dim / 2) * 2
+        )  # size of the mask should be even in each direction to avoid edge effects
+        for itr_rf, itr_dim in zip(r_frac, arr.shape)
+    ]
+
+    filter_latt = np.array(
+        [
+            (filter_shape[_] + 1) / (arr.shape[_] + 1) * lattice[_]
+            for _ in range(len(lattice))
+        ]
+    )
+
+    # Get the fractional positions
+    filter_frac_c = [np.linspace(0, 1, ng, endpoint=False) for ng in filter_shape]
+    frac_pos = np.meshgrid(*filter_frac_c, indexing="ij")
+    frac_pos = [i_dir.flatten() for i_dir in frac_pos]
+
+    # convert to cartesian
+    cart_pos = np.matmul(filter_latt.T, np.vstack(frac_pos))
+
+    mid_point = np.sum(filter_latt) / 2
+    disp2mid2 = [
+        (i_coord.reshape(filter_shape) - mp_coord) ** 2
+        for mp_coord, i_coord in zip(mid_point, cart_pos)
+    ]
+    dist2mid = np.sqrt(sum(disp2mid2))
+    # make sure the mask is zero outside the sphere
+    mm = dist2mid <= sigma * multiple
+    gauss = np.exp(-1 / 2 * (dist2mid / sigma) ** 2) * mm
+    gauss = gauss / gauss.sum()
+    # reduce dimension before convolution if the input is 1D
+    if is_1d:
+        return convolve(input=arr.flatten(), weights=gauss, mode="wrap"), gauss
+    return convolve(input=arr, weights=gauss, mode="wrap"), gauss

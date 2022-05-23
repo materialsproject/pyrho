@@ -11,7 +11,7 @@ from pyrho.core.pgrid import PGrid
     ny=st.integers(min_value=40, max_value=80),
     A=st.integers(min_value=1, max_value=10),
     B=st.integers(min_value=1, max_value=10),
-)  # value cannot be
+)
 def test_pgrid(checker_2D, nx, ny, A, B):
     checker = checker_2D()
     XX, YY = checker.get_xy(np.eye(2), [nx, ny])

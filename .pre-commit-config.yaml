@@ -66,4 +66,5 @@ repos:
   hooks:
   - id: codespell
     stages: [commit, commit-msg]
-    args: [--ignore-words-list, 'titel,statics,ba,nd,te']
+    args:
+      - "--ignore-words-list 'titel,statics,ba,nd,te'"

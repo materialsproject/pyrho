@@ -38,10 +38,10 @@ The data can be examined using the helper plotting function.
 ![2d_pgrid_ex1](https://raw.github.com/materialsproject/pyrho/master/docs/_images/2d_pgrid_ex1.png)
 
 The PGrid object has no concept of normalization so if you half the number of points in the domain, the range of the data will stay the same.
-This is different from how change density is stored in codes like VASP where the values at each point depends on the number of grid points used to store the data.
+This is different from how the charge density is stored in codes like VASP where the values at each point depends on the number of grid points used to store the data.
 
-The regridding capabilities allows the user to obtain the data in any arbitrary representation.
-For example if we want to shift to the middle of the unitcell and create a ((1,1), (1,-1)) supercell,
+The regridding capabilities allow the user to obtain the data in any arbitrary representation.
+For example, if we want to shift to the middle of the unit-cell and create a ((1,1), (1,-1)) super-cell,
 with a 30 by 32 grid, we can run:
 
 ```python

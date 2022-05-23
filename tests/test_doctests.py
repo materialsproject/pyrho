@@ -1,4 +1,4 @@
-"""automaticall run doctests"""
+"""automatically run doctests"""
 
 import doctest
 

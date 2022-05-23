@@ -66,6 +66,4 @@ repos:
   hooks:
   - id: codespell
     stages: [commit, commit-msg]
-    args:
-      - "--ignore-words-list 'titel,statics,ba,nd,te'"
-      - "--skpe '*.ipynb'"
+    args: [-L, nd, --skip, "*.ipynb"]

@@ -1,6 +1,6 @@
+"""Python class for ND grid data volumetric data."""
 from __future__ import annotations
 
-"""Python class for ND grid data volumetric data"""
 from typing import List, Tuple, Union
 
 import numpy as np

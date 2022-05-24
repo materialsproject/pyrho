@@ -232,6 +232,26 @@ class ChargeDensity(MSONable):
             data_dict[k] = self._scale_data(v, normalization="vasp")
         return Chgcar(Poscar(struct), data=data_dict)
 
+    @classmethod
+    def from_file(
+        cls, filename: str, pmg_obj: VolumetricData = Chgcar
+    ) -> "ChargeDensity":
+        """Read a ChargeDensity object from a file.
+
+        Parameters
+        ----------
+        filename:
+            The filename of the ChargeDensity object
+        pmg_obj:
+            The pymatgen object to read from the file (default: Chgcar).
+            the `from_file` method from this class will be called to read the file.
+
+        Returns
+        -------
+            ChargeDensity: The ChargeDensity object
+        """
+        return cls.from_pmg(pmg_obj.from_file(filename))
+
     #
     #     _, new_rho = get_sc_interp(self.rho, sc_mat, grid_sizes=grid_out)
     #     new_rho = new_rho.reshape(grid_out)

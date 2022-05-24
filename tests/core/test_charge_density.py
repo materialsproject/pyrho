@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from pymatgen.io.vasp import Chgcar
 
-from pyrho.core.charge_density import ChargeDensity
+from pyrho.charge_density import ChargeDensity
 
 
 def test_charge_density(test_dir):

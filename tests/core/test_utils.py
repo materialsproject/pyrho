@@ -3,7 +3,7 @@ import pytest
 from hypothesis import given, seed, settings
 from hypothesis import strategies as st
 
-from pyrho.core.utils import gaussian_smear, get_sc_interp, interpolate_fourier, pad_arr
+from pyrho.utils import gaussian_smear, get_sc_interp, interpolate_fourier, pad_arr
 
 
 def test_pad_arr():

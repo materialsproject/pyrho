@@ -2,7 +2,7 @@ import numpy as np
 from hypothesis import given, seed
 from hypothesis import strategies as st
 
-from pyrho.core.pgrid import PGrid
+from pyrho.pgrid import PGrid
 
 
 @seed(1337)

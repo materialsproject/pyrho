@@ -94,4 +94,3 @@ exclude_lines = [
 ]
 show_missing = true
 skip_covered = true
-ignore = ["src/pyrho/core/fourier.py"]

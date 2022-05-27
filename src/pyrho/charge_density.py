@@ -228,8 +228,10 @@ class ChargeDensity(MSONable):
         """
         struct = self.structure.copy()
         data_dict = {}
-        for k, v in self.pgrids.items():
-            data_dict[k] = self._scale_data(v, normalization="vasp")
+        for k, v in self.normalized_data.items():
+            data_dict[k] = _scaled_data(
+                v, lattice=self.structure.lattice, normalization="vasp"
+            )
         return Chgcar(Poscar(struct), data=data_dict)
 
     @classmethod

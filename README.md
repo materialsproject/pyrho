@@ -22,7 +22,7 @@ The input array is a scalar field that is defined on a regularly spaced set of g
 For example, you can construct a periodic field as follows:
 ```python
 import numpy as np
-from pyrho.core.pgrid import PGrid
+from pyrho.pgrid import PGrid
 from pyrho.vis.plotly import get_plotly_scatter_plot
 
 def func(X,Y):

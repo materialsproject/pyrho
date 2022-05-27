@@ -27,12 +27,7 @@ def test_charge_density(test_dir):
         rtol=0.005,
     )  # 0.5 % relative tolerance
 
-    np.array(
-        [
-            [5.0, 10.0, 10.0, 7.0],
-            [22.0, 12.0, 7.0, 3.0],
-            [16.0, 10.0, 3.0, 5.0],
-            [16.0, 22.0, 16.0, 6.0],
-            [19.0, 20.0, 3.0, 7.0],
-        ]
-    )
+    chgcar_transformed = cden_transformed.to_Chgcar()
+    np.testing.assert_allclose(
+        chgcar_sc.data["total"], chgcar_transformed.data["total"], rtol=0.005
+    )  # 0.5 % relative tolerance

@@ -31,12 +31,10 @@ requires-python = '>="3.8"'
 dev = ["pre-commit==2.17.0"]
 docs = [
   "numpydoc==1.3.1",
-  "FireWorks==2.0.3",
 ]
 tests = [
   "pytest==7.1.2",
   "pytest-cov==3.0.0",
-  "FireWorks==2.0.3",
   "hypothesis==6.40.1",
 ]
 strict = [
@@ -45,9 +43,8 @@ strict = [
 ]
 
 [project.urls]
-documentation = "https://materialsproject.github.io//atomate2"
 homepage = "https://materialsproject.github.io/pyrho/"
-repository = "https://materialsproject.github.io//atomate2"
+repository = "https://materialsproject.github.io/pyrho"
 
 [tool.versioningit.vcs]
 default-tag = "0.0.1"

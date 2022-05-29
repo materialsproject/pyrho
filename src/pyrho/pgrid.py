@@ -33,7 +33,7 @@ class PGrid(MSONable):
         self,
         sc_mat: npt.ArrayLike,
         grid_out: List[int],
-        origin: npt.ArrayLike = (0, 0, 0),
+        origin: npt.ArrayLike | None = None,
         up_sample: int = 1,
     ) -> npt.NDArray:
         """Apply a supercell transformation to the grid data
@@ -58,6 +58,7 @@ class PGrid(MSONable):
             The transformed data
 
         """
+        origin = np.array(origin) if origin is not None else np.zeros(self._dim)
         if up_sample == 1:
             interp_grid_data = self.grid_data
         else:
@@ -105,7 +106,7 @@ class PGrid(MSONable):
         self,
         sc_mat: Union[List[List[int]], npt.NDArray],
         grid_out: List[int],
-        origin: npt.NDArray = (0, 0, 0),
+        origin: npt.NDArray | None = None,
         up_sample: int = 1,
     ) -> PGrid:
         """Get a new PGrid object for the new transformed data
@@ -127,6 +128,7 @@ class PGrid(MSONable):
             The transformed PGrid object
 
         """
+        origin = np.array(origin) if origin is not None else np.zeros(self._dim)
         new_data = self._transform_data(
             sc_mat=sc_mat, grid_out=grid_out, origin=origin, up_sample=up_sample
         )

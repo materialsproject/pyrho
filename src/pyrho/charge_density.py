@@ -69,6 +69,11 @@ class ChargeDensity(MSONable):
         }
 
     @property
+    def grid_shape(self) -> Tuple[int, int, int]:
+        """Return the shape of the charge density"""
+        return self.pgrids["total"].grid_shape
+
+    @property
     def normalized_pgrids(self) -> dict[str, PGrid]:
         """Get the normalized pgrids.
 
@@ -253,6 +258,26 @@ class ChargeDensity(MSONable):
             ChargeDensity: The ChargeDensity object
         """
         return cls.from_pmg(pmg_obj.from_file(filename))
+
+    @classmethod
+    def from_hdf5(
+        cls, filename: str, pmg_obj: VolumetricData = Chgcar
+    ) -> "ChargeDensity":
+        """Read a ChargeDensity object from a hdf5 file.
+
+        Parameters
+        ----------
+        filename:
+            The filename of the ChargeDensity object
+        pmg_obj:
+            The pymatgen object to read from the file (default: Chgcar).
+            the `from_file` method from this class will be called to read the file.
+
+        Returns
+        -------
+            ChargeDensity: The ChargeDensity object
+        """
+        return cls.from_pmg(pmg_obj.from_hdf5(filename))
 
     #
     #     _, new_rho = get_sc_interp(self.rho, sc_mat, grid_sizes=grid_out)

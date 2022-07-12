@@ -1,3 +1,9 @@
+# mp-pyrho
+[![.github/workflows/testing.yml](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml/badge.svg)](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml)
+[![codecov](https://codecov.io/gh/materialsproject/pyrho/branch/main/graph/badge.svg?token=YoFMXzpeKI)](https://codecov.io/gh/materialsproject/pyrho)
+
+Tools for re-griding volumetric quantum chemistry data for machine-learning purposes.
+
 # Regridding data using PyRho
 
 ## The PGrid Class
@@ -32,9 +38,7 @@ mpl.rc("image", cmap="viridis")
 get_scatter_plot(pg2d.grid_data, pg2d.lattice, marker_size=40)
 ```
 
-
-
-![png](./docs/_images/output_3_0.png)
+![](https://github.com/materialsproject/pyrho/blob/main/docs/_images/output_3_0.png)
 
 
 
@@ -50,7 +54,7 @@ get_scatter_plot(pg_2x.grid_data, pg_2x.lattice, skips=1, opacity=1, marker_size
 
 
 
-![png](./docs/_images/output_5_0.png)
+![png](https://github.com/materialsproject/pyrho/blob/main/docs/_images/output_5_0.png)
 
 
 

@@ -78,7 +78,7 @@ get_scatter_plot(pg1d.grid_data, pg1d.lattice, marker_size=50)
 
 
 
-![png](./docs/_images/output_7_0.png)
+![png](https://github.com/materialsproject/pyrho/blob/main/docs/_images/output_7_0.png)
 
 
 
@@ -99,7 +99,7 @@ get_scatter_plot(pg1d_fine.grid_data, pg1d_fine.lattice, marker_size=10)
 
 
 
-![png](./docs/_images/output_9_0.png)
+![png](https://github.com/materialsproject/pyrho/blob/main/docs/_images/output_9_0.png)
 
 
 

@@ -79,6 +79,7 @@ class ChargeDensity(MSONable):
     def normalized_pgrids(self) -> dict[str, PGrid]:
         """Get the normalized pgrids.
 
+
         Since different codes use different normalization methods for
         volumetric data we should convert them to the same units (electrons / Angstrom^3)
 

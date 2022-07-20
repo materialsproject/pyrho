@@ -1,10 +1,10 @@
+"""Chang Density Objects: Periodic Grid + Lattice / Atoms"""
+
 from __future__ import annotations
 
+import math
 import warnings
 from dataclasses import dataclass
-
-"""Chang Density Objects: Periodic Grid + Lattice / Atoms"""
-import math
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
@@ -21,15 +21,17 @@ from pyrho.utils import get_sc_interp
 
 @dataclass
 class ChargeDensity(MSONable):
-    """
+    """Charge density object
+
     Defines a charge density with a PGrid object along with the atomic structure
 
-    Args:
-        grid_data: Volumetric data to read in
-        structure: Atomic structure corresponding to the charge density
-        normalization: the normalization scheme:
-            - 'vasp' sum of the data / number of grid points == number of electrons
-            - None/"none" no normalization
+    Parameters
+    ----------
+    grid_data: Volumetric data to read in
+    structure: Atomic structure corresponding to the charge density
+    normalization: the normalization scheme:
+    - 'vasp' sum of the data / number of grid points == number of electrons
+    - None/"none" no normalization
     """
 
     pgrids: Dict[str, PGrid]
@@ -104,13 +106,14 @@ class ChargeDensity(MSONable):
 
     @classmethod
     def from_pmg(
-        cls, vdata: VolumetricData, data_key: str = "total", normalization: str = "vasp"
+        cls, vdata: VolumetricData, normalization: str = "vasp"
     ) -> "ChargeDensity":
-        """
+        """Get data from pymatgen object
+
         Read a single key from the data field of a VolumetricData object
+
         Args:
             vdata: The volumetric data object
-            data_key: The key to read from in the data field
 
         Returns:
             ChargeDensity object
@@ -123,9 +126,10 @@ class ChargeDensity(MSONable):
         )
 
     def reorient_axis(self) -> None:
-        """
+        """Rorient the lattices
+
         Change the orientation of the lattice vector so that:
-        a points along the x-axis, b is in the xy-plane, c is in the positive-z halve of space
+        ``a`` points along the x-axis, ``b`` is in the xy-plane, ``c`` is in the positive-z halve of space
         """
         args: Tuple[float, float, float, float, float, float] = (
             self.structure.lattice.abc + self.structure.lattice.angles
@@ -358,7 +362,8 @@ class ChargeDensity(MSONable):
 
 @deprecated
 def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
-    """
+    """Update the data in the augmentation charge.
+
     The original idea here was to use to to speed up some vasp calculations for
     supercells by initializing the entire CHGCAR file.
     The current code does not deal with transformation of the Augementation charges after regridding.
@@ -367,10 +372,13 @@ def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
     a real working implementation will require analysis of the PAW projection operators.
     However, even with such an implementation, the speed up will be minimal due to VASP's internal
     minimization algorithms.
-    Args:
+
+    Parameters
+    ----------
         data_aug: The original augmentation data from a CHGCAR
         factor: The multiplication factor (some integer number of times it gets repeated)
-    Returns:
+    Returns
+    -------
         List of strings for each line of the Augmentation data.
     """
     res: List[str] = []

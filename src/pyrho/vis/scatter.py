@@ -1,6 +1,4 @@
-"""
-Helper functions to visualize the data in plotly
-"""
+"""Helper functions to visualize the data in plotly."""
 from __future__ import annotations
 
 import numpy as np
@@ -79,7 +77,7 @@ def get_scatter_plot(
 
 
 def _scatter_plotly(xx, yy, zz, cc, ndim, marker_size, opacity):
-    """Return the plotly object"""
+    """Return the plotly object."""
     if ndim == 1:
         data = go.Scatter(
             x=xx,
@@ -128,7 +126,7 @@ def _scatter_plotly(xx, yy, zz, cc, ndim, marker_size, opacity):
 
 
 def _scatter_matplotlib(xx, yy, zz, cc, ndim, marker_size, opacity) -> Axes:
-    """Return the matplotlib object"""
+    """Return the matplotlib object."""
     fig = plt.figure(figsize=(8, 8))
     if ndim == 1:
         ax = fig.add_subplot()

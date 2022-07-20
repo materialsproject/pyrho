@@ -1,4 +1,4 @@
-"""Chang Density Objects: Periodic Grid + Lattice / Atoms"""
+"""Chang Density Objects: Periodic Grid + Lattice / Atoms."""
 
 from __future__ import annotations
 
@@ -18,20 +18,26 @@ from pymatgen.io.vasp import Chgcar, Poscar, VolumetricData
 from pyrho.pgrid import PGrid
 from pyrho.utils import get_sc_interp
 
+__all__ = ["ChargeDensity"]
+
 
 @dataclass
 class ChargeDensity(MSONable):
-    """Charge density object
+    """Charge density object.
 
     Defines a charge density with a PGrid object along with the atomic structure
 
     Parameters
     ----------
-    grid_data: Volumetric data to read in
-    structure: Atomic structure corresponding to the charge density
-    normalization: the normalization scheme:
-    - 'vasp' sum of the data / number of grid points == number of electrons
-    - None/"none" no normalization
+    grid_data:
+        Volumetric data to read in
+    structure:
+        Atomic structure corresponding to the charge density
+    normalization:
+        The normalization scheme:
+        - 'vasp' sum of the data / number of grid points == number of electrons
+        - None/"none" no normalization
+
     """
 
     pgrids: Dict[str, PGrid]
@@ -39,9 +45,11 @@ class ChargeDensity(MSONable):
     normalization: str | None = "vasp"
 
     def __post_init__(self):
-        """Post initialization:
+        """Post initialization.
+
         Steps:
             - Make sure all the lattices are identical
+
         """
         lattices = [self.pgrids[key].lattice for key in self.pgrids.keys()]
         if not all(
@@ -60,6 +68,7 @@ class ChargeDensity(MSONable):
         -------
         dict[str, NDArray]:
             The normalized data in units of (electrons / Angstrom^3)
+
         """
         return {
             k: _normalize_data(
@@ -72,13 +81,12 @@ class ChargeDensity(MSONable):
 
     @property
     def grid_shape(self) -> Tuple[int, int, int]:
-        """Return the shape of the charge density"""
+        """Return the shape of the charge density."""
         return self.pgrids["total"].grid_shape
 
     @property
     def normalized_pgrids(self) -> dict[str, PGrid]:
         """Get the normalized pgrids.
-
 
         Since different codes use different normalization methods for
         volumetric data we should convert them to the same units (electrons / Angstrom^3)
@@ -87,6 +95,7 @@ class ChargeDensity(MSONable):
         -------
         dict[str, PGrid]:
             The normalized pgrids in units of (electrons / Angstrom^3)
+
         """
         return {
             k: PGrid(
@@ -109,15 +118,24 @@ class ChargeDensity(MSONable):
     def from_pmg(
         cls, vdata: VolumetricData, normalization: str = "vasp"
     ) -> "ChargeDensity":
-        """Get data from pymatgen object
+        """Get data from pymatgen object.
 
         Read a single key from the data field of a VolumetricData object
 
-        Args:
-            vdata: The volumetric data object
+        Parameters
+        ----------
+        vdata:
+            The volumetric data object
+        normalization:
+            The normalization scheme
+            - 'vasp' sum of the data / number of grid points == number of electrons
+            - None/"none" no normalization
 
-        Returns:
-            ChargeDensity object
+        Returns
+        -------
+        ChargeDensity:
+            The charge density object
+
         """
         pgrids = {
             k: PGrid(v, vdata.structure.lattice._matrix) for k, v in vdata.data.items()
@@ -127,10 +145,11 @@ class ChargeDensity(MSONable):
         )
 
     def reorient_axis(self) -> None:
-        """Rorient the lattices
+        """Rorient the lattices.
 
-        Change the orientation of the lattice vector so that:
-        ``a`` points along the x-axis, ``b`` is in the xy-plane, ``c`` is in the positive-z halve of space
+        Change the orientation of the lattice vector so that: ``a`` points along the x-axis, ``b`` is in the xy-plane,
+        ``c`` is in the positive-z halve of space
+
         """
         args: Tuple[float, float, float, float, float, float] = (
             self.structure.lattice.abc + self.structure.lattice.angles
@@ -148,6 +167,8 @@ class ChargeDensity(MSONable):
             The side length of the cube
         ngrid:
             Number of grid points in each direction
+        key:
+            The key to read from ``self.normalized_data``
 
         Returns
         -------
@@ -187,7 +208,6 @@ class ChargeDensity(MSONable):
             The transformed ChargeDensity object
 
         """
-
         # warning if the sc_mat is not integer valued
         if not np.allclose(np.round(sc_mat), sc_mat):
             warnings.warn(
@@ -229,12 +249,15 @@ class ChargeDensity(MSONable):
         )
 
     def to_Chgcar(self) -> Chgcar:
-        """Convert the charge density to a pymatgen.io.vasp.outputs.Chgcar object
+        """Convert the charge density to a ``pymatgen.io.vasp.outputs.Chgcar`` object.
 
-        Scale and convert each key in the pgrids dictionary and create a Chgcar object
+        Scale and convert each key in the pgrids dictionary and create a ``Chgcar`` object
 
-        Returns:
-            Chgcar: The charge density object
+        Returns
+        -------
+        Chgcar:
+            The charge density object
+
         """
         struct = self.structure.copy()
         data_dict = {}
@@ -261,6 +284,7 @@ class ChargeDensity(MSONable):
         Returns
         -------
             ChargeDensity: The ChargeDensity object
+
         """
         return cls.from_pmg(pmg_obj.from_file(filename))
 
@@ -281,6 +305,7 @@ class ChargeDensity(MSONable):
         Returns
         -------
             ChargeDensity: The ChargeDensity object
+
         """
         return cls.from_pmg(pmg_obj.from_hdf5(filename))
 
@@ -376,11 +401,16 @@ def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
 
     Parameters
     ----------
-        data_aug: The original augmentation data from a CHGCAR
-        factor: The multiplication factor (some integer number of times it gets repeated)
+    data_aug:
+        The original augmentation data from a CHGCAR
+    factor:
+        The multiplication factor (some integer number of times it gets repeated)
+
     Returns
     -------
-        List of strings for each line of the Augmentation data.
+    List[str]:
+        Each line of the augmentation data.
+
     """
     res: List[str] = []
     cur_block: List[str] = []
@@ -410,7 +440,7 @@ def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
 def _normalize_data(
     grid_data: npt.NDArray, lattice: Lattice, normalization: str | None = "vasp"
 ) -> npt.NDArray:
-    """Normalize the data to the number of electrons
+    """Normalize the data to the number of electrons.
 
     Since different codes use different normalization methods for
     volumetric data we should convert them to the same units (electrons / Angstrom^3)
@@ -436,6 +466,7 @@ def _normalize_data(
     -------
     NDArray:
         The normalized grid data
+
     """
     if normalization is None or normalization[0].lower() == "n":
         return grid_data
@@ -448,7 +479,7 @@ def _normalize_data(
 def _scaled_data(
     grid_data: npt.NDArray, lattice: Lattice, normalization: str | None = "vasp"
 ) -> npt.NDArray:
-    """Undo the normalization of the data
+    """Undo the normalization of the data.
 
     Parameters
     ----------
@@ -462,7 +493,8 @@ def _scaled_data(
     Returns
     -------
     NDArray:
-        The unnormalized grid data
+        The un-normalized grid data
+
     """
     if normalization is None or normalization[0].lower() == "n":
         return grid_data

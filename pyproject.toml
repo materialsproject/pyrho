@@ -61,13 +61,17 @@ method = "git"
 profile = "black"
 
 [tool.flake8]
-max-line-length = 88
-max-doc-length = 88
+max-line-length = 120
+max-doc-length = 120
 select = "C, E, F, W, B, B950"
 extend-ignore = "E203, W503, E501, F401, RST21"
 min-python-version = "3.8.0"
 docstring-convention = "numpy"
 rst-roles = "class, func, ref, obj"
+
+[tool.pydocstyle]
+ignore = "D100,D203,D213,D405,D415"
+
 
 [tool.mypy]
 ignore_missing_imports = true

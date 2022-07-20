@@ -24,7 +24,7 @@ class Checker2D:
     mY: int = 1
 
     def function(self, x, y):
-        """Analytical function in 2D"""
+        """Analytical function in 2D."""
         return np.sin(self.mX * x * 2 * np.pi)  # + np.cos(self.mY * y * 2 * np.pi)
 
     def get_xy(self, lat_mat, grids, origin=(0, 0)):
@@ -38,6 +38,7 @@ class Checker2D:
         Returns:
             XX: x coordinates for the grid in the shape of the grid
             YY: y coordinates for the grid in the shape of the grid
+
         """
         a_vec = np.linspace(0, 1, grids[0], endpoint=False)
         b_vec = np.linspace(0, 1, grids[1], endpoint=False)

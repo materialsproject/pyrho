@@ -48,11 +48,13 @@ templates_path = ["_templates"]
 exclude_patterns = ["Thumbs.db", ".DS_Store", "test*.py"]
 
 # use type hints
-autoapi_dirs = ['../../src']
+autoapi_dirs = ["../../src"]
 autoapi_add_toctree_entry = False
-
+autoapi_python_class_content = "class"
+# autoapi_options = ["members", "show-module-summary", "show-inheritance"]
+autoapi_options = [ 'members', 'private-members', 'show-inheritance', 'show-module-summary', 'special-members', 'imported-members', ]
 # autodoc_typehints = "description"
-# autoclass_content = "class"
+# autoclass_content = 'init'
 
 # better napoleon support
 # napoleon_use_param = True

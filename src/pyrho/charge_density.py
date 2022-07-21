@@ -25,18 +25,18 @@ __all__ = ["ChargeDensity"]
 class ChargeDensity(MSONable):
     """Charge density object.
 
-    Defines a charge density with a PGrid object along with the atomic structure
+    Defines a charge density with a PGrid object along with the atomic structure.
 
-    Parameters
+    Attributes
     ----------
-    grid_data:
-        Volumetric data to read in
-    structure:
-        Atomic structure corresponding to the charge density
-    normalization:
-        The normalization scheme:
-        - 'vasp' sum of the data / number of grid points == number of electrons
-        - None/"none" no normalization
+    pgrids: Dict[str, PGrid]
+        Dictionaries whose values are periodic ``PGrid`` objects
+        representing some periodic scalar field (typically the keys are ``total`` and ``diff`` 
+        for spin-polarized charge densities.)
+    structure: Structure
+        The atomic structure for the electronic charge density.
+    normalization: str | None = "vasp"
+        The normalzation scheme (``vasp`` or ``None``)
 
     """
 

@@ -17,17 +17,18 @@ class PGrid(MSONable):
     The data is defined by the lattice vectors and the grid data.
     The grid points are implicitly defined by the lattice vectors and the grid shape.
 
-    Attributes
-    ----------
-    grid_data:
-        Data stored on the regular rid
-    lattice:
-        Lattice vectors of the grid
-
     """
 
     def __init__(self, grid_data: npt.NDArray, lattice: npt.NDArray):
-        """Initialize the PGrid object."""
+        """Initialize the PGrid object.
+        
+        Attributes
+        ----------
+        grid_data:
+            Data stored on the regular rid
+        lattice:
+            Lattice vectors of the grid
+        """
         self.grid_data = grid_data
         self.lattice = np.array(lattice)
         self._dim = len(self.grid_data.shape)

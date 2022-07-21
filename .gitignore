@@ -153,3 +153,5 @@ dmypy.json
 #
 
 _build/
+
+docs_old/

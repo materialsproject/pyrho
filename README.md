@@ -1,10 +1,12 @@
 # mp-pyrho
-[![.github/workflows/testing.yml](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml/badge.svg)](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml)
-[![codecov](https://codecov.io/gh/materialsproject/pyrho/branch/main/graph/badge.svg?token=YoFMXzpeKI)](https://codecov.io/gh/materialsproject/pyrho)
 
 Tools for re-griding volumetric quantum chemistry data for machine-learning purposes.
 
+[![.github/workflows/testing.yml](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml/badge.svg)](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml)
+[![codecov](https://codecov.io/gh/materialsproject/pyrho/branch/main/graph/badge.svg?token=YoFMXzpeKI)](https://codecov.io/gh/materialsproject/pyrho)
 # Regridding data using PyRho
+
+
 
 ## The PGrid Class
 

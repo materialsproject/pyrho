@@ -349,6 +349,11 @@ def gaussian_smear(
     multiple:
         ``multiple * sigma`` is the cutoff radius for the smearing
 
+    Returns
+    -------
+    NDArray:
+        The smear data array.
+
     """
     # Since smearing requires floating point, we need to make sure the input is floating point
     arr = arr.astype(np.float64)

@@ -31,7 +31,7 @@ class ChargeDensity(MSONable):
     ----------
     pgrids: Dict[str, PGrid]
         Dictionaries whose values are periodic ``PGrid`` objects
-        representing some periodic scalar field (typically the keys are ``total`` and ``diff`` 
+        representing some periodic scalar field (typically the keys are ``total`` and ``diff``
         for spin-polarized charge densities.)
     structure: Structure
         The atomic structure for the electronic charge density.

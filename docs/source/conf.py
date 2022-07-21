@@ -52,7 +52,14 @@ autoapi_dirs = ["../../src"]
 autoapi_add_toctree_entry = False
 autoapi_python_class_content = "class"
 # autoapi_options = ["members", "show-module-summary", "show-inheritance"]
-autoapi_options = [ 'members', 'private-members', 'show-inheritance', 'show-module-summary', 'special-members', 'imported-members', ]
+autoapi_options = [
+    "members",
+    "private-members",
+    "show-inheritance",
+    "show-module-summary",
+    "special-members",
+    "imported-members",
+]
 # autodoc_typehints = "description"
 # autoclass_content = 'init'
 

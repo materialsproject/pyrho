@@ -13,21 +13,21 @@ from pyrho.utils import gaussian_smear, get_sc_interp, interpolate_fourier
 class PGrid(MSONable):
     """Class representing of _periodic_ grid data.
 
-    Represents a periodic scalar field on a regular grid.
-    The data is defined by the lattice vectors and the grid data.
+    Represents a periodic scalar field on a regular grid. The data is defined by the lattice vectors and the grid data.
     The grid points are implicitly defined by the lattice vectors and the grid shape.
 
     """
 
     def __init__(self, grid_data: npt.NDArray, lattice: npt.NDArray):
         """Initialize the PGrid object.
-        
+
         Attributes
         ----------
         grid_data:
             Data stored on the regular rid
         lattice:
             Lattice vectors of the grid
+
         """
         self.grid_data = grid_data
         self.lattice = np.array(lattice)

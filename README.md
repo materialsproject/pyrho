@@ -38,7 +38,7 @@ mpl.rc("image", cmap="viridis")
 get_scatter_plot(pg2d.grid_data, pg2d.lattice, marker_size=40)
 ```
 
-![](https://github.com/materialsproject/pyrho/blob/main/docs/_images/output_3_0.png?raw=true)
+![](https://github.com/materialsproject/pyrho/blob/main/docs/_static/img/output_3_0.png?raw=true)
 
 
 
@@ -54,7 +54,7 @@ get_scatter_plot(pg_2x.grid_data, pg_2x.lattice, skips=1, opacity=1, marker_size
 
 
 
-![png](https://github.com/materialsproject/pyrho/blob/main/docs/_images/output_5_0.png?raw=true)
+![png](https://github.com/materialsproject/pyrho/blob/main/docs/_static/img/output_5_0.png?raw=true)
 
 
 
@@ -78,7 +78,7 @@ get_scatter_plot(pg1d.grid_data, pg1d.lattice, marker_size=50)
 
 
 
-![png](https://github.com/materialsproject/pyrho/blob/main/docs/_images/output_7_0.png?raw=true)
+![png](https://github.com/materialsproject/pyrho/blob/main/docs/_static/img/output_7_0.png?raw=true)
 
 
 
@@ -99,7 +99,7 @@ get_scatter_plot(pg1d_fine.grid_data, pg1d_fine.lattice, marker_size=10)
 
 
 
-![png](https://github.com/materialsproject/pyrho/blob/main/docs/_images/output_9_0.png?raw=true)
+![png](https://github.com/materialsproject/pyrho/blob/main/docs/_static/img/output_9_0.png?raw=true)
 
 
 

@@ -15,4 +15,4 @@ Introduction
 ============
 
 .. mdinclude:: ../../README.md
-   :start-line: 3
+   :start-line: 4

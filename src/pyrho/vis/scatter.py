@@ -19,20 +19,34 @@ def get_scatter_plot(
     marker_size: int = 5,
     plotter: str = "matplotlib",
 ) -> go.Figure | Axes:
-    """
-    Returns a plotly fig object for plotting.
-    Args:
-        data_in: Structured grid data to be plotted
-        lat_mat: Lattice vectors of the cell this must be a 2d array
-        skips: reduction factor of the grid points for plotting, only show [::skips] in each direction
-        logcolor: If True, assign the color in log scale
-        mask: Filter the points to plot
-        opacity: opacity of each point being plotted
-        marker_size: size of the markers in the 3D scatter plot
+    """Return a plotly fig object for plotting.
 
-    Returns:
-        plotly `Figure` object to be rendered in a notebook
-        or an `Axes` object from matplotlib
+    Parameters
+    ----------
+    data_in:
+        Structured grid data to be plotted
+    lat_mat:
+        Lattice vectors of the cell this must be a 2d array
+    skips:
+        Reduction factor of the grid points for plotting, only show [::skips] in each direction
+    logcolor:
+        If True, assign the color in log scale
+    mask:
+        Filter the points to plot
+    opacity:
+        Opacity of each point being plotted
+    marker_size:
+        Size of the markers in the 3D scatter plot
+    marker_size:
+        Marker size for the scatter plot
+    plotter:
+        Plotter to use, either "matplotlib" or "plotly"
+
+
+    Returns
+    -------
+    Figure | Axes:
+        `Figure` object or `Axes` object from matplotlib to be rendered in a notebook
 
     """
     ndim = len(data_in.shape)

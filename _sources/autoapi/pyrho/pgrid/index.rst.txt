@@ -1,0 +1,98 @@
+:py:mod:`pyrho.pgrid`
+=====================
+
+.. py:module:: pyrho.pgrid
+
+.. autoapi-nested-parse::
+
+   Python class for ND grid data volumetric data.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pyrho.pgrid.PGrid
+
+
+
+
+.. py:class:: PGrid(grid_data: numpy.typing.NDArray, lattice: numpy.typing.NDArray)
+
+   Bases: :py:obj:`monty.json.MSONable`
+
+   Class representing of _periodic_ grid data.
+
+   Represents a periodic scalar field on a regular grid. The data is defined by the lattice vectors and the grid data.
+   The grid points are implicitly defined by the lattice vectors and the grid shape.
+
+
+   .. py:method:: _transform_data(self, sc_mat: numpy.typing.ArrayLike, grid_out: List[int], origin: npt.ArrayLike | None = None, up_sample: int = 1) -> numpy.typing.NDArray
+
+      Apply a supercell transformation to the grid data.
+
+      This function assumes that the data is fixed in place and the transformation
+      is applied to the lattice vectors.
+
+      :param sc_mat: Matrix transformation applied to the lattice vectors
+      :param grid_out: The dimensions of the output grid
+      :param origin: Origin of the new lattice in fractional coordinates of the input cell
+      :param up_sample: The factor to scale up the sampling of the grid data using Fourier interpolation
+
+      :returns: The transformed data
+      :rtype: NDArray
+
+
+   .. py:method:: __mul__(self, factor: float) -> PGrid
+
+      Multiply the grid data by a factor.
+
+      :param factor: The factor to multiply the grid data by
+
+      :returns: The new PGrid object
+      :rtype: PGrid
+
+
+   .. py:method:: __truediv__(self, factor: float) -> PGrid
+
+      Divide the grid data by a factor.
+
+      :param factor: The factor to divide the grid data by
+
+      :returns: The new PGrid object
+      :rtype: PGrid
+
+
+   .. py:method:: get_transformed(self, sc_mat: Union[List[List[int]], numpy.typing.NDArray], grid_out: List[int], origin: npt.NDArray | None = None, up_sample: int = 1) -> PGrid
+
+      Get a new PGrid object for the new transformed data.
+
+      :param sc_mat: Matrix transformation applied to the lattice vectors
+      :param grid_out: The dimensions of the output grid
+      :param origin: Origin of the new lattice in fractional coordinates of the input cell
+      :param up_sample: The factor to scale up the sampling of the grid data using Fourier interpolation
+
+      :returns: The transformed PGrid object
+      :rtype: PGrid
+
+
+   .. py:method:: lossy_smooth_compression(self, grid_out: List, smear_std: float = 0.2) -> numpy.typing.NDArray
+
+      Perform Fourier interpolation then Gaussian smoothing.
+
+      The smoothing makes sure that simple operation like max and min filters still
+      give the same results.
+
+      :param grid_out: desired output grid of the compressed data.
+      :param smear_std: standard deviation of the Gaussian smoothing
+
+      :returns: Smoothed array
+      :rtype: NDArray
+
+
+

@@ -1,0 +1,54 @@
+:py:mod:`pyrho.vis.scatter`
+===========================
+
+.. py:module:: pyrho.vis.scatter
+
+.. autoapi-nested-parse::
+
+   Helper functions to visualize the data in plotly.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   pyrho.vis.scatter.get_scatter_plot
+   pyrho.vis.scatter._scatter_plotly
+   pyrho.vis.scatter._scatter_matplotlib
+
+
+
+.. py:function:: get_scatter_plot(data_in: numpy.ndarray, lat_mat: numpy.ndarray, skips: int = 1, logcolor: bool = False, mask: numpy.ndarray = None, opacity: float = 1.0, marker_size: int = 5, plotter: str = 'matplotlib') -> go.Figure | Axes
+
+   Return a plotly fig object for plotting.
+
+   :param data_in: Structured grid data to be plotted
+   :param lat_mat: Lattice vectors of the cell this must be a 2d array
+   :param skips: Reduction factor of the grid points for plotting, only show [::skips] in each direction
+   :param logcolor: If True, assign the color in log scale
+   :param mask: Filter the points to plot
+   :param opacity: Opacity of each point being plotted
+   :param marker_size: Size of the markers in the 3D scatter plot
+   :param marker_size: Marker size for the scatter plot
+   :param plotter: Plotter to use, either "matplotlib" or "plotly"
+
+   :returns: `Figure` object or `Axes` object from matplotlib to be rendered in a notebook
+   :rtype: Figure | Axes
+
+
+.. py:function:: _scatter_plotly(xx, yy, zz, cc, ndim, marker_size, opacity)
+
+   Return the plotly object.
+
+
+.. py:function:: _scatter_matplotlib(xx, yy, zz, cc, ndim, marker_size, opacity) -> matplotlib.axes.Axes
+
+   Return the matplotlib object.
+
+

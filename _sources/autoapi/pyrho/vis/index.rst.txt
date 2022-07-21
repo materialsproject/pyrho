@@ -1,0 +1,20 @@
+:py:mod:`pyrho.vis`
+===================
+
+.. py:module:: pyrho.vis
+
+.. autoapi-nested-parse::
+
+   Visualization module.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   scatter/index.rst
+
+

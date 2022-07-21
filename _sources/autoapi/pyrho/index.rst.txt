@@ -1,0 +1,31 @@
+:py:mod:`pyrho`
+===============
+
+.. py:module:: pyrho
+
+.. autoapi-nested-parse::
+
+   mp-pyrho package.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   vis/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   charge_density/index.rst
+   pgrid/index.rst
+   utils/index.rst
+
+

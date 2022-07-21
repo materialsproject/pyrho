@@ -1,0 +1,195 @@
+:py:mod:`pyrho.utils`
+=====================
+
+.. py:module:: pyrho.utils
+
+.. autoapi-nested-parse::
+
+   Util Functions.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   pyrho.utils.pad_arr
+   pyrho.utils.interpolate_fourier
+   pyrho.utils.roll_array
+   pyrho.utils.get_sc_interp
+   pyrho.utils.get_padded_array
+   pyrho.utils.get_plane_spacing
+   pyrho.utils.get_ucell_frac_fit_sphere
+   pyrho.utils.gaussian_smear
+
+
+
+.. py:function:: pad_arr(arr_in: numpy.typing.NDArray, shape: List[int]) -> numpy.typing.NDArray
+
+   Pad a function on a hypercube.
+
+   .. note::
+       We basically need to move the data at the corners a hypercube to the corners of a bigger/smaller
+       hypercube. Each corner of the hypercube can be represented as a binary number with length equal
+       to the dimension of the cube. Loop over the binary representation to figure out which corner you
+       are at the slice accordingly.
+
+   >>> arr = np.array([[1,2,3], [4,5,6]])
+   >>> pad_arr(arr, [5,3])
+   array([[1, 2, 3],
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+          [4, 5, 6]])
+   >>> pad_arr(arr, [2,2])
+   array([[1, 3],
+          [4, 6]])
+
+   :param arr_in: Data to be padded with zeros
+   :param shape: Desired shape of the array
+
+   :returns: padded data
+   :rtype: NDArray
+
+
+.. py:function:: interpolate_fourier(arr_in: numpy.typing.NDArray, shape: List[int]) -> numpy.typing.NDArray
+
+   Fourier interpolate an array.
+
+   Interpolate the data to some final shape, keep magnitude the same.
+   Will perform best if the input array is periodic in all directions.
+
+   >>> arr = np.array([[5.0, 10.0, 10.0, 7.0],
+   ...        [22.0, 12.0, 7.0, 3.0],
+   ...        [16.0, 10.0, 3.0, 5.0],
+   ...        [16.0, 22.0, 16.0, 6.0],
+   ...        [19.0, 20.0, 3.0, 7.0]])
+   >>> np.round(interpolate_fourier(arr_in=arr, shape=[10,8]),2)
+   array([[ 5.  ,  7.29, 10.  , 10.83, 10.  ,  8.71,  7.  ,  5.17],
+          [12.02, 12.22, 11.22, 12.72, 12.72,  8.11,  4.71,  7.62],
+          [22.  , 19.49, 12.  ,  8.88,  7.  ,  2.51,  3.  , 13.12],
+          [23.2 , 19.82, 10.33,  3.87,  0.64, -1.05,  3.36, 14.9 ],
+          [16.  , 14.86, 10.  ,  5.67,  3.  ,  2.14,  5.  , 11.33],
+          [11.58, 14.07, 14.8 , 14.24, 11.82,  8.06,  6.05,  7.88],
+          [16.  , 20.66, 22.  , 20.66, 16.  ,  9.34,  6.  ,  9.34],
+          [21.86, 26.35, 24.64, 18.31, 10.48,  5.16,  6.05, 13.21],
+          [19.  , 22.5 , 20.  , 11.19,  3.  ,  2.  ,  7.  , 13.31],
+          [ 9.34, 12.33, 13.01,  8.08,  3.33,  4.42,  7.84,  8.67]])
+
+   :param arr_in: Input array of data
+   :param shape: Desired shape shape of the interpolated data
+
+   :returns: Interpolated data in the desired shape
+   :rtype: NDArray
+
+
+.. py:function:: roll_array(arr: numpy.typing.NDArray, roll_vec: List[int]) -> numpy.typing.NDArray
+
+   Roll the array along specified axes.
+
+   Shift the index of an ndarray based on roll_vec.
+
+   :param arr: array to be rolled
+   :param roll_vec: number of indices in each direction to roll
+
+   :returns: The rolled array
+   :rtype: NDArray
+
+
+.. py:function:: get_sc_interp(data_in: numpy.typing.NDArray, sc_mat: numpy.typing.ArrayLike, grid_sizes: List[int], scipy_interp_method='linear', origin: Union[numpy.typing.NDArray, List[float], Tuple[float]] = None) -> Tuple[numpy.typing.NDArray, numpy.typing.NDArray]
+
+   Get the interpolated data in a supercell.
+
+   Take a data array defined on a regular lattice and a new set of lattice
+   vector (in units of the the original lattice), reproduce the data on the new grid.
+   We can consider the original cell to be unit cell (UC) and the new cell to be a super cell (SC)
+   defined using the basis of the UC -- although the the SC in this case can be any lattice.
+
+   .. note::
+       Assuming we have some kind of data stored on a regular grid --- [0,1) in each dimension
+       In the frame where UC is orthonormal we can just map all points in the sc_grid to the a
+       position in the unit cube.
+       Then perform interpolation on the new coordinates that are all within the cube
+       We have to include the boundaries of the UC since the mapped grid must lie between the existing points
+
+   .. note::
+       This algorithm can be used in real space and fourier space
+       For real space we expect the data to be smooth, so we should use "linear" interpolation
+       For fourier space we expect the position of the exact fourier component is important so use "nearest"
+
+   :param data_in: Data stored on a regular grid
+   :param sc_mat: Lattice vectors of new cell in the units of the old cell
+   :param grid_sizes: Number of grid points in each direction in the new cell
+   :param scipy_interp_method: Interpolation method to be used
+   :param origin: Shift applied to the origin in fractional coordinates
+
+   :returns: * *NDArray* -- size ``(ndim x prod(grid_size))`` the cartesian coordinates of each point in the new data
+             * *NDArray* -- size ``(prod(grid_size))`` the regridded data
+
+
+.. py:function:: get_padded_array(data_in: numpy.typing.NDArray) -> numpy.typing.NDArray
+
+   Pad the array with zeros.
+
+   Pad an array in each direction with the periodic boundary conditions.
+
+   :param data_in: Array to be padded
+
+   :returns: Padded array
+   :rtype: NDArray
+
+
+.. py:function:: get_plane_spacing(lattice: numpy.typing.NDArray) -> List[float]
+
+   Get the cartesian spacing between periodic planes of a unit cell.
+
+   >>> get_plane_spacing([[1,0,0], [1,1,0], [0,0,2]]) # doctest: +ELLIPSIS
+   [0.7653..., 1.042..., 2.0]
+
+   :param lattice: List of lattice vectors in cartesian coordinates
+
+   :returns: List where the k-th element is is the spacing of planes generated by all
+             lattice vectors EXCEPT the k-th one
+   :rtype: List[float]
+
+
+.. py:function:: get_ucell_frac_fit_sphere(lattice: numpy.ndarray, r: float = 0.2) -> Iterable[float]
+
+   Lattice ffractions in each direction that are within r of the origin.
+
+   Get the smallest you can make make the lattice parameter in each direction to fit a
+   sphere of radius `r`. For lattice vector `k`, the sphere must be contained within
+   the hyperplanes defined by all lattice vectors except `k`.
+
+   >>> get_ucell_frac_fit_sphere([[1,0,0], [1,-1, 0], [0,0,2]], 0.1) # doctest: +ELLIPSIS
+   [0.2613..., 0.1919..., 0.1]
+
+   :param lattice: List of lattice vectors in cartesian coordinates
+   :param r: width of the sphere
+
+   :returns: fraction of lattice vector in each direction need to fit the sphere
+   :rtype: Iterable of floats
+
+
+.. py:function:: gaussian_smear(arr: numpy.typing.NDArray, lattice: numpy.typing.NDArray, sigma: float = 0.2, multiple: float = 4.0) -> Tuple[numpy.typing.NDArray, numpy.typing.NDArray]
+
+   Apply an isotropic Gaussian smearing to periodic data.
+
+   Apply a Gaussian smearing of width (standard deviation) `sigma` to
+   the periodic field.  The smearing obeys periodic boundary conditions at
+   the edges of the cell.
+
+   :param arr: input data array to smear, if None: smear self.grid_data
+   :param lattice: lattice vectors in cartesian coordinates
+   :param sigma: Smearing width in cartesian coordinates, in the same units as the lattice vectors
+   :param multiple: ``multiple * sigma`` is the cutoff radius for the smearing
+
+   :returns: The smear data array.
+   :rtype: NDArray
+
+

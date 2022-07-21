@@ -1,0 +1,186 @@
+:py:mod:`pyrho.charge_density`
+==============================
+
+.. py:module:: pyrho.charge_density
+
+.. autoapi-nested-parse::
+
+   Chang Density Objects: Periodic Grid + Lattice / Atoms.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pyrho.charge_density.ChargeDensity
+
+
+
+
+.. py:class:: ChargeDensity
+
+   Bases: :py:obj:`monty.json.MSONable`
+
+   Charge density object.
+
+   Defines a charge density with a PGrid object along with the atomic structure.
+
+   .. attribute:: pgrids
+
+      Dictionaries whose values are periodic ``PGrid`` objects
+      representing some periodic scalar field (typically the keys are ``total`` and ``diff``
+      for spin-polarized charge densities.)
+
+      :type: Dict[str, PGrid]
+
+   .. attribute:: structure
+
+      The atomic structure for the electronic charge density.
+
+      :type: Structure
+
+   .. attribute:: normalization
+
+      The normalzation scheme (``vasp`` or ``None``)
+
+      :type: str | None = "vasp"
+
+   .. py:method:: __post_init__(self)
+
+      Post initialization.
+
+      Steps:
+          - Make sure all the lattices are identical
+
+
+
+   .. py:method:: normalized_data(self) -> dict[str, numpy.typing.NDArray]
+      :property:
+
+      Get the normalized data.
+
+      Since different codes use different normalization methods for
+      volumetric data we should convert them to the same units (electrons / Angstrom^3)
+
+      :returns: The normalized data in units of (electrons / Angstrom^3)
+      :rtype: dict[str, NDArray]
+
+
+   .. py:method:: grid_shape(self) -> Tuple[int, int, int]
+      :property:
+
+      Return the shape of the charge density.
+
+
+   .. py:method:: normalized_pgrids(self) -> dict[str, pyrho.pgrid.PGrid]
+      :property:
+
+      Get the normalized pgrids.
+
+      Since different codes use different normalization methods for
+      volumetric data we should convert them to the same units (electrons / Angstrom^3)
+
+      :returns: The normalized pgrids in units of (electrons / Angstrom^3)
+      :rtype: dict[str, PGrid]
+
+
+   .. py:method:: lattice(self) -> numpy.typing.NDArray
+      :property:
+
+      Lattice represented as an NDArray.
+
+
+   .. py:method:: from_pmg(cls, vdata: pymatgen.io.vasp.VolumetricData, normalization: str = 'vasp') -> ChargeDensity
+      :classmethod:
+
+      Get data from pymatgen object.
+
+      Read a single key from the data field of a VolumetricData object
+
+      :param vdata: The volumetric data object
+      :param normalization: The normalization scheme
+                            - 'vasp' sum of the data / number of grid points == number of electrons
+                            - None/"none" no normalization
+
+      :returns: The charge density object
+      :rtype: ChargeDensity
+
+
+   .. py:method:: reorient_axis(self) -> None
+
+      Rorient the lattices.
+
+      Change the orientation of the lattice vector so that: ``a`` points along the x-axis, ``b`` is in the xy-plane,
+      ``c`` is in the positive-z halve of space
+
+
+
+   .. py:method:: get_data_in_cube(self, s: float, ngrid: int, key: str = 'total') -> numpy.typing.NDArray
+
+      Return the charge density data sampled on a cube.
+
+      Obtain a cubic basic cubic crop of the normalized charge density data.
+
+      :param s: The side length of the cube
+      :param ngrid: Number of grid points in each direction
+      :param key: The key to read from ``self.normalized_data``
+
+      :returns: Regridded data in a ngrid x ngrid x ngrid array
+      :rtype: NDArray
+
+
+   .. py:method:: get_transformed(self, sc_mat: numpy.typing.NDArray, grid_out: Union[List[int], int], origin: numpy.typing.ArrayLike = (0, 0, 0), up_sample: int = 1) -> ChargeDensity
+
+      Modify the structure and data and return a new object containing the reshaped data.
+
+      :param sc_mat: The transformation matrix to apply to the lattice vectors
+      :param grid_out: The dimensions of the transformed grid
+      :param origin: Origin of the new lattice in fractional coordinates of the input cell
+      :param up_sample: The factor to scale up the sampling of the grid data using Fourier interpolation
+
+      :returns: The transformed ChargeDensity object
+      :rtype: ChargeDensity
+
+
+   .. py:method:: to_Chgcar(self) -> pymatgen.io.vasp.Chgcar
+
+      Convert the charge density to a ``pymatgen.io.vasp.outputs.Chgcar`` object.
+
+      Scale and convert each key in the pgrids dictionary and create a ``Chgcar`` object
+
+      :returns: The charge density object
+      :rtype: Chgcar
+
+
+   .. py:method:: from_file(cls, filename: str, pmg_obj: pymatgen.io.vasp.VolumetricData = Chgcar) -> ChargeDensity
+      :classmethod:
+
+      Read a ChargeDensity object from a file.
+
+      :param filename: The filename of the ChargeDensity object
+      :param pmg_obj: The pymatgen object to read from the file (default: Chgcar).
+                      the `from_file` method from this class will be called to read the file.
+
+      :returns: **ChargeDensity**
+      :rtype: The ChargeDensity object
+
+
+   .. py:method:: from_hdf5(cls, filename: str, pmg_obj: pymatgen.io.vasp.VolumetricData = Chgcar) -> ChargeDensity
+      :classmethod:
+
+      Read a ChargeDensity object from a hdf5 file.
+
+      :param filename: The filename of the ChargeDensity object
+      :param pmg_obj: The pymatgen object to read from the file (default: Chgcar).
+                      the `from_file` method from this class will be called to read the file.
+
+      :returns: **ChargeDensity**
+      :rtype: The ChargeDensity object
+
+
+

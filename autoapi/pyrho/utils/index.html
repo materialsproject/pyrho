@@ -1,0 +1,586 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="prev" title="pyrho.pgrid" href="../pgrid/index.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>pyrho.utils - pyRho</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  --admonition-font-size: 92%;
+  --admonition-title-font-size: 92%;
+  --font-stack: Lato,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+  --font-size--small: 92%;
+  --font-size--small--2: 87.5%;
+  --font-size--small--3: 87.5%;
+  --font-size--small--4: 87.5%;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --admonition-font-size: 92%;
+  --admonition-title-font-size: 92%;
+  --font-stack: Lato,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+  --font-size--small: 92%;
+  --font-size--small--2: 87.5%;
+  --font-size--small--3: 87.5%;
+  --font-size--small--4: 87.5%;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --admonition-font-size: 92%;
+  --admonition-title-font-size: 92%;
+  --font-stack: Lato,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+  --font-size--small: 92%;
+  --font-size--small--2: 87.5%;
+  --font-size--small--3: 87.5%;
+  --font-size--small--4: 87.5%;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">pyRho</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">pyRho</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../vis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyrho.vis</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../vis/scatter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyrho.vis.scatter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../charge_density/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyrho.charge_density</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pgrid/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyrho.pgrid</span></code></a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyrho.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="module-pyrho.utils">
+<span id="pyrho-utils"></span><h1><a class="reference internal" href="#module-pyrho.utils" title="pyrho.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyrho.utils</span></code></a><a class="headerlink" href="#module-pyrho.utils" title="Permalink to this heading">#</a></h1>
+<p>Util Functions.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyrho.utils.pad_arr" title="pyrho.utils.pad_arr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pad_arr</span></code></a>(arr_in: numpy.typing.NDArray, shape: List[int]) → numpy.typing.NDArray</p></td>
+<td><p>Pad a function on a hypercube.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyrho.utils.interpolate_fourier" title="pyrho.utils.interpolate_fourier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate_fourier</span></code></a>(arr_in: numpy.typing.NDArray, shape: List[int]) → numpy.typing.NDArray</p></td>
+<td><p>Fourier interpolate an array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyrho.utils.roll_array" title="pyrho.utils.roll_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roll_array</span></code></a>(arr: numpy.typing.NDArray, roll_vec: List[int]) → numpy.typing.NDArray</p></td>
+<td><p>Roll the array along specified axes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyrho.utils.get_sc_interp" title="pyrho.utils.get_sc_interp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sc_interp</span></code></a>(data_in: numpy.typing.NDArray, sc_mat: numpy.typing.ArrayLike, grid_sizes: List[int], scipy_interp_method='linear', origin: Union[numpy.typing.NDArray, List[float], Tuple[float]] = None) → Tuple[numpy.typing.NDArray, numpy.typing.NDArray]</p></td>
+<td><p>Get the interpolated data in a supercell.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyrho.utils.get_padded_array" title="pyrho.utils.get_padded_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_padded_array</span></code></a>(data_in: numpy.typing.NDArray) → numpy.typing.NDArray</p></td>
+<td><p>Pad the array with zeros.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyrho.utils.get_plane_spacing" title="pyrho.utils.get_plane_spacing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_plane_spacing</span></code></a>(lattice: numpy.typing.NDArray) → List[float]</p></td>
+<td><p>Get the cartesian spacing between periodic planes of a unit cell.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyrho.utils.get_ucell_frac_fit_sphere" title="pyrho.utils.get_ucell_frac_fit_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ucell_frac_fit_sphere</span></code></a>(lattice: numpy.ndarray, r: float = 0.2) → Iterable[float]</p></td>
+<td><p>Lattice ffractions in each direction that are within r of the origin.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyrho.utils.gaussian_smear" title="pyrho.utils.gaussian_smear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_smear</span></code></a>(arr: numpy.typing.NDArray, lattice: numpy.typing.NDArray, sigma: float = 0.2, multiple: float = 4.0) → Tuple[numpy.typing.NDArray, numpy.typing.NDArray]</p></td>
+<td><p>Apply an isotropic Gaussian smearing to periodic data.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrho.utils.pad_arr">
+<span class="sig-prename descclassname"><span class="pre">pyrho.utils.</span></span><span class="sig-name descname"><span class="pre">pad_arr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/pyrho/utils.html#pad_arr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrho.utils.pad_arr" title="Permalink to this definition">#</a></dt>
+<dd><p>Pad a function on a hypercube.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We basically need to move the data at the corners a hypercube to the corners of a bigger/smaller
+hypercube. Each corner of the hypercube can be represented as a binary number with length equal
+to the dimension of the cube. Loop over the binary representation to figure out which corner you
+are at the slice accordingly.</p>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pad_arr</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">array([[1, 2, 3],</span>
+<span class="go">       [0, 0, 0],</span>
+<span class="go">       [0, 0, 0],</span>
+<span class="go">       [0, 0, 0],</span>
+<span class="go">       [4, 5, 6]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pad_arr</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">array([[1, 3],</span>
+<span class="go">       [4, 6]])</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr_in</strong> – Data to be padded with zeros</p></li>
+<li><p><strong>shape</strong> – Desired shape of the array</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>padded data</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrho.utils.interpolate_fourier">
+<span class="sig-prename descclassname"><span class="pre">pyrho.utils.</span></span><span class="sig-name descname"><span class="pre">interpolate_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/pyrho/utils.html#interpolate_fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrho.utils.interpolate_fourier" title="Permalink to this definition">#</a></dt>
+<dd><p>Fourier interpolate an array.</p>
+<p>Interpolate the data to some final shape, keep magnitude the same.
+Will perform best if the input array is periodic in all directions.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mf">22.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mf">16.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mf">16.0</span><span class="p">,</span> <span class="mf">22.0</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">],</span>
+<span class="gp">... </span>       <span class="p">[</span><span class="mf">19.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">interpolate_fourier</span><span class="p">(</span><span class="n">arr_in</span><span class="o">=</span><span class="n">arr</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">]),</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([[ 5.  ,  7.29, 10.  , 10.83, 10.  ,  8.71,  7.  ,  5.17],</span>
+<span class="go">       [12.02, 12.22, 11.22, 12.72, 12.72,  8.11,  4.71,  7.62],</span>
+<span class="go">       [22.  , 19.49, 12.  ,  8.88,  7.  ,  2.51,  3.  , 13.12],</span>
+<span class="go">       [23.2 , 19.82, 10.33,  3.87,  0.64, -1.05,  3.36, 14.9 ],</span>
+<span class="go">       [16.  , 14.86, 10.  ,  5.67,  3.  ,  2.14,  5.  , 11.33],</span>
+<span class="go">       [11.58, 14.07, 14.8 , 14.24, 11.82,  8.06,  6.05,  7.88],</span>
+<span class="go">       [16.  , 20.66, 22.  , 20.66, 16.  ,  9.34,  6.  ,  9.34],</span>
+<span class="go">       [21.86, 26.35, 24.64, 18.31, 10.48,  5.16,  6.05, 13.21],</span>
+<span class="go">       [19.  , 22.5 , 20.  , 11.19,  3.  ,  2.  ,  7.  , 13.31],</span>
+<span class="go">       [ 9.34, 12.33, 13.01,  8.08,  3.33,  4.42,  7.84,  8.67]])</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr_in</strong> – Input array of data</p></li>
+<li><p><strong>shape</strong> – Desired shape shape of the interpolated data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Interpolated data in the desired shape</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrho.utils.roll_array">
+<span class="sig-prename descclassname"><span class="pre">pyrho.utils.</span></span><span class="sig-name descname"><span class="pre">roll_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roll_vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/pyrho/utils.html#roll_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrho.utils.roll_array" title="Permalink to this definition">#</a></dt>
+<dd><p>Roll the array along specified axes.</p>
+<p>Shift the index of an ndarray based on roll_vec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> – array to be rolled</p></li>
+<li><p><strong>roll_vec</strong> – number of indices in each direction to roll</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rolled array</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrho.utils.get_sc_interp">
+<span class="sig-prename descclassname"><span class="pre">pyrho.utils.</span></span><span class="sig-name descname"><span class="pre">get_sc_interp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc_mat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scipy_interp_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pyrho/utils.html#get_sc_interp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrho.utils.get_sc_interp" title="Permalink to this definition">#</a></dt>
+<dd><p>Get the interpolated data in a supercell.</p>
+<p>Take a data array defined on a regular lattice and a new set of lattice
+vector (in units of the the original lattice), reproduce the data on the new grid.
+We can consider the original cell to be unit cell (UC) and the new cell to be a super cell (SC)
+defined using the basis of the UC – although the the SC in this case can be any lattice.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Assuming we have some kind of data stored on a regular grid — [0,1) in each dimension
+In the frame where UC is orthonormal we can just map all points in the sc_grid to the a
+position in the unit cube.
+Then perform interpolation on the new coordinates that are all within the cube
+We have to include the boundaries of the UC since the mapped grid must lie between the existing points</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This algorithm can be used in real space and fourier space
+For real space we expect the data to be smooth, so we should use “linear” interpolation
+For fourier space we expect the position of the exact fourier component is important so use “nearest”</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_in</strong> – Data stored on a regular grid</p></li>
+<li><p><strong>sc_mat</strong> – Lattice vectors of new cell in the units of the old cell</p></li>
+<li><p><strong>grid_sizes</strong> – Number of grid points in each direction in the new cell</p></li>
+<li><p><strong>scipy_interp_method</strong> – Interpolation method to be used</p></li>
+<li><p><strong>origin</strong> – Shift applied to the origin in fractional coordinates</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>NDArray</em> – size <code class="docutils literal notranslate"><span class="pre">(ndim</span> <span class="pre">x</span> <span class="pre">prod(grid_size))</span></code> the cartesian coordinates of each point in the new data</p></li>
+<li><p><em>NDArray</em> – size <code class="docutils literal notranslate"><span class="pre">(prod(grid_size))</span></code> the regridded data</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrho.utils.get_padded_array">
+<span class="sig-prename descclassname"><span class="pre">pyrho.utils.</span></span><span class="sig-name descname"><span class="pre">get_padded_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span></span></span><a class="reference internal" href="../../../_modules/pyrho/utils.html#get_padded_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrho.utils.get_padded_array" title="Permalink to this definition">#</a></dt>
+<dd><p>Pad the array with zeros.</p>
+<p>Pad an array in each direction with the periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_in</strong> – Array to be padded</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Padded array</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrho.utils.get_plane_spacing">
+<span class="sig-prename descclassname"><span class="pre">pyrho.utils.</span></span><span class="sig-name descname"><span class="pre">get_plane_spacing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pyrho/utils.html#get_plane_spacing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrho.utils.get_plane_spacing" title="Permalink to this definition">#</a></dt>
+<dd><p>Get the cartesian spacing between periodic planes of a unit cell.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_plane_spacing</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span> 
+<span class="go">[0.7653..., 1.042..., 2.0]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lattice</strong> – List of lattice vectors in cartesian coordinates</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List where the k-th element is is the spacing of planes generated by all
+lattice vectors EXCEPT the k-th one</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrho.utils.get_ucell_frac_fit_sphere">
+<span class="sig-prename descclassname"><span class="pre">pyrho.utils.</span></span><span class="sig-name descname"><span class="pre">get_ucell_frac_fit_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pyrho/utils.html#get_ucell_frac_fit_sphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrho.utils.get_ucell_frac_fit_sphere" title="Permalink to this definition">#</a></dt>
+<dd><p>Lattice ffractions in each direction that are within r of the origin.</p>
+<p>Get the smallest you can make make the lattice parameter in each direction to fit a
+sphere of radius <cite>r</cite>. For lattice vector <cite>k</cite>, the sphere must be contained within
+the hyperplanes defined by all lattice vectors except <cite>k</cite>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_ucell_frac_fit_sphere</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span> <span class="mf">0.1</span><span class="p">)</span> 
+<span class="go">[0.2613..., 0.1919..., 0.1]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lattice</strong> – List of lattice vectors in cartesian coordinates</p></li>
+<li><p><strong>r</strong> – width of the sphere</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>fraction of lattice vector in each direction need to fit the sphere</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Iterable of floats</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrho.utils.gaussian_smear">
+<span class="sig-prename descclassname"><span class="pre">pyrho.utils.</span></span><span class="sig-name descname"><span class="pre">gaussian_smear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiple</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pyrho/utils.html#gaussian_smear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrho.utils.gaussian_smear" title="Permalink to this definition">#</a></dt>
+<dd><p>Apply an isotropic Gaussian smearing to periodic data.</p>
+<p>Apply a Gaussian smearing of width (standard deviation) <cite>sigma</cite> to
+the periodic field.  The smearing obeys periodic boundary conditions at
+the edges of the cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> – input data array to smear, if None: smear self.grid_data</p></li>
+<li><p><strong>lattice</strong> – lattice vectors in cartesian coordinates</p></li>
+<li><p><strong>sigma</strong> – Smearing width in cartesian coordinates, in the same units as the lattice vectors</p></li>
+<li><p><strong>multiple</strong> – <code class="docutils literal notranslate"><span class="pre">multiple</span> <span class="pre">*</span> <span class="pre">sigma</span></code> is the cutoff radius for the smearing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The smear data array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NDArray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="../pgrid/index.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyrho.pgrid</span></code></div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Materials Project Team
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyrho.utils</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#pyrho.utils.pad_arr">pad_arr</a></li>
+<li><a class="reference internal" href="#pyrho.utils.interpolate_fourier">interpolate_fourier</a></li>
+<li><a class="reference internal" href="#pyrho.utils.roll_array">roll_array</a></li>
+<li><a class="reference internal" href="#pyrho.utils.get_sc_interp">get_sc_interp</a></li>
+<li><a class="reference internal" href="#pyrho.utils.get_padded_array">get_padded_array</a></li>
+<li><a class="reference internal" href="#pyrho.utils.get_plane_spacing">get_plane_spacing</a></li>
+<li><a class="reference internal" href="#pyrho.utils.get_ucell_frac_fit_sphere">get_ucell_frac_fit_sphere</a></li>
+<li><a class="reference internal" href="#pyrho.utils.gaussian_smear">gaussian_smear</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    </body>
+</html>

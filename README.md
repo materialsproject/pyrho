@@ -5,6 +5,8 @@ Tools for re-griding volumetric quantum chemistry data for machine-learning purp
 
 [![.github/workflows/testing.yml](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml/badge.svg)](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml)
 [![codecov](https://codecov.io/gh/materialsproject/pyrho/branch/main/graph/badge.svg?token=YoFMXzpeKI)](https://codecov.io/gh/materialsproject/pyrho)
+[![DOI](https://zenodo.org/badge/266894456.svg)](https://zenodo.org/badge/latestdoi/266894456)
+
 
 # Regridding data using PyRho
 

@@ -46,7 +46,7 @@ tests = [
   "hypothesis==6.40.1",
 ]
 strict = [
-  "pymatgen==2022.7.19",
+  "pymatgen==2022.9.21",
 ]
 
 [project.urls]

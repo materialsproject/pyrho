@@ -1,5 +1,5 @@
 ---
-title: 'mp-PyRho: Regridding periodic variables in for machine learning'
+title: 'mp-PyRho: Regridding periodic charge densities for machine-learning applications'
 
 tags:
   - Python

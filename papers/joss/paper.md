@@ -2,8 +2,8 @@
 title: 'mp-PyRho: Regridding periodic charge densities for machine-learning applications'
 
 tags:
-  - Python
-  - material science
+  - python
+  - materials science
   - machine learning
   - periodic data
 authors:
@@ -22,7 +22,7 @@ date: October 2022
 # Summary
 
 The electronic charge density is a central quantity in the field of computational material science.
-Since most materials simulations codes, such as the Vienna Ab initio Simulation Package (VASP) and Quantum ESPRESSO, assume periodic boundary conditions, the calculations usually stores the charge densities on a three-dimensional grid that is regular in the directions of the lattice parameters.
+Since most materials simulations codes, such as the Vienna Ab initio Simulation Package (VASP)[@Kresse1993Jan] and Quantum ESPRESSO[@Giannozzi2009Sep], assume periodic boundary conditions, the calculations usually stores the charge densities on a three-dimensional grid that is regular in the directions of the lattice parameters.
 This makes the calculations, especially performing FFT's on these charge densities traighforward.
 However, these non-orthogonal, and more importantly material-specific grids, means that we cannot directly compare the charge densities from different simulations.
 Despite how data-rich the charge densities are, using periodic charge densities for machine learning is difficult because:
@@ -37,7 +37,7 @@ If the output grids are cubic with the same dimensions, then they can be used as
 
 `mp-pyRho` is a Python package that allows users to control the repsentation of periodic data in arbitray dimensions.
 The matematics of the re-gridding relies on `scipy.interpolate` and is general for all dimensions.
-However, special considertion was given to the case of 3D data, where we have integrated with the `VolumetricData` objects from the `pymatgen` package [@pymatgen].
+However, special considertion was given to the case of 3D data, where we have integrated with the `VolumetricData` objects from the `pymatgen` package [Ong2013Feb].
 
 The code is responsible for:
 1. Up-scaling the periodic data to a higher resolution grid using Fourier interpolation.

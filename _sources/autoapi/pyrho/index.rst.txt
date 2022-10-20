@@ -5,7 +5,7 @@
 
 .. autoapi-nested-parse::
 
-   py-rho package.
+   mp-pyrho package.
 
 
 

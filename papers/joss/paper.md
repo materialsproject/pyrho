@@ -11,6 +11,9 @@ authors:
     orcid: 0000-0002-2743-7531
     equal-contrib: true
     affiliation: "1, 2" # (Multiple affiliations must be quoted)
+  - name: Kristin A. Persson
+    orcid: 0000-0002-8410-4639
+    affiliation: 1
 affiliations:
   - name: Department of Materials Science and Engineering, University of California, Berkeley, Berkeley, California 94720, United States
     index: 1

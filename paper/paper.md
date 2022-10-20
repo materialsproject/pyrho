@@ -9,7 +9,6 @@ tags:
 authors:
   - name: Jimmy-Xuan Shen
     orcid: 0000-0002-2743-7531
-    equal-contrib: true
     affiliation: "1, 2" # (Multiple affiliations must be quoted)
   - name: Kristin A. Persson
     orcid: 0000-0002-8410-4639

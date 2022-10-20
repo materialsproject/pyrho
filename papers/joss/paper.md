@@ -57,8 +57,8 @@ As charge density data become more availibe through modern quantum chemistry dat
 
 Grid-interpolation and grid-restructuring are common tasks in computational geometry, and efficient algorithms exist to perform these tasks.
 However, since 3D periodic data is extremely common in computational materials science and not common elsewhere, there is a lack of software that is specifically designed to handle this type of data.
-`mp-pyRho` is designed to be a general tool for regridding periodic data, and we have integrated it with the `VolumetricData` objects from the `pymatgen` package [@pymatgen] to make it easy to use for materials science applications.
+`mp-pyRho` is designed to be a general tool for regridding periodic data, and we have integrated it with the `VolumetricData` objects from the `pymatgen` package [@Ong2013Feb] to make it easy to use for materials science applications.
 
 # Acknowledgements
 
-We acknowledge contributions from Jason M. Munro, Matthew K. Horton, and Shyam Dwaraknath for their help with the development of this software.
+We acknowledge contributions from Jason M. Munro, Matthew K. Horton, and Shyam Dwaraknath for their help with the development of this software and Kristin A. Persson for supervising during the development of this software.

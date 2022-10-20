@@ -13,12 +13,14 @@ authors:
     affiliation: "1, 2" # (Multiple affiliations must be quoted)
   - name: Kristin A. Persson
     orcid: 0000-0002-8410-4639
-    affiliation: 1
+    affiliation: "1, 3"
 affiliations:
   - name: Department of Materials Science and Engineering, University of California, Berkeley, Berkeley, California 94720, United States
     index: 1
   - name: Lawrence Livermore National Laboratory, Livermore, California 94550, United States
     index: 2
+  - name: Energy Sciences Area, Lawrence Berkeley National Laboratory, Berkeley, California 94720, United States
+    index: 3
 date: October 2022
 bibliography: paper.bib
 ---

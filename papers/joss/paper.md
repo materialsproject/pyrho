@@ -65,4 +65,5 @@ However, since 3D periodic data is extremely common in computational materials s
 
 # Acknowledgements
 
-We acknowledge contributions from Jason M. Munro, Matthew K. Horton, and Shyam Dwaraknath for their help with the development of this software and Kristin A. Persson for supervising during the development of this software.
+We acknowledge contributions from Jason M. Munro, Matthew K. Horton, and Shyam Dwaraknath for their helpful discussions during the development of this software and Kristin A. Persson for supervising during the development of this software.
+This work was supported by the US Department of Energy, Office of Science, Office of Basic Energy Sciences, Materials Sciences and Engineering Division under contract no. DE-AC02-05-CH11231 (Materials Project program KC23MP).

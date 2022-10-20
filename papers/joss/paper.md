@@ -24,11 +24,11 @@ bibliography: paper.bib
 
 The electronic charge density is a central quantity in the field of computational material science.
 Since most materials simulations codes, such as the Vienna Ab initio Simulation Package (VASP)[@Kresse1993Jan] and Quantum ESPRESSO[@Giannozzi2009Sep], assume periodic boundary conditions, the calculations usually stores the charge densities on a three-dimensional grid that is regular in the directions of the lattice parameters.
-This makes the calculations, especially performing FFT's on these charge densities traighforward.
+This makes the calculations, especially performing FFT's on these charge densities straightforward.
 However, these non-orthogonal, and more importantly material-specific grids, means that we cannot directly compare the charge densities from different simulations.
 Despite how data-rich the charge densities are, using periodic charge densities for machine learning is difficult because:
 
-1. Different charge densities are usually stored on non-comensurate grids, meaning that one deep-learning Convolutional Neural Network (CNN) cannot be trained to process different crystal structures.
+1. Different charge densities are usually stored on non-commensurate grids, meaning that one deep-learning Convolutional Neural Network (CNN) cannot be trained to process different crystal structures.
 
 2. Only a single charge density is generated for each simulation, this is not ideal for Deep Learning since we want to train on data sets that represent many copies of the same system.  This is like trying to train a CNN to recognize a cat by only showing it one picture of a cat.
 

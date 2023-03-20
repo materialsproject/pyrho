@@ -1,6 +1,12 @@
 # mp-pyrho
 📄 [Full Documentation](https://materialsproject.github.io/pyrho)
 
+# Installation
+
+```
+pip install mp-pyrho
+```
+
 Tools for re-griding volumetric quantum chemistry data for machine-learning purposes.
 
 [![.github/workflows/testing.yml](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml/badge.svg)](https://github.com/materialsproject/pyrho/actions/workflows/testing.yml)

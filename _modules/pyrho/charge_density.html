@@ -251,7 +251,7 @@
 
 <span class="nd">@dataclass</span>
 <div class="viewcode-block" id="ChargeDensity"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity">[docs]</a><span class="k">class</span> <span class="nc">ChargeDensity</span><span class="p">(</span><span class="n">MSONable</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Charge density object.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Charge density object.</span>
 
 <span class="sd">    Defines a charge density with a PGrid object along with the atomic structure.</span>
 
@@ -273,7 +273,7 @@
 <div class="viewcode-block" id="ChargeDensity.normalization"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.normalization">[docs]</a>    <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span></div>
 
 <div class="viewcode-block" id="ChargeDensity.__post_init__"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Post initialization.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Post initialization.</span>
 
 <span class="sd">        Steps:</span>
 <span class="sd">            - Make sure all the lattices are identical</span>
@@ -287,7 +287,7 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="ChargeDensity.normalized_data"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.normalized_data">[docs]</a>    <span class="k">def</span> <span class="nf">normalized_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Get the normalized data.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the normalized data.</span>
 
 <span class="sd">        Since different codes use different normalization methods for</span>
 <span class="sd">        volumetric data we should convert them to the same units (electrons / Angstrom^3)</span>
@@ -309,12 +309,12 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="ChargeDensity.grid_shape"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.grid_shape">[docs]</a>    <span class="k">def</span> <span class="nf">grid_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Return the shape of the charge density.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the shape of the charge density.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pgrids</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid_shape</span></div>
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="ChargeDensity.normalized_pgrids"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.normalized_pgrids">[docs]</a>    <span class="k">def</span> <span class="nf">normalized_pgrids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PGrid</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Get the normalized pgrids.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the normalized pgrids.</span>
 
 <span class="sd">        Since different codes use different normalization methods for</span>
 <span class="sd">        volumetric data we should convert them to the same units (electrons / Angstrom^3)</span>
@@ -339,14 +339,14 @@
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="ChargeDensity.lattice"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.lattice">[docs]</a>    <span class="k">def</span> <span class="nf">lattice</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Lattice represented as an NDArray.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Lattice represented as an NDArray.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">matrix</span></div>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="ChargeDensity.from_pmg"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.from_pmg">[docs]</a>    <span class="k">def</span> <span class="nf">from_pmg</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">vdata</span><span class="p">:</span> <span class="n">VolumetricData</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChargeDensity&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Get data from pymatgen object.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get data from pymatgen object.</span>
 
 <span class="sd">        Read a single key from the data field of a VolumetricData object</span>
 
@@ -373,7 +373,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ChargeDensity.reorient_axis"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.reorient_axis">[docs]</a>    <span class="k">def</span> <span class="nf">reorient_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Rorient the lattices.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rorient the lattices.</span>
 
 <span class="sd">        Change the orientation of the lattice vector so that: ``a`` points along the x-axis, ``b`` is in the xy-plane,</span>
 <span class="sd">        ``c`` is in the positive-z halve of space</span>
@@ -385,7 +385,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">lattice</span> <span class="o">=</span> <span class="n">Lattice</span><span class="o">.</span><span class="n">from_parameters</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">vesta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ChargeDensity.get_data_in_cube"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.get_data_in_cube">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_in_cube</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ngrid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;total&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Return the charge density data sampled on a cube.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the charge density data sampled on a cube.</span>
 
 <span class="sd">        Obtain a cubic basic cubic crop of the normalized charge density data.</span>
 
@@ -417,7 +417,7 @@
         <span class="n">origin</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
         <span class="n">up_sample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChargeDensity&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Modify the structure and data and return a new object containing the reshaped data.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Modify the structure and data and return a new object containing the reshaped data.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -477,7 +477,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ChargeDensity.to_Chgcar"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.to_Chgcar">[docs]</a>    <span class="k">def</span> <span class="nf">to_Chgcar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Chgcar</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Convert the charge density to a ``pymatgen.io.vasp.outputs.Chgcar`` object.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the charge density to a ``pymatgen.io.vasp.outputs.Chgcar`` object.</span>
 
 <span class="sd">        Scale and convert each key in the pgrids dictionary and create a ``Chgcar`` object</span>
 
@@ -499,7 +499,7 @@
 <div class="viewcode-block" id="ChargeDensity.from_file"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pmg_obj</span><span class="p">:</span> <span class="n">VolumetricData</span> <span class="o">=</span> <span class="n">Chgcar</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChargeDensity&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Read a ChargeDensity object from a file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read a ChargeDensity object from a file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -520,7 +520,7 @@
 <div class="viewcode-block" id="ChargeDensity.from_hdf5"><a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.from_hdf5">[docs]</a>    <span class="k">def</span> <span class="nf">from_hdf5</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pmg_obj</span><span class="p">:</span> <span class="n">VolumetricData</span> <span class="o">=</span> <span class="n">Chgcar</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChargeDensity&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Read a ChargeDensity object from a hdf5 file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read a ChargeDensity object from a hdf5 file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -616,7 +616,7 @@
 
 <span class="nd">@deprecated</span>
 <span class="k">def</span> <span class="nf">multiply_aug</span><span class="p">(</span><span class="n">data_aug</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Update the data in the augmentation charge.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the data in the augmentation charge.</span>
 
 <span class="sd">    The original idea here was to use to to speed up some vasp calculations for</span>
 <span class="sd">    supercells by initializing the entire CHGCAR file.</span>
@@ -668,7 +668,7 @@
 <span class="k">def</span> <span class="nf">_normalize_data</span><span class="p">(</span>
     <span class="n">grid_data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">lattice</span><span class="p">:</span> <span class="n">Lattice</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Normalize the data to the number of electrons.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize the data to the number of electrons.</span>
 
 <span class="sd">    Since different codes use different normalization methods for</span>
 <span class="sd">    volumetric data we should convert them to the same units (electrons / Angstrom^3)</span>
@@ -707,7 +707,7 @@
 <span class="k">def</span> <span class="nf">_scaled_data</span><span class="p">(</span>
     <span class="n">grid_data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">lattice</span><span class="p">:</span> <span class="n">Lattice</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Undo the normalization of the data.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Undo the normalization of the data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

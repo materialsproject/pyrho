@@ -440,8 +440,10 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sc_mat</span><span class="p">),</span> <span class="n">sc_mat</span><span class="p">):</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;The `sc_mat` is not integer valued.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;Non-integer valued transformations are valid but will not product periodic structures, thus we cannot define a new Structure object.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;We will round the sc_mat to integer values for now but can implement functionality that returns a Molecule object in the future.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Non-integer valued transformations are valid but will not product periodic structures, &quot;</span>
+                <span class="s2">&quot;thus we cannot define a new Structure object.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;We will round the sc_mat to integer values for now but can implement functionality &quot;</span>
+                <span class="s2">&quot;that returns a Molecule object in the future.&quot;</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="n">sc_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sc_mat</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">new_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>

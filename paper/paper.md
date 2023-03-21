@@ -27,7 +27,7 @@ bibliography: paper.bib
 # Summary
 
 The electronic charge density is a central quantity in the field of computational material science.
-Since most materials simulations codes, such as the Vienna Ab initio Simulation Package (VASP)[@Kresse1993Jan] and Quantum ESPRESSO[@Giannozzi2009Sep], assume periodic boundary conditions, the calculations usually stores the charge densities on a three-dimensional grid that is regular in the directions of the lattice parameters.
+Since most materials simulations codes, such as the Vienna Ab initio Simulation Package (VASP)[@Kresse1993Jan] and Quantum ESPRESSO[@Giannozzi2009Sep], assume periodic boundary conditions, the calculations usually stores the charge densities on a three-dimensional grid that is regular in the directions of the lattice vectors.
 This makes the calculations, especially performing FFT's on these charge densities straightforward.
 However, these non-orthogonal, and more importantly material-specific grids, means that we cannot directly compare the charge densities from different simulations.
 Despite how data-rich the charge densities are, using periodic charge densities for machine learning is difficult because:

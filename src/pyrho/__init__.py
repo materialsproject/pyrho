@@ -3,7 +3,6 @@
 __author__ = """Jimmy Shen"""
 __email__ = "jmmshn@gmail.com"
 
-import os
 
 from pkg_resources import DistributionNotFound, get_distribution
 

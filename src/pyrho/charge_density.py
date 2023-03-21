@@ -212,8 +212,10 @@ class ChargeDensity(MSONable):
         if not np.allclose(np.round(sc_mat), sc_mat):
             warnings.warn(
                 "The `sc_mat` is not integer valued.\n"
-                "Non-integer valued transformations are valid but will not product periodic structures, thus we cannot define a new Structure object.\n"
-                "We will round the sc_mat to integer values for now but can implement functionality that returns a Molecule object in the future.",
+                "Non-integer valued transformations are valid but will not product periodic structures, "
+                "thus we cannot define a new Structure object.\n"
+                "We will round the sc_mat to integer values for now but can implement functionality "
+                "that returns a Molecule object in the future.",
             )
         sc_mat = np.round(sc_mat).astype(int)
         new_structure = self.structure.copy()

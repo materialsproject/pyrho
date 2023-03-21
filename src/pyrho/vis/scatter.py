@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 
-"""Visualizaiton functions do the scatter plots in plotly since it seems to be more efficient."""
+"""Visualization functions do the scatter plots in plotly since it seems to be more efficient."""
 
 
 def get_scatter_plot(

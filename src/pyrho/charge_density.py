@@ -5,18 +5,24 @@ from __future__ import annotations
 import math
 import warnings
 from dataclasses import dataclass
-from typing import Dict, List, Tuple, Union
+from typing import TYPE_CHECKING
 
 import numpy as np
 import numpy.typing as npt
 from monty.dev import deprecated
 from monty.json import MSONable
+from pymatgen.analysis.structure_matcher import ElementComparator, StructureMatcher
 from pymatgen.core.lattice import Lattice
-from pymatgen.core.structure import Structure
 from pymatgen.io.vasp import Chgcar, Poscar, VolumetricData
 
 from pyrho.pgrid import PGrid
 from pyrho.utils import get_sc_interp
+
+if TYPE_CHECKING:
+    from typing import Dict, List, Tuple, Union
+
+    from pymatgen.core.structure import Structure
+
 
 __all__ = ["ChargeDensity"]
 
@@ -27,7 +33,7 @@ class ChargeDensity(MSONable):
 
     Defines a charge density with a PGrid object along with the atomic structure.
 
-    Attributes
+    Attributes:
     ----------
     pgrids: Dict[str, PGrid]
         Dictionaries whose values are periodic ``PGrid`` objects
@@ -64,7 +70,7 @@ class ChargeDensity(MSONable):
         Since different codes use different normalization methods for
         volumetric data we should convert them to the same units (electrons / Angstrom^3)
 
-        Returns
+        Returns:
         -------
         dict[str, NDArray]:
             The normalized data in units of (electrons / Angstrom^3)
@@ -91,7 +97,7 @@ class ChargeDensity(MSONable):
         Since different codes use different normalization methods for
         volumetric data we should convert them to the same units (electrons / Angstrom^3)
 
-        Returns
+        Returns:
         -------
         dict[str, PGrid]:
             The normalized pgrids in units of (electrons / Angstrom^3)
@@ -131,7 +137,7 @@ class ChargeDensity(MSONable):
             - 'vasp' sum of the data / number of grid points == number of electrons
             - None/"none" no normalization
 
-        Returns
+        Returns:
         -------
         ChargeDensity:
             The charge density object
@@ -170,7 +176,7 @@ class ChargeDensity(MSONable):
         key:
             The key to read from ``self.normalized_data``
 
-        Returns
+        Returns:
         -------
         NDArray:
             Regridded data in a ngrid x ngrid x ngrid array
@@ -202,7 +208,7 @@ class ChargeDensity(MSONable):
         up_sample:
             The factor to scale up the sampling of the grid data using Fourier interpolation
 
-        Returns
+        Returns:
         -------
         ChargeDensity:
             The transformed ChargeDensity object
@@ -255,9 +261,24 @@ class ChargeDensity(MSONable):
 
         Scale and convert each key in the pgrids dictionary and create a ``Chgcar`` object
 
-        Returns
+        Returns:
         -------
         Chgcar:
+            The charge density object
+
+        """
+        self.to_VolumetricData(cls=Chgcar, normalization="vasp")
+
+    def to_VolumetricData(
+        self, cls=VolumetricData, normalization: str = "vasp"
+    ) -> VolumetricData:
+        """Convert the charge density to a ``pymatgen.io.vasp.outputs.VolumetricData`` object.
+
+        Scale and convert each key in the pgrids dictionary and create a ``VolumetricData`` object
+
+        Returns:
+        -------
+        VolumetricData:
             The charge density object
 
         """
@@ -265,9 +286,9 @@ class ChargeDensity(MSONable):
         data_dict = {}
         for k, v in self.normalized_data.items():
             data_dict[k] = _scaled_data(
-                v, lattice=self.structure.lattice, normalization="vasp"
+                v, lattice=self.structure.lattice, normalization=normalization
             )
-        return Chgcar(Poscar(struct), data=data_dict)
+        return cls(Poscar(structure=struct), data_dict)
 
     @classmethod
     def from_file(
@@ -283,7 +304,7 @@ class ChargeDensity(MSONable):
             The pymatgen object to read from the file (default: Chgcar).
             the `from_file` method from this class will be called to read the file.
 
-        Returns
+        Returns:
         -------
             ChargeDensity: The ChargeDensity object
 
@@ -304,88 +325,81 @@ class ChargeDensity(MSONable):
             The pymatgen object to read from the file (default: Chgcar).
             the `from_file` method from this class will be called to read the file.
 
-        Returns
+        Returns:
         -------
             ChargeDensity: The ChargeDensity object
 
         """
         return cls.from_pmg(pmg_obj.from_hdf5(filename))
 
-    #
-    #     _, new_rho = get_sc_interp(self.rho, sc_mat, grid_sizes=grid_out)
-    #     new_rho = new_rho.reshape(grid_out)
-    #
-    #     grid_shifts = [
-    #         int(t * g) for t, g in zip(translation - np.round(translation), grid_out)
-    #     ]
-    #
-    #     new_rho = roll_array(new_rho, grid_shifts)
-    #     return self.__class__.from_rho(new_rho, new_structure)
+
+def get_matched_structure_mapping(
+    uc_struct: Structure, sc_struct: Structure, sm: StructureMatcher | None = None
+):
+    """Get the mapping of the supercell to the unit cell.
+
+    Get the mapping from the supercell structure onto the base structure,
+    Note: this only works for structures that are exactly matched.
+
+    Args:
+        uc_struct: host structure, smaller cell
+        sc_struct: bigger cell
+        sm: StructureMatcher instance
+    Returns:
+        sc_m : supercell matrix to apply to s1 to get s2
+        total_t : translation to apply on s1 * sc_m to get s2
+    """
+    if sm is None:
+        sm = StructureMatcher(
+            primitive_cell=False, comparator=ElementComparator(), attempt_supercell=True
+        )
+    s1, s2 = sm._process_species([sc_struct.copy(), uc_struct.copy()])
+    trans = sm.get_transformation(s1, s2)
+    if trans is None:
+        return None
+    sc, t, mapping = trans
+    temp = s2.copy().make_supercell(sc)
+    ii, jj = 0, mapping[0]
+    vec = np.round(sc_struct[ii].frac_coords - temp[jj].frac_coords)
+    return sc, t + vec
 
 
-# class SpinChargeDensity(MSONable, ChargeABC):
-#     def __init__(self, chargeden_dict: Dict, aug_charge: Dict = None):
-#         """
-#         Wrapper class that parses multiple sets of grid data on the same lattice
+def get_volumetric_like_sc(
+    vd: VolumetricData,
+    sc_struct: Structure,
+    grid_out: npt.ArrayLike,
+    up_sample: int = 1,
+    sm: StructureMatcher | None = None,
+    normalization: str | None = "vasp",
+):
+    """Get the volumetric data in the supercell.
 
-#         Args:
-#             chargeden_dict: A dictionary containing multiple charge density objects
-#                         typically in the format {'total' : ChargeDen1, 'diff' : ChargeDen2}
-#         """
-#         self.chargeden_dict = chargeden_dict
-#         self.aug_charge = aug_charge
-#         self._tmp_key = next(
-#             iter(self.chargeden_dict)
-#         )  # get one key in the dictionary to make writing the subsequent code easier
+    Args:
+        vd: VolumeData instance
+        sc_struct: supercell structure.
+        grid_out: grid size to output the volumetric data.
+        up_sample: up sampling factor.
+        sm: StructureMatcher instance
+        normalization: normalization method for the volumetric data.
+            default is "vasp" which assumes the normalization is the
+            same as VASP's CHGCAR file. If None, no normalization is
+            done.
 
-#     @classmethod
-#     def from_pmg_volumetric_data(
-#         cls, vdata: VolumetricData, data_keys=("total", "diff")
-#     ):
-#         chargeden_dict = {}
-#         data_aug = getattr(vdata, "data_aug", None)
-#         for k in data_keys:
-#             chargeden_dict[k] = ChargeDensity.from_pmg(vdata, data_key=k)
-#         return cls(chargeden_dict, aug_charge=data_aug)
-
-#     @property
-#     def lattice(self) -> Lattice:
-#         return self.chargeden_dict[self._tmp_key].lattice
-
-#     def to_Chgcar(self) -> Chgcar:
-#         struct = self.chargeden_dict[self._tmp_key].structure
-#         data_ = {k: v.renormalized_data for k, v in self.chargeden_dict.items()}
-#         return Chgcar(Poscar(struct), data_, data_aug=self.aug_charge)
-
-#     def to_VolumetricData(self) -> VolumetricData:
-#         key_ = next(iter(self.chargeden_dict))
-#         struct = self.chargeden_dict[key_].structure
-#         data_ = {k: v.renormalized_data for k, v in self.chargeden_dict.items()}
-#         return VolumetricData(struct, data_)
-
-#     def get_reshaped(
-#         self,
-#         sc_mat: npt.ArrayLike,
-#         grid_out: Union[List, int],
-#         origin: npt.ArrayLike = (0.0, 0.0, 0.0),
-#         up_sample: int = 1,
-#     ) -> "SpinChargeDensity":
-#         new_spin_charge = {}
-#         for k, v in self.chargeden_dict.items():
-#             new_spin_charge[k] = v.get_reshaped_cell(sc_mat, frac_shift, grid_out)
-#         factor = int(
-#             new_spin_charge[self._tmp_key].structure.num_sites
-#             / self.chargeden_dict[self._tmp_key].structure.num_sites
-#         )
-#         new_aug = {}
-#         if self.aug_charge is not None:
-#             for k, v in self.aug_charge.items():
-#                 new_aug[k] = multiply_aug(v, factor)
-#         return self.__class__(new_spin_charge, new_aug)
-
-#     def reorient_axis(self) -> None:
-#         for k, v in self.chargeden_dict:
-#             v.reorient_axis()
+    Returns:
+        VolumetricData: volumetric data in the supercell
+    """
+    trans = get_matched_structure_mapping(vd.structure, sc_struct=sc_struct, sm=sm)
+    if trans is None:
+        raise ValueError("Could not find a supercell mapping")
+    sc_mat, total_t = trans
+    cden = ChargeDensity.from_pmg(vd, normalization=normalization)
+    orig = np.dot(total_t, sc_mat)
+    cden_transformed = cden.get_transformed(
+        sc_mat=sc_mat, origin=-orig, grid_out=grid_out, up_sample=up_sample
+    )
+    return cden_transformed.to_VolumetricData(
+        cls=vd.__class__, normalization=normalization
+    )
 
 
 @deprecated
@@ -408,7 +422,7 @@ def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
     factor:
         The multiplication factor (some integer number of times it gets repeated)
 
-    Returns
+    Returns:
     -------
     List[str]:
         Each line of the augmentation data.
@@ -464,7 +478,7 @@ def _normalize_data(
             where the second `/vol` account for the different number of electrons in
             different cells
 
-    Returns
+    Returns:
     -------
     NDArray:
         The normalized grid data
@@ -492,7 +506,7 @@ def _scaled_data(
     normalization:
         The normalization method defaults to vasp
 
-    Returns
+    Returns:
     -------
     NDArray:
         The un-normalized grid data

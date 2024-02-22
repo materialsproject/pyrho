@@ -31,11 +31,13 @@ class Checker2D:
         """Get the x and y coordinates for a given pair of lattice vectors and grid size.
 
         Args:
+        ----
             lat_mat: lattice vectors
             grids: grid size
             origin_cart: origin of the lattice vectors in cartesian coordinates
 
         Returns:
+        -------
             XX: x coordinates for the grid in the shape of the grid
             YY: y coordinates for the grid in the shape of the grid
 

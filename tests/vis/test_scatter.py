@@ -4,7 +4,6 @@ from pyrho.vis.scatter import get_scatter_plot
 
 
 def test_get_scatter_plot():
-
     data = [
         [
             [1, 1, 1, 1, 1, 1, 1],

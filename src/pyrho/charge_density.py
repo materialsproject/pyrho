@@ -338,13 +338,16 @@ def get_matched_structure_mapping(
     Get the mapping from the supercell structure onto the base structure,
     Note: this only works for structures that are exactly matched.
 
-    Args:
-        uc_struct: host structure, smaller cell
-        sc_struct: bigger cell
-        sm: StructureMatcher instance
+    Parameters:
+    ----------
+    uc_struct: host structure, smaller cell
+    sc_struct: bigger cell
+    sm: StructureMatcher instance
+
     Returns:
-        sc_m : supercell matrix to apply to s1 to get s2
-        total_t : translation to apply on s1 * sc_m to get s2
+    -------
+    sc_m : supercell matrix to apply to s1 to get s2
+    total_t : translation to apply on s1 * sc_m to get s2
     """
     if sm is None:
         sm = StructureMatcher(
@@ -371,19 +374,21 @@ def get_volumetric_like_sc(
 ):
     """Get the volumetric data in the supercell.
 
-    Args:
-        vd: VolumeData instance
-        sc_struct: supercell structure.
-        grid_out: grid size to output the volumetric data.
-        up_sample: up sampling factor.
-        sm: StructureMatcher instance
-        normalization: normalization method for the volumetric data.
-            default is "vasp" which assumes the normalization is the
-            same as VASP's CHGCAR file. If None, no normalization is
-            done.
+    Parameters:
+    ----------
+    vd: VolumeData instance
+    sc_struct: supercell structure.
+    grid_out: grid size to output the volumetric data.
+    up_sample: up sampling factor.
+    sm: StructureMatcher instance
+    normalization: normalization method for the volumetric data.
+        default is "vasp" which assumes the normalization is the
+        same as VASP's CHGCAR file. If None, no normalization is
+        done.
 
     Returns:
-        VolumetricData: volumetric data in the supercell
+    -------
+    VolumetricData: volumetric data in the supercell
     """
     trans = get_matched_structure_mapping(vd.structure, sc_struct=sc_struct, sm=sm)
     if trans is None:

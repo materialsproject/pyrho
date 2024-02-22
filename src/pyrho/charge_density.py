@@ -19,8 +19,6 @@ from pyrho.pgrid import PGrid
 from pyrho.utils import get_sc_interp
 
 if TYPE_CHECKING:
-    from typing import Dict, List, Tuple, Union
-
     from pymatgen.core.structure import Structure
 
 
@@ -46,7 +44,7 @@ class ChargeDensity(MSONable):
 
     """
 
-    pgrids: Dict[str, PGrid]
+    pgrids: dict[str, PGrid]
     structure: Structure
     normalization: str | None = "vasp"
 
@@ -86,7 +84,7 @@ class ChargeDensity(MSONable):
         }
 
     @property
-    def grid_shape(self) -> Tuple[int, int, int]:
+    def grid_shape(self) -> tuple[int, int, int]:
         """Return the shape of the charge density."""
         return self.pgrids["total"].grid_shape
 
@@ -157,7 +155,7 @@ class ChargeDensity(MSONable):
         ``c`` is in the positive-z halve of space
 
         """
-        args: Tuple[float, float, float, float, float, float] = (
+        args: tuple[float, float, float, float, float, float] = (
             self.structure.lattice.abc + self.structure.lattice.angles
         )
         self.structure.lattice = Lattice.from_parameters(*args, vesta=True)
@@ -191,7 +189,7 @@ class ChargeDensity(MSONable):
     def get_transformed(
         self,
         sc_mat: npt.NDArray,
-        grid_out: Union[List[int], int],
+        grid_out: list[int] | int,
         origin: npt.ArrayLike = (0, 0, 0),
         up_sample: int = 1,
     ) -> "ChargeDensity":
@@ -403,7 +401,7 @@ def get_volumetric_like_sc(
 
 
 @deprecated
-def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
+def multiply_aug(data_aug: list[str], factor: int) -> list[str]:
     """Update the data in the augmentation charge.
 
     The original idea here was to use to to speed up some vasp calculations for
@@ -428,8 +426,8 @@ def multiply_aug(data_aug: List[str], factor: int) -> List[str]:
         Each line of the augmentation data.
 
     """
-    res: List[str] = []
-    cur_block: List[str] = []
+    res: list[str] = []
+    cur_block: list[str] = []
     cnt = 0
     for ll in data_aug:
         if "augmentation" in ll:

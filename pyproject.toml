@@ -16,7 +16,7 @@ classifiers = [
 ]
 authors = [{name = "Jimmy-Xuan Shen", email = "jmmshn@gmail.com"}]
 dependencies = [
-  'pymatgen>=2022.9.21',
+  'pymatgen',
 ]
 
 description = "Tools for re-griding periodic volumetric quantum chemistry data for machine-learning purposes."
@@ -46,7 +46,7 @@ tests = [
   "hypothesis==6.40.1",
 ]
 strict = [
-  "pymatgen==2023.8.15",
+  "pymatgen==2024.2.20",
 ]
 
 [project.urls]

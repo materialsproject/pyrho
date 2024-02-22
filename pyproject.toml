@@ -16,7 +16,7 @@ classifiers = [
 ]
 authors = [{name = "Jimmy-Xuan Shen", email = "jmmshn@gmail.com"}]
 dependencies = [
-  'pymatgen',
+  'pymatgen>=2023.9.21',
 ]
 
 description = "Tools for re-griding periodic volumetric quantum chemistry data for machine-learning purposes."

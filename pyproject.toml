@@ -27,6 +27,8 @@ name = "mp-pyrho"
 readme = "README.md"
 requires-python = ">=3.8"
 
+[tool.setuptools_scm]
+
 [project.optional-dependencies]
 dev = ["pre-commit==2.17.0"]
 docs = [
@@ -121,10 +123,6 @@ line-ending = "auto"
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
-
-[tool.versioningit.vcs]
-default-tag = "0.0.1"
-method = "git"
 
 [tool.mypy]
 ignore_missing_imports = true

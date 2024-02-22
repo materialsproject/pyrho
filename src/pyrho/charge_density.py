@@ -265,7 +265,7 @@ class ChargeDensity(MSONable):
             The charge density object
 
         """
-        self.to_VolumetricData(cls=Chgcar, normalization="vasp")
+        return self.to_VolumetricData(cls=Chgcar, normalization="vasp")
 
     def to_VolumetricData(
         self, cls=VolumetricData, normalization: str = "vasp"

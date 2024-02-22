@@ -1,5 +1,4 @@
 """Chang Density Objects: Periodic Grid + Lattice / Atoms."""
-
 from __future__ import annotations
 
 import math

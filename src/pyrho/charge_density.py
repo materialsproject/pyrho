@@ -361,7 +361,7 @@ def get_matched_structure_mapping(
     temp = s2.copy().make_supercell(sc)
     ii, jj = 0, mapping[0]
     vec = np.round(sc_struct[ii].frac_coords - temp[jj].frac_coords)
-    return sc, vec
+    return sc, t + vec
 
 
 def get_volumetric_like_sc(

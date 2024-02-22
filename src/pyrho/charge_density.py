@@ -332,7 +332,7 @@ class ChargeDensity(MSONable):
 
 def get_matched_structure_mapping(
     uc_struct: Structure, sc_struct: Structure, sm: StructureMatcher | None = None
-) -> tuple[npt.NDArray, float] | None:
+) -> tuple[npt.NDArray, npt.ArrayLike] | None:
     """Get the mapping of the supercell to the unit cell.
 
     Get the mapping from the supercell structure onto the base structure,
@@ -361,7 +361,7 @@ def get_matched_structure_mapping(
     temp = s2.copy().make_supercell(sc)
     ii, jj = 0, mapping[0]
     vec = np.round(sc_struct[ii].frac_coords - temp[jj].frac_coords)
-    return sc, t + vec
+    return sc, vec
 
 
 def get_volumetric_like_sc(

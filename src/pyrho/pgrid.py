@@ -1,4 +1,5 @@
 """Python class for ND grid data volumetric data."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

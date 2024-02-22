@@ -1,13 +1,15 @@
 """Python class for ND grid data volumetric data."""
 from __future__ import annotations
 
-from typing import List, Union
+from typing import TYPE_CHECKING
 
 import numpy as np
-import numpy.typing as npt
 from monty.json import MSONable
 
 from pyrho.utils import gaussian_smear, get_sc_interp, interpolate_fourier
+
+if TYPE_CHECKING:
+    import numpy.typing as npt
 
 
 class PGrid(MSONable):
@@ -38,7 +40,7 @@ class PGrid(MSONable):
     def _transform_data(
         self,
         sc_mat: npt.ArrayLike,
-        grid_out: List[int],
+        grid_out: npt.ArrayLike,
         origin: npt.ArrayLike | None = None,
         up_sample: int = 1,
     ) -> npt.NDArray:
@@ -112,8 +114,8 @@ class PGrid(MSONable):
 
     def get_transformed(
         self,
-        sc_mat: Union[List[List[int]], npt.NDArray],
-        grid_out: List[int],
+        sc_mat: list[list[int]] | npt.NDArray,
+        grid_out: list[int],
         origin: npt.NDArray | None = None,
         up_sample: int = 1,
     ) -> PGrid:
@@ -144,7 +146,7 @@ class PGrid(MSONable):
         return PGrid(grid_data=new_data, lattice=new_lattice)
 
     def lossy_smooth_compression(
-        self, grid_out: List, smear_std: float = 0.2
+        self, grid_out: list, smear_std: float = 0.2
     ) -> npt.NDArray:
         """Perform Fourier interpolation then Gaussian smoothing.
 

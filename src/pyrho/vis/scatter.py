@@ -48,7 +48,7 @@ def get_scatter_plot(
         Plotter to use, either "matplotlib" or "plotly"
 
 
-    Returns:
+    Returns
     -------
     Figure | Axes:
         `Figure` object or `Axes` object from matplotlib to be rendered in a notebook

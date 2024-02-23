@@ -24,7 +24,7 @@ class PGrid(MSONable):
     def __init__(self, grid_data: npt.NDArray, lattice: npt.NDArray):
         """Initialize the PGrid object.
 
-        Attributes:
+        Attributes
         ----------
         grid_data:
             Data stored on the regular rid
@@ -61,7 +61,7 @@ class PGrid(MSONable):
         up_sample:
             The factor to scale up the sampling of the grid data using Fourier interpolation
 
-        Returns:
+        Returns
         -------
         NDArray:
             The transformed data
@@ -89,7 +89,7 @@ class PGrid(MSONable):
         factor:
             The factor to multiply the grid data by
 
-        Returns:
+        Returns
         -------
         PGrid:
             The new PGrid object
@@ -105,7 +105,7 @@ class PGrid(MSONable):
         factor:
             The factor to divide the grid data by
 
-        Returns:
+        Returns
         -------
         PGrid:
             The new PGrid object
@@ -133,7 +133,7 @@ class PGrid(MSONable):
         up_sample:
             The factor to scale up the sampling of the grid data using Fourier interpolation
 
-        Returns:
+        Returns
         -------
         PGrid:
             The transformed PGrid object
@@ -161,7 +161,7 @@ class PGrid(MSONable):
         smear_std:
             standard deviation of the Gaussian smoothing
 
-        Returns:
+        Returns
         -------
         NDArray:
             Smoothed array

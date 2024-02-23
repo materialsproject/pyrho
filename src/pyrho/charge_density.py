@@ -30,7 +30,7 @@ class ChargeDensity(MSONable):
 
     Defines a charge density with a PGrid object along with the atomic structure.
 
-    Attributes:
+    Attributes
     ----------
     pgrids: Dict[str, PGrid]
         Dictionaries whose values are periodic ``PGrid`` objects
@@ -67,7 +67,7 @@ class ChargeDensity(MSONable):
         Since different codes use different normalization methods for
         volumetric data we should convert them to the same units (electrons / Angstrom^3)
 
-        Returns:
+        Returns
         -------
         dict[str, NDArray]:
             The normalized data in units of (electrons / Angstrom^3)
@@ -94,7 +94,7 @@ class ChargeDensity(MSONable):
         Since different codes use different normalization methods for
         volumetric data we should convert them to the same units (electrons / Angstrom^3)
 
-        Returns:
+        Returns
         -------
         dict[str, PGrid]:
             The normalized pgrids in units of (electrons / Angstrom^3)
@@ -134,7 +134,7 @@ class ChargeDensity(MSONable):
             - 'vasp' sum of the data / number of grid points == number of electrons
             - None/"none" no normalization
 
-        Returns:
+        Returns
         -------
         ChargeDensity:
             The charge density object
@@ -173,7 +173,7 @@ class ChargeDensity(MSONable):
         key:
             The key to read from ``self.normalized_data``
 
-        Returns:
+        Returns
         -------
         NDArray:
             Regridded data in a ngrid x ngrid x ngrid array
@@ -205,7 +205,7 @@ class ChargeDensity(MSONable):
         up_sample:
             The factor to scale up the sampling of the grid data using Fourier interpolation
 
-        Returns:
+        Returns
         -------
         ChargeDensity:
             The transformed ChargeDensity object
@@ -256,7 +256,7 @@ class ChargeDensity(MSONable):
 
         Scale and convert each key in the pgrids dictionary and create a ``Chgcar`` object
 
-        Returns:
+        Returns
         -------
         Chgcar:
             The charge density object
@@ -271,7 +271,7 @@ class ChargeDensity(MSONable):
 
         Scale and convert each key in the pgrids dictionary and create a ``VolumetricData`` object
 
-        Returns:
+        Returns
         -------
         VolumetricData:
             The charge density object
@@ -299,7 +299,7 @@ class ChargeDensity(MSONable):
             The pymatgen object to read from the file (default: Chgcar).
             the `from_file` method from this class will be called to read the file.
 
-        Returns:
+        Returns
         -------
             ChargeDensity: The ChargeDensity object
 
@@ -320,7 +320,7 @@ class ChargeDensity(MSONable):
             The pymatgen object to read from the file (default: Chgcar).
             the `from_file` method from this class will be called to read the file.
 
-        Returns:
+        Returns
         -------
             ChargeDensity: The ChargeDensity object
 
@@ -342,7 +342,7 @@ def get_matched_structure_mapping(
     sc_struct: bigger cell
     sm: StructureMatcher instance
 
-    Returns:
+    Returns
     -------
     sc_m : supercell matrix to apply to s1 to get s2
     total_t : translation to apply on s1 * sc_m to get s2
@@ -372,7 +372,7 @@ def get_volumetric_like_sc(
 ):
     """Get the volumetric data in the supercell.
 
-    Parameters:
+    Parameters
     ----------
     vd: VolumeData instance
     sc_struct: supercell structure.
@@ -384,7 +384,7 @@ def get_volumetric_like_sc(
         same as VASP's CHGCAR file. If None, no normalization is
         done.
 
-    Returns:
+    Returns
     -------
     VolumetricData: volumetric data in the supercell
     """
@@ -422,7 +422,7 @@ def multiply_aug(data_aug: list[str], factor: int) -> list[str]:
     factor:
         The multiplication factor (some integer number of times it gets repeated)
 
-    Returns:
+    Returns
     -------
     List[str]:
         Each line of the augmentation data.
@@ -477,7 +477,7 @@ def _normalize_data(
             where the second `/vol` account for the different number of electrons in
             different cells
 
-    Returns:
+    Returns
     -------
     NDArray:
         The normalized grid data
@@ -505,7 +505,7 @@ def _scaled_data(
     normalization:
         The normalization method defaults to vasp
 
-    Returns:
+    Returns
     -------
     NDArray:
         The un-normalized grid data

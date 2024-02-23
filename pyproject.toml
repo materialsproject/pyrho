@@ -45,7 +45,7 @@ docs = [
 tests = [
   "pytest==7.1.2",
   "pytest-cov==3.0.0",
-  "hypothesis==6.40.1",
+  "hypothesis==6.98.10",
 ]
 strict = [
   "pymatgen==2024.2.20",

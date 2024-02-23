@@ -31,7 +31,7 @@ class ChargeDensity(MSONable):
     Defines a charge density with a PGrid object along with the atomic structure.
 
     Attributes:
-    ----------
+    -----------
     pgrids: Dict[str, PGrid]
         Dictionaries whose values are periodic ``PGrid`` objects
         representing some periodic scalar field (typically the keys are ``total`` and ``diff``
@@ -56,7 +56,7 @@ class ChargeDensity(MSONable):
         """
         lattices = [self.pgrids[key].lattice for key in self.pgrids.keys()]
         if not all(
-            np.allclose(self.structure.lattice._matrix, lattice) for lattice in lattices
+            np.allclose(self.structure.lattice.matrix, lattice) for lattice in lattices
         ):
             raise ValueError("Lattices are not identical")
 
@@ -68,7 +68,7 @@ class ChargeDensity(MSONable):
         volumetric data we should convert them to the same units (electrons / Angstrom^3)
 
         Returns:
-        -------
+        --------
         dict[str, NDArray]:
             The normalized data in units of (electrons / Angstrom^3)
 
@@ -141,7 +141,7 @@ class ChargeDensity(MSONable):
 
         """
         pgrids = {
-            k: PGrid(v, vdata.structure.lattice._matrix) for k, v in vdata.data.items()
+            k: PGrid(v, vdata.structure.lattice.matrix) for k, v in vdata.data.items()
         }
         return cls(
             pgrids=pgrids, structure=vdata.structure, normalization=normalization
@@ -233,8 +233,6 @@ class ChargeDensity(MSONable):
             ngrid = grid_out / new_structure.volume
             mult = (np.prod(lengths) / ngrid) ** (1 / 3)
             grid_out = [int(math.floor(max(l_ / mult, 1))) for l_ in lengths]
-        else:
-            grid_out = grid_out
 
         pgrids = {}
         for k, pgrid in self.normalized_pgrids.items():
@@ -445,13 +443,12 @@ def multiply_aug(data_aug: list[str], factor: int) -> list[str]:
             cur_block = [ll]
         else:
             cur_block.append(ll)
-    else:
-        for _ in range(factor):
-            cnt += 1
-            cur_block[
-                0
-            ] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
-            res.extend(cur_block)
+    for _ in range(factor):
+        cnt += 1
+        cur_block[
+            0
+        ] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
+        res.extend(cur_block)
     return res
 
 

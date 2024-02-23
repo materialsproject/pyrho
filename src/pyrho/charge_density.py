@@ -31,7 +31,7 @@ class ChargeDensity(MSONable):
     Defines a charge density with a PGrid object along with the atomic structure.
 
     Attributes:
-    -----------
+    ----------
     pgrids: Dict[str, PGrid]
         Dictionaries whose values are periodic ``PGrid`` objects
         representing some periodic scalar field (typically the keys are ``total`` and ``diff``
@@ -68,7 +68,7 @@ class ChargeDensity(MSONable):
         volumetric data we should convert them to the same units (electrons / Angstrom^3)
 
         Returns:
-        --------
+        -------
         dict[str, NDArray]:
             The normalized data in units of (electrons / Angstrom^3)
 

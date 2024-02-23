@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from pymatgen.io.vasp import Chgcar
 
-from pyrho.charge_density import ChargeDensity
+from pyrho.charge_density import ChargeDensity, get_volumetric_like_sc
 
 
 def test_charge_density(test_dir):
@@ -33,3 +33,10 @@ def test_charge_density(test_dir):
     np.testing.assert_allclose(
         chgcar_sc.data["total"], chgcar_transformed.data["total"], atol=0.1, rtol=0.01
     )  # since the chgcar is scaled, the absolute tolerance is 0.1
+
+def test_mapping(test_dir):
+    chgcar_uc = Chgcar.from_file(test_dir / "CHGCAR.uc.vasp")
+    chgcar_sc = Chgcar.from_file(test_dir / "CHGCAR.sc1.vasp")
+    grid_out = chgcar_sc.dim
+    chgcar_out = get_volumetric_like_sc(chgcar_uc, chgcar_sc.structure, grid_out=grid_out, up_sample=2)
+    np.testing.assert_allclose(chgcar_out.data["total"], chgcar_sc.data["total"], atol=0.1, rtol=0.01)

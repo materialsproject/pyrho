@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 from itertools import combinations
-from typing import Iterable, List, Tuple, Union
+from typing import TYPE_CHECKING, Iterable, List, Tuple, Union
 
 import numpy as np
-from numpy.typing import ArrayLike, NDArray
 from scipy.interpolate import RegularGridInterpolator
 from scipy.ndimage import convolve
+
+if TYPE_CHECKING:
+    from numpy.typing import ArrayLike, NDArray
 
 __all__ = [
     "pad_arr",
@@ -55,11 +57,7 @@ def pad_arr(arr_in: NDArray, shape: List[int]) -> NDArray:
         padded data
 
     """
-    # for _, isize in enumerate(shape):
-    #     if isize < arr_in.shape[_]:
-    #         raise Warning(
-    #             "Some dimension of output array is smaller than the same dimension of input array."
-    #         )
+
     def get_slice(idig, idim, bound_pairs):
         if idig == "0":
             return slice(0, bound_pairs[idim][0])

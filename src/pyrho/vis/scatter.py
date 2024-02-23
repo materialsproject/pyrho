@@ -1,10 +1,15 @@
 """Helper functions to visualize the data in plotly."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 import plotly.graph_objs as go
 from matplotlib import pyplot as plt
-from matplotlib.axes import Axes
+
+if TYPE_CHECKING:
+    from matplotlib.axes import Axes
+
 
 """Visualization functions do the scatter plots in plotly since it seems to be more efficient."""
 

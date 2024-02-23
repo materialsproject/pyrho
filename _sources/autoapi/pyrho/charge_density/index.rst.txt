@@ -24,6 +24,7 @@ Classes
 
 .. py:class:: ChargeDensity
 
+
    Bases: :py:obj:`monty.json.MSONable`
 
    Charge density object.
@@ -50,17 +51,8 @@ Classes
 
       :type: str | None = "vasp"
 
-   .. py:method:: __post_init__(self)
-
-      Post initialization.
-
-      Steps:
-          - Make sure all the lattices are identical
-
-
-
-   .. py:method:: normalized_data(self) -> dict[str, numpy.typing.NDArray]
-      :property:
+   .. py:property:: normalized_data
+      :type: dict[str, numpy.typing.NDArray]
 
       Get the normalized data.
 
@@ -70,15 +62,13 @@ Classes
       :returns: The normalized data in units of (electrons / Angstrom^3)
       :rtype: dict[str, NDArray]
 
-
-   .. py:method:: grid_shape(self) -> Tuple[int, int, int]
-      :property:
+   .. py:property:: grid_shape
+      :type: tuple[int, int, int]
 
       Return the shape of the charge density.
 
-
-   .. py:method:: normalized_pgrids(self) -> dict[str, pyrho.pgrid.PGrid]
-      :property:
+   .. py:property:: normalized_pgrids
+      :type: dict[str, pyrho.pgrid.PGrid]
 
       Get the normalized pgrids.
 
@@ -88,14 +78,21 @@ Classes
       :returns: The normalized pgrids in units of (electrons / Angstrom^3)
       :rtype: dict[str, PGrid]
 
-
-   .. py:method:: lattice(self) -> numpy.typing.NDArray
-      :property:
+   .. py:property:: lattice
+      :type: numpy.typing.NDArray
 
       Lattice represented as an NDArray.
 
+   .. py:method:: __post_init__()
 
-   .. py:method:: from_pmg(cls, vdata: pymatgen.io.vasp.VolumetricData, normalization: str = 'vasp') -> ChargeDensity
+      Post initialization.
+
+      Steps:
+          - Make sure all the lattices are identical
+
+
+
+   .. py:method:: from_pmg(vdata: pymatgen.io.vasp.VolumetricData, normalization: str = 'vasp') -> ChargeDensity
       :classmethod:
 
       Get data from pymatgen object.
@@ -111,7 +108,7 @@ Classes
       :rtype: ChargeDensity
 
 
-   .. py:method:: reorient_axis(self) -> None
+   .. py:method:: reorient_axis() -> None
 
       Rorient the lattices.
 
@@ -120,7 +117,7 @@ Classes
 
 
 
-   .. py:method:: get_data_in_cube(self, s: float, ngrid: int, key: str = 'total') -> numpy.typing.NDArray
+   .. py:method:: get_data_in_cube(s: float, ngrid: int, key: str = 'total') -> numpy.typing.NDArray
 
       Return the charge density data sampled on a cube.
 
@@ -134,7 +131,7 @@ Classes
       :rtype: NDArray
 
 
-   .. py:method:: get_transformed(self, sc_mat: numpy.typing.NDArray, grid_out: Union[List[int], int], origin: numpy.typing.ArrayLike = (0, 0, 0), up_sample: int = 1) -> ChargeDensity
+   .. py:method:: get_transformed(sc_mat: numpy.typing.NDArray, grid_out: list[int] | int, origin: numpy.typing.ArrayLike = (0, 0, 0), up_sample: int = 1) -> ChargeDensity
 
       Modify the structure and data and return a new object containing the reshaped data.
 
@@ -147,7 +144,7 @@ Classes
       :rtype: ChargeDensity
 
 
-   .. py:method:: to_Chgcar(self) -> pymatgen.io.vasp.Chgcar
+   .. py:method:: to_Chgcar() -> pymatgen.io.vasp.Chgcar
 
       Convert the charge density to a ``pymatgen.io.vasp.outputs.Chgcar`` object.
 
@@ -157,7 +154,17 @@ Classes
       :rtype: Chgcar
 
 
-   .. py:method:: from_file(cls, filename: str, pmg_obj: pymatgen.io.vasp.VolumetricData = Chgcar) -> ChargeDensity
+   .. py:method:: to_VolumetricData(cls=VolumetricData, normalization: str = 'vasp') -> pymatgen.io.vasp.VolumetricData
+
+      Convert the charge density to a ``pymatgen.io.vasp.outputs.VolumetricData`` object.
+
+      Scale and convert each key in the pgrids dictionary and create a ``VolumetricData`` object
+
+      :returns: The charge density object
+      :rtype: VolumetricData
+
+
+   .. py:method:: from_file(filename: str, pmg_obj: pymatgen.io.vasp.VolumetricData = Chgcar) -> ChargeDensity
       :classmethod:
 
       Read a ChargeDensity object from a file.
@@ -166,11 +173,10 @@ Classes
       :param pmg_obj: The pymatgen object to read from the file (default: Chgcar).
                       the `from_file` method from this class will be called to read the file.
 
-      :returns: **ChargeDensity**
-      :rtype: The ChargeDensity object
+      :returns: ChargeDensity: The ChargeDensity object
 
 
-   .. py:method:: from_hdf5(cls, filename: str, pmg_obj: pymatgen.io.vasp.VolumetricData = Chgcar) -> ChargeDensity
+   .. py:method:: from_hdf5(filename: str, pmg_obj: pymatgen.io.vasp.VolumetricData = Chgcar) -> ChargeDensity
       :classmethod:
 
       Read a ChargeDensity object from a hdf5 file.
@@ -179,8 +185,7 @@ Classes
       :param pmg_obj: The pymatgen object to read from the file (default: Chgcar).
                       the `from_file` method from this class will be called to read the file.
 
-      :returns: **ChargeDensity**
-      :rtype: The ChargeDensity object
+      :returns: ChargeDensity: The ChargeDensity object
 
 
 

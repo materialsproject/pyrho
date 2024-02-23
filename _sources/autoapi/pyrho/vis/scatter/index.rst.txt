@@ -24,7 +24,7 @@ Functions
 
 
 
-.. py:function:: get_scatter_plot(data_in: numpy.ndarray, lat_mat: numpy.ndarray, skips: int = 1, logcolor: bool = False, mask: numpy.ndarray = None, opacity: float = 1.0, marker_size: int = 5, plotter: str = 'matplotlib') -> go.Figure | Axes
+.. py:function:: get_scatter_plot(data_in: numpy.ndarray, lat_mat: numpy.ndarray, skips: int = 1, logcolor: bool = False, mask: numpy.ndarray = None, opacity: float = 1.0, marker_size: int = 5, plotter: str = 'matplotlib') -> plotly.graph_objs.Figure | matplotlib.axes.Axes
 
    Return a plotly fig object for plotting.
 

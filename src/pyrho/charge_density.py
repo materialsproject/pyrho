@@ -339,7 +339,7 @@ def get_matched_structure_mapping(
     Note: this only works for structures that are exactly matched.
 
     Parameters:
-    ----------
+    -----------
     uc_struct: host structure, smaller cell
     sc_struct: bigger cell
     sm: StructureMatcher instance

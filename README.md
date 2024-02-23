@@ -14,6 +14,13 @@ Tools for re-griding volumetric quantum chemistry data for machine-learning purp
 [![DOI](https://zenodo.org/badge/266894456.svg)](https://zenodo.org/badge/latestdoi/266894456)
 
 
+If you use this package in your research, please cite the following:
+
+```
+Shen, J.-X., Munro, J. M., Horton, M. K., Huck, P., Dwaraknath, S., & Persson, K. A. (2022). A representation-independent electronic charge density database for crystalline materials. Sci Data, 9(661), 1–7. doi: 10.1038/s41597-022-01746-z
+
+```
+
 # Regridding data using PyRho
 
 

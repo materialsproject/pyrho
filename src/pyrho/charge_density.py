@@ -338,8 +338,8 @@ def get_matched_structure_mapping(
     Get the mapping from the supercell structure onto the base structure,
     Note: this only works for structures that are exactly matched.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     uc_struct: host structure, smaller cell
     sc_struct: bigger cell
     sm: StructureMatcher instance

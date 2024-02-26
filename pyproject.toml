@@ -43,7 +43,7 @@ docs = [
   "sphinx-autoapi==3.0.0",
 ]
 tests = [
-  "pytest==7.1.2",
+  "pytest==8.0.2",
   "pytest-cov==3.0.0",
   "hypothesis==6.98.10",
 ]

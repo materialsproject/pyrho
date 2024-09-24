@@ -4,7 +4,7 @@ __author__ = """Jimmy Shen"""
 __email__ = "jmmshn@gmail.com"
 
 
-from pkg_resources import DistributionNotFound, get_distribution
+from importlib.resources import DistributionNotFound, get_distribution
 
 try:
     __version__ = get_distribution(__name__).version

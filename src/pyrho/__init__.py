@@ -3,7 +3,7 @@
 __author__ = """Jimmy Shen"""
 __email__ = "jmmshn@gmail.com"
 
-from importlib.metadata import version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, version
 
 try:
     __version__ = version(__name__)

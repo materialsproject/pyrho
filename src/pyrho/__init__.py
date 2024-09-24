@@ -3,10 +3,9 @@
 __author__ = """Jimmy Shen"""
 __email__ = "jmmshn@gmail.com"
 
-
-from importlib.resources import DistributionNotFound, get_distribution
+from importlib.metadata import version, PackageNotFoundError
 
 try:
-    __version__ = get_distribution(__name__).version
-except DistributionNotFound:
-    pass
+    __version__ = version(__name__)
+except PackageNotFoundError:
+    __version__ = "unknown"

@@ -25,7 +25,7 @@ keywords = ["machine-learning", "dft", "vasp", "volumetric", "pymatgen"]
 license = {text = "modified BSD"}
 name = "mp-pyrho"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 [tool.setuptools_scm]
 
@@ -43,12 +43,9 @@ docs = [
   "sphinx-autoapi==3.0.0",
 ]
 tests = [
-  "pytest==7.1.2",
-  "pytest-cov==3.0.0",
-  "hypothesis==6.98.10",
-]
-strict = [
-  "pymatgen==2024.2.20",
+  "pytest>=7.1.2",
+  "pytest-cov>=3.0.0",
+  "hypothesis>=6.98.10",
 ]
 
 [project.urls]

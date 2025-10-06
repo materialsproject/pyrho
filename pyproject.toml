@@ -30,7 +30,7 @@ requires-python = ">=3.9"
 [tool.setuptools_scm]
 
 [project.optional-dependencies]
-dev = ["pre-commit==3.6.2"]
+dev = ["pre-commit==4.3.0"]
 docs = [
   "numpydoc==1.6.0",
   "sphinx==7.2.6",

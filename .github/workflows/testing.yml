@@ -1,3 +1,5 @@
+name: Testing
+
 on:
   push:
     branches:
@@ -7,6 +9,7 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -41,7 +44,7 @@ jobs:
       with:
         python-version:  ${{ matrix.python-version }}
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/setup.py') }}
@@ -57,11 +60,11 @@ jobs:
       run: |
         pytest --cov=pyrho --cov-report=xml
 
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v4
       if: matrix.python-version == 3.13
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
+        files: ./coverage.xml
 
   docs:
     runs-on: ubuntu-latest

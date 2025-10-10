@@ -1,4 +1,5 @@
 """Chang Density Objects: Periodic Grid + Lattice / Atoms."""
+
 from __future__ import annotations
 
 import math
@@ -232,7 +233,7 @@ class ChargeDensity(MSONable):
         if isinstance(grid_out, int):
             ngrid = grid_out / new_structure.volume
             mult = (np.prod(lengths) / ngrid) ** (1 / 3)
-            grid_out = [int(math.floor(max(l_ / mult, 1))) for l_ in lengths]
+            grid_out = [math.floor(max(l_ / mult, 1)) for l_ in lengths]
 
         pgrids = {}
         for k, pgrid in self.normalized_pgrids.items():
@@ -436,18 +437,18 @@ def multiply_aug(data_aug: list[str], factor: int) -> list[str]:
             if cur_block:
                 for _ in range(factor):
                     cnt += 1
-                    cur_block[
-                        0
-                    ] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
+                    cur_block[0] = (
+                        f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
+                    )
                     res.extend(cur_block)
             cur_block = [ll]
         else:
             cur_block.append(ll)
     for _ in range(factor):
         cnt += 1
-        cur_block[
-            0
-        ] = f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
+        cur_block[0] = (
+            f"augmentation occupancies{cnt:>4}{cur_block[0].split()[-1]:>4}\n"
+        )
         res.extend(cur_block)
     return res
 

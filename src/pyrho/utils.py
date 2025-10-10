@@ -1,4 +1,5 @@
 """Util Functions."""
+
 from __future__ import annotations
 
 from itertools import combinations
@@ -12,15 +13,15 @@ if TYPE_CHECKING:
     from numpy.typing import ArrayLike, NDArray
 
 __all__ = [
-    "pad_arr",
-    "interpolate_fourier",
-    "roll_array",
-    "get_sc_interp",
+    "gaussian_smear",
     "get_padded_array",
     "get_plane_spacing",
+    "get_sc_interp",
     "get_ucell_frac_fit_sphere",
     "get_ucell_frac_fit_sphere",
-    "gaussian_smear",
+    "interpolate_fourier",
+    "pad_arr",
+    "roll_array",
 ]
 
 
@@ -75,7 +76,7 @@ def pad_arr(arr_in: NDArray, shape: List[int]) -> NDArray:
         for i_dim, j_dim in zip(dimensions, shape)
     ]
     dim = len(dimensions)
-    fmt = f"#0{dim+2}b"
+    fmt = f"#0{dim + 2}b"
     corners = [format(itr, fmt)[-dim:] for itr in range(2**dim)]
     arr_out = np.zeros(shape, dtype=arr_in.dtype)
 
@@ -291,7 +292,7 @@ def get_plane_spacing(lattice: NDArray) -> List[float]:
             if j != idir
         ]
         v_perp_subspace = lattice[idir] - sum(idir_proj)
-        spacing.append(np.linalg.norm(v_perp_subspace))
+        spacing.append(float(np.linalg.norm(v_perp_subspace)))
     return spacing
 
 

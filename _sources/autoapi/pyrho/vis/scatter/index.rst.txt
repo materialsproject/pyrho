@@ -1,5 +1,5 @@
-:py:mod:`pyrho.vis.scatter`
-===========================
+pyrho.vis.scatter
+=================
 
 .. py:module:: pyrho.vis.scatter
 
@@ -9,12 +9,8 @@
 
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -23,6 +19,8 @@ Functions
    pyrho.vis.scatter._scatter_matplotlib
 
 
+Module Contents
+---------------
 
 .. py:function:: get_scatter_plot(data_in: numpy.ndarray, lat_mat: numpy.ndarray, skips: int = 1, logcolor: bool = False, mask: numpy.ndarray = None, opacity: float = 1.0, marker_size: int = 5, plotter: str = 'matplotlib') -> plotly.graph_objs.Figure | matplotlib.axes.Axes
 

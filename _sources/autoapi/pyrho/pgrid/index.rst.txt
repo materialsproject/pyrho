@@ -1,5 +1,5 @@
-:py:mod:`pyrho.pgrid`
-=====================
+pyrho.pgrid
+===========
 
 .. py:module:: pyrho.pgrid
 
@@ -9,28 +9,27 @@
 
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    pyrho.pgrid.PGrid
 
 
-
+Module Contents
+---------------
 
 .. py:class:: PGrid(grid_data: numpy.typing.NDArray, lattice: numpy.typing.NDArray)
 
-
    Bases: :py:obj:`monty.json.MSONable`
+
 
    Class representing of _periodic_ grid data.
 
    Represents a periodic scalar field on a regular grid. The data is defined by the lattice vectors and the grid data.
    The grid points are implicitly defined by the lattice vectors and the grid shape.
+
 
 
    .. py:method:: _transform_data(sc_mat: numpy.typing.ArrayLike, grid_out: numpy.typing.ArrayLike, origin: numpy.typing.ArrayLike | None = None, up_sample: int = 1) -> numpy.typing.NDArray
@@ -49,6 +48,7 @@ Classes
       :rtype: NDArray
 
 
+
    .. py:method:: __mul__(factor: float) -> PGrid
 
       Multiply the grid data by a factor.
@@ -59,6 +59,7 @@ Classes
       :rtype: PGrid
 
 
+
    .. py:method:: __truediv__(factor: float) -> PGrid
 
       Divide the grid data by a factor.
@@ -67,6 +68,7 @@ Classes
 
       :returns: The new PGrid object
       :rtype: PGrid
+
 
 
    .. py:method:: get_transformed(sc_mat: list[list[int]] | numpy.typing.NDArray, grid_out: list[int], origin: numpy.typing.NDArray | None = None, up_sample: int = 1) -> PGrid
@@ -80,6 +82,7 @@ Classes
 
       :returns: The transformed PGrid object
       :rtype: PGrid
+
 
 
    .. py:method:: lossy_smooth_compression(grid_out: list, smear_std: float = 0.2) -> numpy.typing.NDArray

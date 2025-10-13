@@ -1,5 +1,5 @@
-:py:mod:`pyrho`
-===============
+pyrho
+=====
 
 .. py:module:: pyrho
 
@@ -9,23 +9,15 @@
 
 
 
-Subpackages
------------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   vis/index.rst
-
-
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   charge_density/index.rst
-   pgrid/index.rst
-   utils/index.rst
+   /autoapi/pyrho/charge_density/index
+   /autoapi/pyrho/pgrid/index
+   /autoapi/pyrho/utils/index
+   /autoapi/pyrho/vis/index
 
 

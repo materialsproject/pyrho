@@ -1,5 +1,5 @@
-:py:mod:`pyrho.vis`
-===================
+pyrho.vis
+=========
 
 .. py:module:: pyrho.vis
 
@@ -11,10 +11,10 @@
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   scatter/index.rst
+   /autoapi/pyrho/vis/scatter/index
 
 

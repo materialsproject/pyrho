@@ -1,5 +1,5 @@
-:py:mod:`pyrho.utils`
-=====================
+pyrho.utils
+===========
 
 .. py:module:: pyrho.utils
 
@@ -9,12 +9,8 @@
 
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -28,6 +24,8 @@ Functions
    pyrho.utils.gaussian_smear
 
 
+Module Contents
+---------------
 
 .. py:function:: pad_arr(arr_in: numpy.typing.NDArray, shape: List[int]) -> numpy.typing.NDArray
 

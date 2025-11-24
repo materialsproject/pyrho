@@ -48,6 +48,7 @@ tests = [
   "pytest-cov>=3.0.0",
   "hypothesis>=6.98.10",
 ]
+gpu = ["cupy>=13.6.0"]
 
 [project.urls]
 homepage = "https://materialsproject.github.io/pyrho/"

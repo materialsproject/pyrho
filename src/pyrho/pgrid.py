@@ -76,10 +76,7 @@ class PGrid(MSONable):
                 shape=[g_dim_ * up_sample for g_dim_ in self.grid_data.shape],
             )
         _, new_data = get_sc_interp(
-            interp_grid_data,
-            sc_mat,
-            grid_sizes=grid_out,
-            origin=origin,
+            interp_grid_data, sc_mat, grid_sizes=grid_out, origin=origin
         )  # type: ignore
         new_data = new_data.reshape(grid_out)
         return new_data
@@ -144,10 +141,7 @@ class PGrid(MSONable):
         """
         origin = np.array(origin) if origin is not None else np.zeros(self._dim)
         new_data = self._transform_data(
-            sc_mat=sc_mat,
-            grid_out=grid_out,
-            origin=origin,
-            up_sample=up_sample,
+            sc_mat=sc_mat, grid_out=grid_out, origin=origin, up_sample=up_sample
         )
         new_lattice = np.dot(sc_mat, self.lattice)
         return PGrid(grid_data=new_data, lattice=new_lattice)

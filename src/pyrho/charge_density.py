@@ -238,10 +238,7 @@ class ChargeDensity(MSONable):
         pgrids = {}
         for k, pgrid in self.normalized_pgrids.items():
             new_pgrid = pgrid.get_transformed(
-                sc_mat=sc_mat,
-                grid_out=grid_out,
-                origin=origin,
-                up_sample=up_sample,
+                sc_mat=sc_mat, grid_out=grid_out, origin=origin, up_sample=up_sample
             )
             pgrids[k] = _scaled_data(
                 grid_data=new_pgrid,

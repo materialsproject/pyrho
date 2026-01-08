@@ -6,11 +6,15 @@ from itertools import combinations
 from typing import TYPE_CHECKING, Iterable, List, Tuple, Union
 
 import numpy as np
-from scipy.interpolate import RegularGridInterpolator
 from scipy.ndimage import convolve
 
 if TYPE_CHECKING:
     from numpy.typing import ArrayLike, NDArray
+
+try:
+    import cupy as cp
+except ImportError:
+    cp = None
 
 __all__ = [
     "gaussian_smear",
@@ -18,15 +22,21 @@ __all__ = [
     "get_plane_spacing",
     "get_sc_interp",
     "get_ucell_frac_fit_sphere",
-    "get_ucell_frac_fit_sphere",
     "interpolate_fourier",
     "pad_arr",
     "roll_array",
 ]
 
 
+def get_namespace(arr):
+    """Get array namespace (NumPy, CuPy)."""
+    if cp is not None:  # and isinstance(arr, cp.ndarray):
+        return cp, cp.asarray(arr)
+    return np, arr
+
+
 def pad_arr(
-    arr_in: Union[NDArray, "cp.ndarray"], shape: List[int], use_gpu: bool = False
+    arr_in: Union[NDArray, "cp.ndarray"], shape: List[int]
 ) -> Union[NDArray, "cp.ndarray"]:
     """Pad a function on a hypercube.
 
@@ -42,18 +52,11 @@ def pad_arr(
         Data to be padded with zeros
     shape:
         Desired shape of the array
-    use_gpu:
-        Whether to use GPU for computation.
 
     Returns
     -------
     NDArray or cp.ndarray:
-        Padded data. Returns CuPy array if use_gpu=True, NumPy array otherwise.
-
-    Raises
-    ------
-    ImportError:
-        If use_gpu=True but CuPy is not installed.
+        Padded data.
 
     Examples
     --------
@@ -68,44 +71,12 @@ def pad_arr(
     array([[1, 3],
            [4, 6]])
     """
-    if use_gpu:
-        try:
-            import cupy as cp
-        except ImportError:
-            raise RuntimeError(
-                "CuPy is not installed or cannot be imported; cannot run GPU computation."
-            )
-
-        dimensions = arr_in.shape
-        boundaries = [
-            (
-                int(cp.ceil(min(i_dim, j_dim) + 1) / 2.0),
-                int(cp.floor(min(i_dim, j_dim)) / 2.0),
-            )
-            for i_dim, j_dim in zip(dimensions, shape)
-        ]
-
-        dim = len(dimensions)
-        fmt = f"#0{dim + 2}b"
-        corners = [format(itr, fmt)[-dim:] for itr in range(2**dim)]
-        arr_out = cp.zeros(shape, dtype=arr_in.dtype)
-
-        for ic in corners:
-            islice = tuple(
-                slice(0, boundaries[idim][0])
-                if idig == "0"
-                else slice(-boundaries[idim][1], None)
-                for idim, idig in enumerate(ic)
-            )
-            arr_out[islice] = arr_in[islice]
-
-        return arr_out
-
+    xp, arr_in = get_namespace(arr_in)
     dimensions = arr_in.shape
     boundaries = [
         (
-            int(np.ceil(min(i_dim, j_dim) + 1) / 2.0),
-            int(np.floor(min(i_dim, j_dim)) / 2.0),
+            int(xp.ceil(min(i_dim, j_dim) + 1) / 2.0),
+            int(xp.floor(min(i_dim, j_dim)) / 2.0),
         )
         for i_dim, j_dim in zip(dimensions, shape)
     ]
@@ -113,7 +84,7 @@ def pad_arr(
     dim = len(dimensions)
     fmt = f"#0{dim + 2}b"
     corners = [format(itr, fmt)[-dim:] for itr in range(2**dim)]
-    arr_out = np.zeros(shape, dtype=arr_in.dtype)
+    arr_out = xp.zeros(shape, dtype=arr_in.dtype)
 
     for ic in corners:
         islice = tuple(
@@ -126,10 +97,33 @@ def pad_arr(
 
     return arr_out
 
+    # dimensions = arr_in.shape
+    # boundaries = [
+    #     (
+    #         int(np.ceil(min(i_dim, j_dim) + 1) / 2.0),
+    #         int(np.floor(min(i_dim, j_dim)) / 2.0),
+    #     )
+    #     for i_dim, j_dim in zip(dimensions, shape)
+    # ]
 
-def interpolate_fourier(
-    arr_in: NDArray, shape: List[int], use_gpu: bool = False
-) -> NDArray:
+    # dim = len(dimensions)
+    # fmt = f"#0{dim + 2}b"
+    # corners = [format(itr, fmt)[-dim:] for itr in range(2**dim)]
+    # arr_out = np.zeros(shape, dtype=arr_in.dtype)
+
+    # for ic in corners:
+    #     islice = tuple(
+    #         slice(0, boundaries[idim][0])
+    #         if idig == "0"
+    #         else slice(-boundaries[idim][1], None)
+    #         for idim, idig in enumerate(ic)
+    #     )
+    #     arr_out[islice] = arr_in[islice]
+
+    # return arr_out
+
+
+def interpolate_fourier(arr_in: NDArray, shape: List[int]) -> NDArray:
     """Fourier interpolate an array.
 
     Interpolate the data to some final shape, keep magnitude the same.
@@ -158,8 +152,6 @@ def interpolate_fourier(
         Input array of data
     shape:
         Desired shape shape of the interpolated data
-    use_gpu:
-        Whether to use GPU for computation.
 
     Returns
     -------
@@ -167,32 +159,27 @@ def interpolate_fourier(
         Interpolated data in the desired shape
 
     """
-    if use_gpu:
-        try:
-            import cupy as cp
-        except ImportError:
-            raise RuntimeError(
-                "CuPy is not installed or cannot be imported; cannot run GPU computation."
-            )
+    # if cp:
+    #     arr_in = cp.asarray(arr_in)
+    xp, arr_in = get_namespace(arr_in)
+    # arr_in = xp.asarray(arr_in)
 
-        arr_in = cp.asarray(arr_in)
-
-        fft_res = cp.fft.fftn(arr_in)
-        fft_res = pad_arr(fft_res, shape, use_gpu=True)
-
-        results = cp.fft.ifftn(fft_res) * cp.size(fft_res) / cp.size(arr_in)
-
-        if not cp.iscomplexobj(arr_in):
-            return results.real
-        return results
-
-    fft_res = np.fft.fftn(arr_in)
+    fft_res = xp.fft.fftn(arr_in)
     fft_res = pad_arr(fft_res, shape)
-    results = np.fft.ifftn(fft_res) * np.size(fft_res) / np.size(arr_in)
-    # take the real value if the input array is real
-    if not np.iscomplexobj(arr_in):
-        return np.real(results)
+
+    results = xp.fft.ifftn(fft_res) * xp.size(fft_res) / xp.size(arr_in)
+
+    if not xp.iscomplexobj(arr_in):
+        return results.real
     return results
+
+    # fft_res = np.fft.fftn(arr_in)
+    # fft_res = pad_arr(fft_res, shape)
+    # results = np.fft.ifftn(fft_res) * np.size(fft_res) / np.size(arr_in)
+    # # take the real value if the input array is real
+    # if not np.iscomplexobj(arr_in):
+    #     return np.real(results)
+    # return results
 
 
 def roll_array(arr: NDArray, roll_vec: List[int]) -> NDArray:
@@ -224,7 +211,6 @@ def get_sc_interp(
     grid_sizes: List[int],
     scipy_interp_method="linear",
     origin: Union[NDArray, List[float], Tuple[float]] = None,
-    use_gpu: bool = False,
 ) -> Tuple[NDArray, NDArray]:
     """Get the interpolated data in a supercell.
 
@@ -266,78 +252,73 @@ def get_sc_interp(
         size ``(prod(grid_size))`` the regridded data
 
     """
-    if use_gpu:
-        try:
-            import cupy as cp
-            from cupyx.scipy.interpolate import RegularGridInterpolator as CuPyRGI
-        except ImportError:
-            raise RuntimeError(
-                "CuPy is not installed or cannot be imported; cannot run GPU computation."
-            )
+    # Convert input data to CuPy arrays
+    # data = cp.asarray(data_in)
+    # sc_mat = cp.asarray(sc_mat)
+    xp, data_in = get_namespace(data_in)
+    sc_mat = xp.asarray(sc_mat)
+    if xp is cp:
+        from cupyx.scipy.interpolate import RegularGridInterpolator
+    else:
+        from scipy.interpolate import RegularGridInterpolator
 
-        # Convert input data to CuPy arrays
-        data = cp.asarray(data_in)
-        sc_mat = cp.asarray(sc_mat)
-
-        # Pad the data for boundary interpolation
-        padded_data = get_padded_array(data, use_gpu=use_gpu)
-
-        # Create interpolation grid vectors
-        uc_vecs = [cp.linspace(0, 1, isize + 1, endpoint=True) for isize in data.shape]
-
-        # Create interpolator
-        interp_func = CuPyRGI(uc_vecs, padded_data, method=scipy_interp_method)
-
-        # Generate grid coordinates
-        grid_vec = [cp.linspace(0, 1, isize, endpoint=False) for isize in grid_sizes]
-        frac_coords = cp.meshgrid(*grid_vec, indexing="ij")
-        frac_coords = cp.vstack([icoord.flatten() for icoord in frac_coords])
-
-        # Transform to supercell coordinates
-        sc_coord = cp.dot(sc_mat.T, frac_coords)
-
-        # Apply origin shift if provided
-        if origin is not None:
-            origin_array = cp.asarray([[_] for _ in origin])
-            sc_coord += origin_array
-
-        # Map coordinates to unit cell
-        mapped_coords = sc_coord - cp.floor(sc_coord)
-
-        # Perform interpolation
-        interpolated_data = interp_func(mapped_coords.T)
-
-        # Convert back to NumPy for output
-        sc_coord = cp.asnumpy(sc_coord)
-        interpolated_data = cp.asnumpy(interpolated_data)
-        return sc_coord, interpolated_data
-    # We will need to interpolated near the boundaries so we have to pad the data
+    # Pad the data for boundary interpolation
     padded_data = get_padded_array(data_in)
-    # interpolate the padded data to the sc coordinate in the cube
-    uc_vecs = [
-        np.linspace(0, 1, isize + 1, endpoint=True) for isize in data_in.shape
-    ]  # need to go from ij indexing to xy
+    # Create interpolation grid vectors
+    uc_vecs = [xp.linspace(0, 1, isize + 1, endpoint=True) for isize in data_in.shape]
+
+    # Create interpolator
     interp_func = RegularGridInterpolator(
         uc_vecs, padded_data, method=scipy_interp_method
-    )  # input data from CHGCAR requires transpose
-    grid_vec = [np.linspace(0, 1, isize, endpoint=False) for isize in grid_sizes]
-    frac_coords = np.meshgrid(
-        *grid_vec, indexing="ij"
-    )  # indexing to match the labeled array
-    frac_coords = np.vstack([icoord.flatten() for icoord in frac_coords])
+    )
 
-    sc_coord = np.dot(np.array(sc_mat).T, frac_coords)  # shape (dim, NGRID)
-
+    # Generate grid coordinates
+    grid_vec = [xp.linspace(0, 1, isize, endpoint=False) for isize in grid_sizes]
+    frac_coords = xp.meshgrid(*grid_vec, indexing="ij")
+    frac_coords = xp.vstack([icoord.flatten() for icoord in frac_coords])
+    # Transform to supercell coordinates
+    sc_coord = xp.dot(sc_mat.T, frac_coords)
+    # Apply origin shift if provided
     if origin is not None:
-        sc_coord += np.array([[_] for _ in origin])
+        origin_array = xp.asarray([[_] for _ in origin])
+        sc_coord += origin_array
 
-    mapped_coords = sc_coord - np.floor(sc_coord)
+    # Map coordinates to unit cell
+    mapped_coords = sc_coord - xp.floor(sc_coord)
+    # Perform interpolation
+    interpolated_data = interp_func(mapped_coords.T)
+    # Convert back to NumPy for output
+    if xp is cp:
+        sc_coord = xp.asnumpy(sc_coord)
+        interpolated_data = xp.asnumpy(interpolated_data)
+    return sc_coord, interpolated_data
+    # # We will need to interpolated near the boundaries so we have to pad the data
+    # padded_data = get_padded_array(data_in)
+    # # interpolate the padded data to the sc coordinate in the cube
+    # uc_vecs = [
+    #     np.linspace(0, 1, isize + 1, endpoint=True) for isize in data_in.shape
+    # ]  # need to go from ij indexing to xy
+    # interp_func = RegularGridInterpolator(
+    #     uc_vecs, padded_data, method=scipy_interp_method
+    # )  # input data from CHGCAR requires transpose
+    # grid_vec = [np.linspace(0, 1, isize, endpoint=False) for isize in grid_sizes]
+    # frac_coords = np.meshgrid(
+    #     *grid_vec, indexing="ij"
+    # )  # indexing to match the labeled array
+    # frac_coords = np.vstack([icoord.flatten() for icoord in frac_coords])
 
-    return sc_coord, interp_func(mapped_coords.T)
+    # sc_coord = np.dot(np.array(sc_mat).T, frac_coords)  # shape (dim, NGRID)
+
+    # if origin is not None:
+    #     sc_coord += np.array([[_] for _ in origin])
+
+    # mapped_coords = sc_coord - np.floor(sc_coord)
+
+    # return sc_coord, interp_func(mapped_coords.T)
 
 
 def get_padded_array(
-    data_in: Union[NDArray, "cp.ndarray"], use_gpu: bool = False
+    data_in: Union[NDArray, "cp.ndarray"],
 ) -> Union[NDArray, "cp.ndarray"]:
     """Pad the array with zeros.
 
@@ -347,27 +328,18 @@ def get_padded_array(
     ----------
     data_in:
         Array to be padded
-    use_gpu:
-        Whether to use GPU for computation.
 
     Returns
     -------
     NDArray or cp.ndarray:
-        Padded array. Returns CuPy array if use_gpu=True, NumPy array otherwise.
+        Padded array.
     """
-    if use_gpu:
-        try:
-            import cupy as cp
-        except ImportError:
-            raise RuntimeError(
-                "CuPy is not installed or cannot be imported; cannot run GPU computation."
-            )
-
-        pad_width = [(0, 1) for _ in range(data_in.ndim)]
-        return cp.pad(data_in, pad_width, mode="wrap")
-
+    xp, data_in = get_namespace(data_in)
     pad_width = [(0, 1) for _ in range(data_in.ndim)]
-    return np.pad(data_in, pad_width, mode="wrap")
+    return xp.pad(data_in, pad_width, mode="wrap")
+
+    # pad_width = [(0, 1) for _ in range(data_in.ndim)]
+    # return np.pad(data_in, pad_width, mode="wrap")
 
 
 def get_plane_spacing(lattice: NDArray) -> List[float]:

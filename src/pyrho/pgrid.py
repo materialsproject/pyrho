@@ -44,7 +44,6 @@ class PGrid(MSONable):
         grid_out: npt.ArrayLike,
         origin: npt.ArrayLike | None = None,
         up_sample: int = 1,
-        use_gpu: bool = False,
     ) -> npt.NDArray:
         """Apply a supercell transformation to the grid data.
 
@@ -75,10 +74,12 @@ class PGrid(MSONable):
             interp_grid_data = interpolate_fourier(
                 arr_in=self.grid_data,
                 shape=[g_dim_ * up_sample for g_dim_ in self.grid_data.shape],
-                use_gpu=use_gpu,
             )
         _, new_data = get_sc_interp(
-            interp_grid_data, sc_mat, grid_sizes=grid_out, origin=origin, use_gpu=use_gpu
+            interp_grid_data,
+            sc_mat,
+            grid_sizes=grid_out,
+            origin=origin,
         )  # type: ignore
         new_data = new_data.reshape(grid_out)
         return new_data
@@ -121,7 +122,6 @@ class PGrid(MSONable):
         grid_out: list[int],
         origin: npt.NDArray | None = None,
         up_sample: int = 1,
-        use_gpu: bool = False,
     ) -> PGrid:
         """Get a new PGrid object for the new transformed data.
 
@@ -148,7 +148,6 @@ class PGrid(MSONable):
             grid_out=grid_out,
             origin=origin,
             up_sample=up_sample,
-            use_gpu=use_gpu,
         )
         new_lattice = np.dot(sc_mat, self.lattice)
         return PGrid(grid_data=new_data, lattice=new_lattice)

@@ -192,7 +192,6 @@ class ChargeDensity(MSONable):
         grid_out: list[int] | int,
         origin: npt.ArrayLike = (0, 0, 0),
         up_sample: int = 1,
-        use_gpu: bool = False,
     ) -> "ChargeDensity":
         """Modify the structure and data and return a new object containing the reshaped data.
 
@@ -243,7 +242,6 @@ class ChargeDensity(MSONable):
                 grid_out=grid_out,
                 origin=origin,
                 up_sample=up_sample,
-                use_gpu=use_gpu,
             )
             pgrids[k] = _scaled_data(
                 grid_data=new_pgrid,

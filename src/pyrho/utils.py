@@ -239,17 +239,17 @@ def get_sc_interp(
         *grid_vec, indexing="ij"
     )  # indexing to match the labeled array
     frac_coords = xp.vstack([icoord.flatten() for icoord in frac_coords])
-    sc_coord = xp.dot(sc_mat.T, frac_coords)  # shape (dim, NGRID)
 
+    sc_coord = xp.dot(sc_mat.T, frac_coords)  # shape (dim, NGRID)
     if origin is not None:
         origin_array = xp.asarray([[_] for _ in origin])
         sc_coord += origin_array
-
     mapped_coords = sc_coord - xp.floor(sc_coord)
     interpolated_data = interp_func(mapped_coords.T)
     if xp is cp:
         sc_coord = xp.asnumpy(sc_coord)
         interpolated_data = xp.asnumpy(interpolated_data)
+
     return sc_coord, interpolated_data
 
 

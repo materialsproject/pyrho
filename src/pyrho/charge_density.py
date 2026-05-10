@@ -11,7 +11,7 @@ import numpy as np
 import numpy.typing as npt
 from monty.dev import deprecated
 from monty.json import MSONable
-from pymatgen.analysis.structure_matcher import ElementComparator, StructureMatcher
+from pymatgen.core.structure_matcher import ElementComparator, StructureMatcher
 from pymatgen.core.lattice import Lattice
 from pymatgen.io.vasp import Chgcar, Poscar, VolumetricData
 

@@ -76,7 +76,10 @@ get_scatter_plot(pg_2x.grid_data, pg_2x.lattice, skips=1, opacity=1, marker_size
 
 ![png](https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_5_0.png?raw=true)
 
-
+**GPU Acceleration**
+- Requires `CuPy >= 13.6.0`
+- Install using: `pip install -e .[gpu]`
+- GPU support primarily accelerates grid transformation operations, particularly `get_transformed`.
 
 # Up-sampling with Fourier interpolation
 

@@ -12,12 +12,16 @@ from scipy.ndimage import convolve
 if TYPE_CHECKING:
     from numpy.typing import ArrayLike, NDArray
 
+try:
+    import cupy as cp
+except ImportError:
+    cp = None
+
 __all__ = [
     "gaussian_smear",
     "get_padded_array",
     "get_plane_spacing",
     "get_sc_interp",
-    "get_ucell_frac_fit_sphere",
     "get_ucell_frac_fit_sphere",
     "interpolate_fourier",
     "pad_arr",
@@ -25,7 +29,16 @@ __all__ = [
 ]
 
 
-def pad_arr(arr_in: NDArray, shape: List[int]) -> NDArray:
+def get_namespace(arr):
+    """Get array namespace (NumPy, CuPy)."""
+    if cp is not None:
+        return cp, cp.asarray(arr)
+    return np, arr
+
+
+def pad_arr(
+    arr_in: Union[NDArray, "cp.ndarray"], shape: List[int]
+) -> Union[NDArray, "cp.ndarray"]:
     """Pad a function on a hypercube.
 
     .. note::
@@ -54,7 +67,7 @@ def pad_arr(arr_in: NDArray, shape: List[int]) -> NDArray:
 
     Returns
     -------
-    NDArray:
+    NDArray or cp.ndarray:
         padded data
 
     """
@@ -67,18 +80,19 @@ def pad_arr(arr_in: NDArray, shape: List[int]) -> NDArray:
         else:
             raise ValueError("Binary digit not 1 or 0")
 
+    xp, arr_in = get_namespace(arr_in)
     dimensions = arr_in.shape
     boundaries = [
         (
-            int(np.ceil(min(i_dim, j_dim) + 1) / 2.0),
-            int(np.floor(min(i_dim, j_dim)) / 2.0),
+            int(xp.ceil(min(i_dim, j_dim) + 1) / 2.0),
+            int(xp.floor(min(i_dim, j_dim)) / 2.0),
         )
         for i_dim, j_dim in zip(dimensions, shape)
     ]
     dim = len(dimensions)
     fmt = f"#0{dim + 2}b"
     corners = [format(itr, fmt)[-dim:] for itr in range(2**dim)]
-    arr_out = np.zeros(shape, dtype=arr_in.dtype)
+    arr_out = xp.zeros(shape, dtype=arr_in.dtype)
 
     for ic in corners:
         islice = tuple(
@@ -120,16 +134,17 @@ def interpolate_fourier(arr_in: NDArray, shape: List[int]) -> NDArray:
 
     Returns
     -------
-    NDArray:
+    NDArray or cp.ndarray:
         Interpolated data in the desired shape
 
     """
-    fft_res = np.fft.fftn(arr_in)
+    xp, arr_in = get_namespace(arr_in)
+    fft_res = xp.fft.fftn(arr_in)
     fft_res = pad_arr(fft_res, shape)
-    results = np.fft.ifftn(fft_res) * np.size(fft_res) / np.size(arr_in)
+    results = xp.fft.ifftn(fft_res) * xp.size(fft_res) / xp.size(arr_in)
     # take the real value if the input array is real
-    if not np.iscomplexobj(arr_in):
-        return np.real(results)
+    if not xp.iscomplexobj(arr_in):
+        return results.real
     return results
 
 
@@ -157,7 +172,7 @@ def roll_array(arr: NDArray, roll_vec: List[int]) -> NDArray:
 
 
 def get_sc_interp(
-    data_in: NDArray,
+    data_in: Union[NDArray, "cp.ndarray"],
     sc_mat: ArrayLike,
     grid_sizes: List[int],
     scipy_interp_method="linear",
@@ -204,32 +219,43 @@ def get_sc_interp(
 
     """
     # We will need to interpolated near the boundaries so we have to pad the data
+    xp, data_in = get_namespace(data_in)
+    sc_mat = xp.asarray(sc_mat)
+    if xp is cp:
+        from cupyx.scipy.interpolate import RegularGridInterpolator
+    else:
+        from scipy.interpolate import RegularGridInterpolator
     padded_data = get_padded_array(data_in)
 
     # interpolate the padded data to the sc coordinate in the cube
     uc_vecs = [
-        np.linspace(0, 1, isize + 1, endpoint=True) for isize in data_in.shape
+        xp.linspace(0, 1, isize + 1, endpoint=True) for isize in data_in.shape
     ]  # need to go from ij indexing to xy
     interp_func = RegularGridInterpolator(
         uc_vecs, padded_data, method=scipy_interp_method
     )  # input data from CHGCAR requires transpose
-    grid_vec = [np.linspace(0, 1, isize, endpoint=False) for isize in grid_sizes]
-    frac_coords = np.meshgrid(
+    grid_vec = [xp.linspace(0, 1, isize, endpoint=False) for isize in grid_sizes]
+    frac_coords = xp.meshgrid(
         *grid_vec, indexing="ij"
     )  # indexing to match the labeled array
-    frac_coords = np.vstack([icoord.flatten() for icoord in frac_coords])
+    frac_coords = xp.vstack([icoord.flatten() for icoord in frac_coords])
 
-    sc_coord = np.dot(np.array(sc_mat).T, frac_coords)  # shape (dim, NGRID)
-
+    sc_coord = xp.dot(sc_mat.T, frac_coords)  # shape (dim, NGRID)
     if origin is not None:
-        sc_coord += np.array([[_] for _ in origin])
+        origin_array = xp.asarray([[_] for _ in origin])
+        sc_coord += origin_array
+    mapped_coords = sc_coord - xp.floor(sc_coord)
+    interpolated_data = interp_func(mapped_coords.T)
+    if xp is cp:
+        sc_coord = xp.asnumpy(sc_coord)
+        interpolated_data = xp.asnumpy(interpolated_data)
 
-    mapped_coords = sc_coord - np.floor(sc_coord)
-
-    return sc_coord, interp_func(mapped_coords.T)
+    return sc_coord, interpolated_data
 
 
-def get_padded_array(data_in: NDArray) -> NDArray:
+def get_padded_array(
+    data_in: Union[NDArray, "cp.ndarray"],
+) -> Union[NDArray, "cp.ndarray"]:
     """Pad the array with zeros.
 
     Pad an array in each direction with the periodic boundary conditions.
@@ -241,20 +267,12 @@ def get_padded_array(data_in: NDArray) -> NDArray:
 
     Returns
     -------
-    NDArray:
+    NDArray or cp.ndarray:
         Padded array
-
     """
-    padded_data = data_in.copy()
-    slice_arr = [
-        [slice(0, 1) if ii == i else slice(0, None) for ii in range(len(data_in.shape))]
-        for i in range(len(data_in.shape))
-    ]
-    for idim, islice in enumerate(slice_arr):
-        padded_data = np.concatenate(
-            (padded_data, padded_data[tuple(islice)]), axis=idim
-        )
-    return padded_data
+    xp, data_in = get_namespace(data_in)
+    pad_width = [(0, 1) for _ in range(data_in.ndim)]
+    return xp.pad(data_in, pad_width, mode="wrap")
 
 
 def get_plane_spacing(lattice: NDArray) -> List[float]:

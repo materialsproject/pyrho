@@ -261,7 +261,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for pyrho.charge_density</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Chang Density Objects: Periodic Grid + Lattice / Atoms.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Chang Density Objects: Periodic Grid + Lattice / Atoms."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -285,14 +285,14 @@
     <span class="kn">from</span><span class="w"> </span><span class="nn">pymatgen.core.structure</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ChargeDensity&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ChargeDensity"</span><span class="p">]</span>
 
 
 <span class="nd">@dataclass</span>
 <div class="viewcode-block" id="ChargeDensity">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ChargeDensity</span><span class="p">(</span><span class="n">MSONable</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Charge density object.</span>
+<span class="w">    </span><span class="sd">"""Charge density object.</span>
 
 <span class="sd">    Defines a charge density with a PGrid object along with the atomic structure.</span>
 
@@ -304,10 +304,10 @@
 <span class="sd">        for spin-polarized charge densities.)</span>
 <span class="sd">    structure: Structure</span>
 <span class="sd">        The atomic structure for the electronic charge density.</span>
-<span class="sd">    normalization: str | None = &quot;vasp&quot;</span>
+<span class="sd">    normalization: str | None = "vasp"</span>
 <span class="sd">        The normalzation scheme (``vasp`` or ``None``)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="ChargeDensity.pgrids">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.pgrids">[docs]</a>
@@ -319,30 +319,30 @@
 
 <div class="viewcode-block" id="ChargeDensity.normalization">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.normalization">[docs]</a>
-    <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span></div>
+    <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"vasp"</span></div>
 
 
 <div class="viewcode-block" id="ChargeDensity.__post_init__">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.__post_init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Post initialization.</span>
+<span class="w">        </span><span class="sd">"""Post initialization.</span>
 
 <span class="sd">        Steps:</span>
 <span class="sd">            - Make sure all the lattices are identical</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">lattices</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pgrids</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">lattice</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pgrids</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">lattice</span><span class="p">)</span> <span class="k">for</span> <span class="n">lattice</span> <span class="ow">in</span> <span class="n">lattices</span>
         <span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Lattices are not identical&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Lattices are not identical"</span><span class="p">)</span></div>
 
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="ChargeDensity.normalized_data">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.normalized_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">normalized_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the normalized data.</span>
+<span class="w">        </span><span class="sd">"""Get the normalized data.</span>
 
 <span class="sd">        Since different codes use different normalization methods for</span>
 <span class="sd">        volumetric data we should convert them to the same units (electrons / Angstrom^3)</span>
@@ -352,7 +352,7 @@
 <span class="sd">        dict[str, NDArray]:</span>
 <span class="sd">            The normalized data in units of (electrons / Angstrom^3)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="n">k</span><span class="p">:</span> <span class="n">_normalize_data</span><span class="p">(</span>
                 <span class="n">grid_data</span><span class="o">=</span><span class="n">v</span><span class="o">.</span><span class="n">grid_data</span><span class="p">,</span>
@@ -367,15 +367,15 @@
 <div class="viewcode-block" id="ChargeDensity.grid_shape">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.grid_shape">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">grid_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the shape of the charge density.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pgrids</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid_shape</span></div>
+<span class="w">        </span><span class="sd">"""Return the shape of the charge density."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pgrids</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span><span class="o">.</span><span class="n">grid_shape</span></div>
 
 
     <span class="nd">@property</span>
 <div class="viewcode-block" id="ChargeDensity.normalized_pgrids">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.normalized_pgrids">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">normalized_pgrids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PGrid</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the normalized pgrids.</span>
+<span class="w">        </span><span class="sd">"""Get the normalized pgrids.</span>
 
 <span class="sd">        Since different codes use different normalization methods for</span>
 <span class="sd">        volumetric data we should convert them to the same units (electrons / Angstrom^3)</span>
@@ -385,7 +385,7 @@
 <span class="sd">        dict[str, PGrid]:</span>
 <span class="sd">            The normalized pgrids in units of (electrons / Angstrom^3)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="n">k</span><span class="p">:</span> <span class="n">PGrid</span><span class="p">(</span>
                 <span class="n">grid_data</span><span class="o">=</span><span class="n">_normalize_data</span><span class="p">(</span>
@@ -403,7 +403,7 @@
 <div class="viewcode-block" id="ChargeDensity.lattice">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.lattice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">lattice</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Lattice represented as an NDArray.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Lattice represented as an NDArray."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">matrix</span></div>
 
 
@@ -411,9 +411,9 @@
 <div class="viewcode-block" id="ChargeDensity.from_pmg">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.from_pmg">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_pmg</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span> <span class="n">vdata</span><span class="p">:</span> <span class="n">VolumetricData</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChargeDensity&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get data from pymatgen object.</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">vdata</span><span class="p">:</span> <span class="n">VolumetricData</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"vasp"</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ChargeDensity"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Get data from pymatgen object.</span>
 
 <span class="sd">        Read a single key from the data field of a VolumetricData object</span>
 
@@ -423,15 +423,15 @@
 <span class="sd">            The volumetric data object</span>
 <span class="sd">        normalization:</span>
 <span class="sd">            The normalization scheme</span>
-<span class="sd">            - &#39;vasp&#39; sum of the data / number of grid points == number of electrons</span>
-<span class="sd">            - None/&quot;none&quot; no normalization</span>
+<span class="sd">            - 'vasp' sum of the data / number of grid points == number of electrons</span>
+<span class="sd">            - None/"none" no normalization</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        ChargeDensity:</span>
 <span class="sd">            The charge density object</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">pgrids</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">k</span><span class="p">:</span> <span class="n">PGrid</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">vdata</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vdata</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">}</span>
@@ -443,12 +443,12 @@
 <div class="viewcode-block" id="ChargeDensity.reorient_axis">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.reorient_axis">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">reorient_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rorient the lattices.</span>
+<span class="w">        </span><span class="sd">"""Rorient the lattices.</span>
 
 <span class="sd">        Change the orientation of the lattice vector so that: ``a`` points along the x-axis, ``b`` is in the xy-plane,</span>
 <span class="sd">        ``c`` is in the positive-z halve of space</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">args</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">abc</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">angles</span>
         <span class="p">)</span>
@@ -457,8 +457,8 @@
 
 <div class="viewcode-block" id="ChargeDensity.get_data_in_cube">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.get_data_in_cube">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_data_in_cube</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ngrid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;total&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the charge density data sampled on a cube.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data_in_cube</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ngrid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"total"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the charge density data sampled on a cube.</span>
 
 <span class="sd">        Obtain a cubic basic cubic crop of the normalized charge density data.</span>
 
@@ -476,7 +476,7 @@
 <span class="sd">        NDArray:</span>
 <span class="sd">            Regridded data in a ngrid x ngrid x ngrid array</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">grid_out</span> <span class="o">=</span> <span class="p">[</span><span class="n">ngrid</span><span class="p">,</span> <span class="n">ngrid</span><span class="p">,</span> <span class="n">ngrid</span><span class="p">]</span>
         <span class="n">target_sc_lat_vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">s</span>
         <span class="n">sc_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span> <span class="o">@</span> <span class="n">target_sc_lat_vecs</span>
@@ -492,8 +492,8 @@
         <span class="n">grid_out</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">origin</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
         <span class="n">up_sample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChargeDensity&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Modify the structure and data and return a new object containing the reshaped data.</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ChargeDensity"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Modify the structure and data and return a new object containing the reshaped data.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -511,15 +511,15 @@
 <span class="sd">        ChargeDensity:</span>
 <span class="sd">            The transformed ChargeDensity object</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># warning if the sc_mat is not integer valued</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sc_mat</span><span class="p">),</span> <span class="n">sc_mat</span><span class="p">):</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;The `sc_mat` is not integer valued.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;Non-integer valued transformations are valid but will not product periodic structures, &quot;</span>
-                <span class="s2">&quot;thus we cannot define a new Structure object.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;We will round the sc_mat to integer values for now but can implement functionality &quot;</span>
-                <span class="s2">&quot;that returns a Molecule object in the future.&quot;</span><span class="p">,</span>
+                <span class="s2">"The `sc_mat` is not integer valued.</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"Non-integer valued transformations are valid but will not product periodic structures, "</span>
+                <span class="s2">"thus we cannot define a new Structure object.</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"We will round the sc_mat to integer values for now but can implement functionality "</span>
+                <span class="s2">"that returns a Molecule object in the future."</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="n">sc_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sc_mat</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">new_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -556,7 +556,7 @@
 <div class="viewcode-block" id="ChargeDensity.to_Chgcar">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.to_Chgcar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_Chgcar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Chgcar</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the charge density to a ``pymatgen.io.vasp.outputs.Chgcar`` object.</span>
+<span class="w">        </span><span class="sd">"""Convert the charge density to a ``pymatgen.io.vasp.outputs.Chgcar`` object.</span>
 
 <span class="sd">        Scale and convert each key in the pgrids dictionary and create a ``Chgcar`` object</span>
 
@@ -565,16 +565,16 @@
 <span class="sd">        Chgcar:</span>
 <span class="sd">            The charge density object</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_VolumetricData</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">Chgcar</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">&quot;vasp&quot;</span><span class="p">)</span></div>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_VolumetricData</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">Chgcar</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">"vasp"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ChargeDensity.to_VolumetricData">
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.to_VolumetricData">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_VolumetricData</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">VolumetricData</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">VolumetricData</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"vasp"</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VolumetricData</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the charge density to a ``pymatgen.io.vasp.outputs.VolumetricData`` object.</span>
+<span class="w">        </span><span class="sd">"""Convert the charge density to a ``pymatgen.io.vasp.outputs.VolumetricData`` object.</span>
 
 <span class="sd">        Scale and convert each key in the pgrids dictionary and create a ``VolumetricData`` object</span>
 
@@ -583,7 +583,7 @@
 <span class="sd">        VolumetricData:</span>
 <span class="sd">            The charge density object</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">struct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalized_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -598,8 +598,8 @@
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.from_file">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_file</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pmg_obj</span><span class="p">:</span> <span class="n">VolumetricData</span> <span class="o">=</span> <span class="n">Chgcar</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChargeDensity&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read a ChargeDensity object from a file.</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ChargeDensity"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Read a ChargeDensity object from a file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -613,7 +613,7 @@
 <span class="sd">        -------</span>
 <span class="sd">            ChargeDensity: The ChargeDensity object</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pmg</span><span class="p">(</span><span class="n">pmg_obj</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span></div>
 
 
@@ -622,8 +622,8 @@
 <a class="viewcode-back" href="../../autoapi/pyrho/charge_density/index.html#pyrho.charge_density.ChargeDensity.from_hdf5">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_hdf5</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pmg_obj</span><span class="p">:</span> <span class="n">VolumetricData</span> <span class="o">=</span> <span class="n">Chgcar</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChargeDensity&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read a ChargeDensity object from a hdf5 file.</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ChargeDensity"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Read a ChargeDensity object from a hdf5 file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -637,7 +637,7 @@
 <span class="sd">        -------</span>
 <span class="sd">            ChargeDensity: The ChargeDensity object</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pmg</span><span class="p">(</span><span class="n">pmg_obj</span><span class="o">.</span><span class="n">from_hdf5</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span></div>
 </div>
 
@@ -646,7 +646,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_matched_structure_mapping</span><span class="p">(</span>
     <span class="n">uc_struct</span><span class="p">:</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">sc_struct</span><span class="p">:</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">sm</span><span class="p">:</span> <span class="n">StructureMatcher</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">npt</span><span class="o">.</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the mapping of the supercell to the unit cell.</span>
+<span class="w">    </span><span class="sd">"""Get the mapping of the supercell to the unit cell.</span>
 
 <span class="sd">    Get the mapping from the supercell structure onto the base structure,</span>
 <span class="sd">    Note: this only works for structures that are exactly matched.</span>
@@ -661,7 +661,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    sc_m : supercell matrix to apply to s1 to get s2</span>
 <span class="sd">    total_t : translation to apply on s1 * sc_m to get s2</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">sm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">sm</span> <span class="o">=</span> <span class="n">StructureMatcher</span><span class="p">(</span>
             <span class="n">primitive_cell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="n">ElementComparator</span><span class="p">(),</span> <span class="n">attempt_supercell</span><span class="o">=</span><span class="kc">True</span>
@@ -683,9 +683,9 @@
     <span class="n">grid_out</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">ArrayLike</span><span class="p">,</span>
     <span class="n">up_sample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">sm</span><span class="p">:</span> <span class="n">StructureMatcher</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span><span class="p">,</span>
+    <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"vasp"</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the volumetric data in the supercell.</span>
+<span class="w">    </span><span class="sd">"""Get the volumetric data in the supercell.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -695,17 +695,17 @@
 <span class="sd">    up_sample: up sampling factor.</span>
 <span class="sd">    sm: StructureMatcher instance</span>
 <span class="sd">    normalization: normalization method for the volumetric data.</span>
-<span class="sd">        default is &quot;vasp&quot; which assumes the normalization is the</span>
-<span class="sd">        same as VASP&#39;s CHGCAR file. If None, no normalization is</span>
+<span class="sd">        default is "vasp" which assumes the normalization is the</span>
+<span class="sd">        same as VASP's CHGCAR file. If None, no normalization is</span>
 <span class="sd">        done.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    VolumetricData: volumetric data in the supercell</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">trans</span> <span class="o">=</span> <span class="n">get_matched_structure_mapping</span><span class="p">(</span><span class="n">vd</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> <span class="n">sc_struct</span><span class="o">=</span><span class="n">sc_struct</span><span class="p">,</span> <span class="n">sm</span><span class="o">=</span><span class="n">sm</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">trans</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find a supercell mapping&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Could not find a supercell mapping"</span><span class="p">)</span>
     <span class="n">sc_mat</span><span class="p">,</span> <span class="n">total_t</span> <span class="o">=</span> <span class="n">trans</span>
     <span class="n">cden</span> <span class="o">=</span> <span class="n">ChargeDensity</span><span class="o">.</span><span class="n">from_pmg</span><span class="p">(</span><span class="n">vd</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span><span class="p">)</span>
     <span class="n">orig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">total_t</span><span class="p">,</span> <span class="n">sc_mat</span><span class="p">)</span>
@@ -719,7 +719,7 @@
 
 <span class="nd">@deprecated</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">multiply_aug</span><span class="p">(</span><span class="n">data_aug</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the data in the augmentation charge.</span>
+<span class="w">    </span><span class="sd">"""Update the data in the augmentation charge.</span>
 
 <span class="sd">    The original idea here was to use to to speed up some vasp calculations for</span>
 <span class="sd">    supercells by initializing the entire CHGCAR file.</span>
@@ -727,7 +727,7 @@
 
 <span class="sd">    This is a naive way to multiply the Augmentation data in the CHGCAR,</span>
 <span class="sd">    a real working implementation will require analysis of the PAW projection operators.</span>
-<span class="sd">    However, even with such an implementation, the speed up will be minimal due to VASP&#39;s internal</span>
+<span class="sd">    However, even with such an implementation, the speed up will be minimal due to VASP's internal</span>
 <span class="sd">    minimization algorithms.</span>
 
 <span class="sd">    Parameters</span>
@@ -742,17 +742,17 @@
 <span class="sd">    List[str]:</span>
 <span class="sd">        Each line of the augmentation data.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">cur_block</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">ll</span> <span class="ow">in</span> <span class="n">data_aug</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;augmentation&quot;</span> <span class="ow">in</span> <span class="n">ll</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"augmentation"</span> <span class="ow">in</span> <span class="n">ll</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">cur_block</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">factor</span><span class="p">):</span>
                     <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">cur_block</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;augmentation occupancies</span><span class="si">{</span><span class="n">cnt</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}{</span><span class="n">cur_block</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"augmentation occupancies</span><span class="si">{</span><span class="n">cnt</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}{</span><span class="n">cur_block</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
                     <span class="p">)</span>
                     <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cur_block</span><span class="p">)</span>
             <span class="n">cur_block</span> <span class="o">=</span> <span class="p">[</span><span class="n">ll</span><span class="p">]</span>
@@ -761,16 +761,16 @@
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">factor</span><span class="p">):</span>
         <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">cur_block</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;augmentation occupancies</span><span class="si">{</span><span class="n">cnt</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}{</span><span class="n">cur_block</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"augmentation occupancies</span><span class="si">{</span><span class="n">cnt</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}{</span><span class="n">cur_block</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
         <span class="p">)</span>
         <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cur_block</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_normalize_data</span><span class="p">(</span>
-    <span class="n">grid_data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">lattice</span><span class="p">:</span> <span class="n">Lattice</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span>
+    <span class="n">grid_data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">lattice</span><span class="p">:</span> <span class="n">Lattice</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"vasp"</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize the data to the number of electrons.</span>
+<span class="w">    </span><span class="sd">"""Normalize the data to the number of electrons.</span>
 
 <span class="sd">    Since different codes use different normalization methods for</span>
 <span class="sd">    volumetric data we should convert them to the same units (electrons / Angstrom^3)</span>
@@ -797,19 +797,19 @@
 <span class="sd">    NDArray:</span>
 <span class="sd">        The normalized grid data</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">normalization</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">normalization</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">normalization</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">normalization</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"n"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">grid_data</span>
-    <span class="k">elif</span> <span class="n">normalization</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;v&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">normalization</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"v"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">grid_data</span> <span class="o">/</span> <span class="n">lattice</span><span class="o">.</span><span class="n">volume</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Not a valid normalization scheme&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not a valid normalization scheme"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_scaled_data</span><span class="p">(</span>
-    <span class="n">grid_data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">lattice</span><span class="p">:</span> <span class="n">Lattice</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;vasp&quot;</span>
+    <span class="n">grid_data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">lattice</span><span class="p">:</span> <span class="n">Lattice</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"vasp"</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Undo the normalization of the data.</span>
+<span class="w">    </span><span class="sd">"""Undo the normalization of the data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -825,13 +825,13 @@
 <span class="sd">    NDArray:</span>
 <span class="sd">        The un-normalized grid data</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">normalization</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">normalization</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">normalization</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">normalization</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"n"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">grid_data</span>
-    <span class="k">elif</span> <span class="n">normalization</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;v&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">normalization</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"v"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">grid_data</span> <span class="o">*</span> <span class="n">lattice</span><span class="o">.</span><span class="n">volume</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Not a valid normalization scheme&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Not a valid normalization scheme"</span><span class="p">)</span>
 </pre></div>
         </article>
       </div>

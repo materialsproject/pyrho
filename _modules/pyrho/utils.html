@@ -261,7 +261,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for pyrho.utils</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Util Functions.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Util Functions."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -276,22 +276,22 @@
     <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">NDArray</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;gaussian_smear&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_padded_array&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_plane_spacing&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_sc_interp&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_ucell_frac_fit_sphere&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;get_ucell_frac_fit_sphere&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;interpolate_fourier&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;pad_arr&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;roll_array&quot;</span><span class="p">,</span>
+    <span class="s2">"gaussian_smear"</span><span class="p">,</span>
+    <span class="s2">"get_padded_array"</span><span class="p">,</span>
+    <span class="s2">"get_plane_spacing"</span><span class="p">,</span>
+    <span class="s2">"get_sc_interp"</span><span class="p">,</span>
+    <span class="s2">"get_ucell_frac_fit_sphere"</span><span class="p">,</span>
+    <span class="s2">"get_ucell_frac_fit_sphere"</span><span class="p">,</span>
+    <span class="s2">"interpolate_fourier"</span><span class="p">,</span>
+    <span class="s2">"pad_arr"</span><span class="p">,</span>
+    <span class="s2">"roll_array"</span><span class="p">,</span>
 <span class="p">]</span>
 
 
 <div class="viewcode-block" id="pad_arr">
 <a class="viewcode-back" href="../../autoapi/pyrho/utils/index.html#pyrho.utils.pad_arr">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">pad_arr</span><span class="p">(</span><span class="n">arr_in</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pad a function on a hypercube.</span>
+<span class="w">    </span><span class="sd">"""Pad a function on a hypercube.</span>
 
 <span class="sd">    .. note::</span>
 <span class="sd">        We basically need to move the data at the corners a hypercube to the corners of a bigger/smaller</span>
@@ -322,15 +322,15 @@
 <span class="sd">    NDArray:</span>
 <span class="sd">        padded data</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_slice</span><span class="p">(</span><span class="n">idig</span><span class="p">,</span> <span class="n">idim</span><span class="p">,</span> <span class="n">bound_pairs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">idig</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">idig</span> <span class="o">==</span> <span class="s2">"0"</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">bound_pairs</span><span class="p">[</span><span class="n">idim</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="n">idig</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">idig</span> <span class="o">==</span> <span class="s2">"1"</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="o">-</span><span class="n">bound_pairs</span><span class="p">[</span><span class="n">idim</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Binary digit not 1 or 0&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Binary digit not 1 or 0"</span><span class="p">)</span>
 
     <span class="n">dimensions</span> <span class="o">=</span> <span class="n">arr_in</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">boundaries</span> <span class="o">=</span> <span class="p">[</span>
@@ -341,7 +341,7 @@
         <span class="k">for</span> <span class="n">i_dim</span><span class="p">,</span> <span class="n">j_dim</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">dimensions</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
     <span class="p">]</span>
     <span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)</span>
-    <span class="n">fmt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#0</span><span class="si">{</span><span class="n">dim</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="si">}</span><span class="s2">b&quot;</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"#0</span><span class="si">{</span><span class="n">dim</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="si">}</span><span class="s2">b"</span>
     <span class="n">corners</span> <span class="o">=</span> <span class="p">[</span><span class="nb">format</span><span class="p">(</span><span class="n">itr</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)[</span><span class="o">-</span><span class="n">dim</span><span class="p">:]</span> <span class="k">for</span> <span class="n">itr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">dim</span><span class="p">)]</span>
     <span class="n">arr_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">arr_in</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
@@ -357,7 +357,7 @@
 <div class="viewcode-block" id="interpolate_fourier">
 <a class="viewcode-back" href="../../autoapi/pyrho/utils/index.html#pyrho.utils.interpolate_fourier">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">interpolate_fourier</span><span class="p">(</span><span class="n">arr_in</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fourier interpolate an array.</span>
+<span class="w">    </span><span class="sd">"""Fourier interpolate an array.</span>
 
 <span class="sd">    Interpolate the data to some final shape, keep magnitude the same.</span>
 <span class="sd">    Will perform best if the input array is periodic in all directions.</span>
@@ -391,7 +391,7 @@
 <span class="sd">    NDArray:</span>
 <span class="sd">        Interpolated data in the desired shape</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">fft_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftn</span><span class="p">(</span><span class="n">arr_in</span><span class="p">)</span>
     <span class="n">fft_res</span> <span class="o">=</span> <span class="n">pad_arr</span><span class="p">(</span><span class="n">fft_res</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftn</span><span class="p">(</span><span class="n">fft_res</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">fft_res</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">arr_in</span><span class="p">)</span>
@@ -405,7 +405,7 @@
 <div class="viewcode-block" id="roll_array">
 <a class="viewcode-back" href="../../autoapi/pyrho/utils/index.html#pyrho.utils.roll_array">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">roll_array</span><span class="p">(</span><span class="n">arr</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">roll_vec</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Roll the array along specified axes.</span>
+<span class="w">    </span><span class="sd">"""Roll the array along specified axes.</span>
 
 <span class="sd">    Shift the index of an ndarray based on roll_vec.</span>
 
@@ -421,7 +421,7 @@
 <span class="sd">    NDArray:</span>
 <span class="sd">        The rolled array</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">roll_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">roll_vec</span><span class="p">):</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">roll_val</span><span class="p">,</span> <span class="n">ii</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">arr</span></div>
@@ -434,10 +434,10 @@
     <span class="n">data_in</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span>
     <span class="n">sc_mat</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
     <span class="n">grid_sizes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
-    <span class="n">scipy_interp_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+    <span class="n">scipy_interp_method</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">,</span>
     <span class="n">origin</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">NDArray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the interpolated data in a supercell.</span>
+<span class="w">    </span><span class="sd">"""Get the interpolated data in a supercell.</span>
 
 <span class="sd">    Take a data array defined on a regular lattice and a new set of lattice</span>
 <span class="sd">    vector (in units of the the original lattice), reproduce the data on the new grid.</span>
@@ -453,8 +453,8 @@
 
 <span class="sd">    .. note::</span>
 <span class="sd">        This algorithm can be used in real space and fourier space</span>
-<span class="sd">        For real space we expect the data to be smooth, so we should use &quot;linear&quot; interpolation</span>
-<span class="sd">        For fourier space we expect the position of the exact fourier component is important so use &quot;nearest&quot;</span>
+<span class="sd">        For real space we expect the data to be smooth, so we should use "linear" interpolation</span>
+<span class="sd">        For fourier space we expect the position of the exact fourier component is important so use "nearest"</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -476,7 +476,7 @@
 <span class="sd">    NDArray:</span>
 <span class="sd">        size ``(prod(grid_size))`` the regridded data</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># We will need to interpolated near the boundaries so we have to pad the data</span>
     <span class="n">padded_data</span> <span class="o">=</span> <span class="n">get_padded_array</span><span class="p">(</span><span class="n">data_in</span><span class="p">)</span>
 
@@ -489,7 +489,7 @@
     <span class="p">)</span>  <span class="c1"># input data from CHGCAR requires transpose</span>
     <span class="n">grid_vec</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">isize</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">isize</span> <span class="ow">in</span> <span class="n">grid_sizes</span><span class="p">]</span>
     <span class="n">frac_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
-        <span class="o">*</span><span class="n">grid_vec</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
+        <span class="o">*</span><span class="n">grid_vec</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span>
     <span class="p">)</span>  <span class="c1"># indexing to match the labeled array</span>
     <span class="n">frac_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">icoord</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="k">for</span> <span class="n">icoord</span> <span class="ow">in</span> <span class="n">frac_coords</span><span class="p">])</span>
 
@@ -507,7 +507,7 @@
 <div class="viewcode-block" id="get_padded_array">
 <a class="viewcode-back" href="../../autoapi/pyrho/utils/index.html#pyrho.utils.get_padded_array">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_padded_array</span><span class="p">(</span><span class="n">data_in</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pad the array with zeros.</span>
+<span class="w">    </span><span class="sd">"""Pad the array with zeros.</span>
 
 <span class="sd">    Pad an array in each direction with the periodic boundary conditions.</span>
 
@@ -521,7 +521,7 @@
 <span class="sd">    NDArray:</span>
 <span class="sd">        Padded array</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">padded_data</span> <span class="o">=</span> <span class="n">data_in</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">slice_arr</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">ii</span> <span class="o">==</span> <span class="n">i</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data_in</span><span class="o">.</span><span class="n">shape</span><span class="p">))]</span>
@@ -538,7 +538,7 @@
 <div class="viewcode-block" id="get_plane_spacing">
 <a class="viewcode-back" href="../../autoapi/pyrho/utils/index.html#pyrho.utils.get_plane_spacing">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_plane_spacing</span><span class="p">(</span><span class="n">lattice</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the cartesian spacing between periodic planes of a unit cell.</span>
+<span class="w">    </span><span class="sd">"""Get the cartesian spacing between periodic planes of a unit cell.</span>
 
 <span class="sd">    &gt;&gt;&gt; get_plane_spacing([[1,0,0], [1,1,0], [0,0,2]]) # doctest: +ELLIPSIS</span>
 <span class="sd">    [0.7653..., 1.042..., 2.0]</span>
@@ -554,7 +554,7 @@
 <span class="sd">        List where the k-th element is is the spacing of planes generated by all</span>
 <span class="sd">        lattice vectors EXCEPT the k-th one</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># get all pairwise projections i must be smaller than j</span>
     <span class="n">ndim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lattice</span><span class="p">)</span>
     <span class="n">idx_pairs</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">ndim</span><span class="p">),</span> <span class="mi">2</span><span class="p">)]</span>
@@ -580,7 +580,7 @@
 <div class="viewcode-block" id="get_ucell_frac_fit_sphere">
 <a class="viewcode-back" href="../../autoapi/pyrho/utils/index.html#pyrho.utils.get_ucell_frac_fit_sphere">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_ucell_frac_fit_sphere</span><span class="p">(</span><span class="n">lattice</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lattice ffractions in each direction that are within r of the origin.</span>
+<span class="w">    </span><span class="sd">"""Lattice ffractions in each direction that are within r of the origin.</span>
 
 <span class="sd">    Get the smallest you can make make the lattice parameter in each direction to fit a</span>
 <span class="sd">    sphere of radius `r`. For lattice vector `k`, the sphere must be contained within</span>
@@ -601,7 +601,7 @@
 <span class="sd">    Iterable of floats</span>
 <span class="sd">        fraction of lattice vector in each direction need to fit the sphere</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">rfrac</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">ispace</span> <span class="ow">in</span> <span class="n">get_plane_spacing</span><span class="p">(</span><span class="n">lattice</span><span class="o">=</span><span class="n">lattice</span><span class="p">):</span>
         <span class="n">rfrac</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">r</span> <span class="o">/</span> <span class="n">ispace</span><span class="p">)</span>
@@ -617,7 +617,7 @@
     <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
     <span class="n">multiple</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">NDArray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply an isotropic Gaussian smearing to periodic data.</span>
+<span class="w">    </span><span class="sd">"""Apply an isotropic Gaussian smearing to periodic data.</span>
 
 <span class="sd">    Apply a Gaussian smearing of width (standard deviation) `sigma` to</span>
 <span class="sd">    the periodic field.  The smearing obeys periodic boundary conditions at</span>
@@ -639,7 +639,7 @@
 <span class="sd">    NDArray:</span>
 <span class="sd">        The smear data array.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Since smearing requires floating point, we need to make sure the input is floating point</span>
     <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
@@ -672,7 +672,7 @@
 
     <span class="c1"># Get the fractional positions</span>
     <span class="n">filter_frac_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ng</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">ng</span> <span class="ow">in</span> <span class="n">filter_shape</span><span class="p">]</span>
-    <span class="n">frac_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="o">*</span><span class="n">filter_frac_c</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
+    <span class="n">frac_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="o">*</span><span class="n">filter_frac_c</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>
     <span class="n">frac_pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">i_dir</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="k">for</span> <span class="n">i_dir</span> <span class="ow">in</span> <span class="n">frac_pos</span><span class="p">]</span>
 
     <span class="c1"># convert to cartesian</span>
@@ -690,8 +690,8 @@
     <span class="n">gauss</span> <span class="o">=</span> <span class="n">gauss</span> <span class="o">/</span> <span class="n">gauss</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="c1"># reduce dimension before convolution if the input is 1D</span>
     <span class="k">if</span> <span class="n">is_1d</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">convolve</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">weights</span><span class="o">=</span><span class="n">gauss</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">),</span> <span class="n">gauss</span>
-    <span class="k">return</span> <span class="n">convolve</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">arr</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">gauss</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">),</span> <span class="n">gauss</span></div>
+        <span class="k">return</span> <span class="n">convolve</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">weights</span><span class="o">=</span><span class="n">gauss</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wrap"</span><span class="p">),</span> <span class="n">gauss</span>
+    <span class="k">return</span> <span class="n">convolve</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">arr</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">gauss</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wrap"</span><span class="p">),</span> <span class="n">gauss</span></div>
 
 </pre></div>
         </article>

@@ -14,14 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
         with:
-          python-version: 3.13
+          python-version: "3.13"
+          activate-environment: true
 
       - name: Install pre-commit
-        run: uv pip install --system pre-commit
+        run: uv sync --locked --only-group dev
 
       - name: Run pre-commit autoupdate
         run: pre-commit autoupdate

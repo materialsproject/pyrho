@@ -27,8 +27,8 @@ requires-python = ">=3.11"
 
 [tool.setuptools_scm]
 
-[project.optional-dependencies]
-dev = ["pre-commit==4.3.0"]
+[dependency-groups]
+dev = ["pre-commit==4.3.0", { include-group = "test" }]
 docs = [
   "numpydoc==1.9.0",
   "sphinx==8.2.3",
@@ -41,7 +41,7 @@ docs = [
   "sphinx-autoapi==3.6.1",
   "lxml_html_clean==0.4.3",
 ]
-tests = [
+test = [
   "pytest>=7.1.2",
   "pytest-cov>=3.0.0",
   "hypothesis>=6.98.10",

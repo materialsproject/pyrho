@@ -31,6 +31,7 @@ repos:
     entry: codespell
     language: python
     types: [text]
+    exclude: ^uv\.lock$
     args: [
       --ignore-words-list, 'titel,statics,ba,nd,te,mater,commun,vise,dscribe',
       --skip, "*.ipynb,./tests,*paper*",

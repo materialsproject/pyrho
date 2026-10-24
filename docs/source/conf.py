@@ -33,7 +33,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
-    "m2r2",
+    "myst_parser",
     "nbsphinx",
     "nbsphinx_link",
     "autoapi.extension",

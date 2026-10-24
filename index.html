@@ -273,23 +273,19 @@
 </pre></div>
 </div>
 <p>Tools for re-griding volumetric quantum chemistry data for machine-learning purposes.</p>
-<a class="reference external image-reference" href="https://github.com/materialsproject/pyrho/actions/workflows/testing.yml"><img alt=".github/workflows/testing.yml" src="https://github.com/materialsproject/pyrho/actions/workflows/testing.yml/badge.svg" />
-</a>
-<a class="reference external image-reference" href="https://codecov.io/gh/materialsproject/pyrho"><img alt="codecov" src="https://codecov.io/gh/materialsproject/pyrho/branch/main/graph/badge.svg?token=YoFMXzpeKI" />
-</a>
-<a class="reference external image-reference" href="https://zenodo.org/badge/latestdoi/266894456"><img alt="DOI" src="https://zenodo.org/badge/266894456.svg" />
-</a>
+<p><a class="reference external" href="https://github.com/materialsproject/pyrho/actions/workflows/testing.yml"><img alt=".github/workflows/testing.yml" src="https://github.com/materialsproject/pyrho/actions/workflows/testing.yml/badge.svg" /></a>
+<a class="reference external" href="https://codecov.io/gh/materialsproject/pyrho"><img alt="codecov" src="https://codecov.io/gh/materialsproject/pyrho/branch/main/graph/badge.svg?token=YoFMXzpeKI" /></a>
+<a class="reference external" href="https://zenodo.org/badge/latestdoi/266894456"><img alt="DOI" src="https://zenodo.org/badge/266894456.svg" /></a></p>
 <p>If you use this package in your research, please cite the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Shen, J.-X., Munro, J. M., Horton, M. K., Huck, P., Dwaraknath, S., &amp; Persson, K. A. (2022).
 A representation-independent electronic charge density database for crystalline materials.
 Sci Data, 9(661), 1–7. doi: 10.1038/s41597-022-01746-z
 </pre></div>
 </div>
-</section>
 <section id="regridding-data-using-pyrho">
-<h1>Regridding data using PyRho<a class="headerlink" href="#regridding-data-using-pyrho" title="Link to this heading">¶</a></h1>
+<h2>Regridding data using PyRho<a class="headerlink" href="#regridding-data-using-pyrho" title="Link to this heading">¶</a></h2>
 <section id="the-pgrid-class">
-<h2>The PGrid Class<a class="headerlink" href="#the-pgrid-class" title="Link to this heading">¶</a></h2>
+<h3>The PGrid Class<a class="headerlink" href="#the-pgrid-class" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">PGrid</span></code> object is defined by an N-dimensional numpy array <code class="docutils literal notranslate"><span class="pre">grid_data</span></code> and a N lattice vector given as a matrix <code class="docutils literal notranslate"><span class="pre">lattice</span></code>. The input array is a scalar field that is defined on a regularly spaced set of grid points starting at the origin. For example, you can construct a periodic field as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyrho.pgrid</span><span class="w"> </span><span class="kn">import</span> <span class="n">PGrid</span>
@@ -314,20 +310,18 @@ Sci Data, 9(661), 1–7. doi: 10.1038/s41597-022-01746-z
 <span class="n">get_scatter_plot</span><span class="p">(</span><span class="n">pg2d</span><span class="o">.</span><span class="n">grid_data</span><span class="p">,</span> <span class="n">pg2d</span><span class="o">.</span><span class="n">lattice</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference external image-reference" href="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_3_0.png?raw=true"><img alt="" src="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_3_0.png?raw=true" />
-</a>
+<p><img alt="" src="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_3_0.png?raw=true" /></p>
 <p>The period data in the PGrid object must be fixed-scaled so if you half the number of points in the domain, the range of the data will stay the same. This is different from how the charge density is stored in codes like VASP where the values at each point change based on the number of grid points used to store the data.</p>
 <p>The regridding capabilities allow the user to obtain the data in any arbitrary representation. For example, if we want to shift to the middle of the unit-cell and create a ((1,1), (1,-1)) super-cell, with a 30 by 32 grid, we can run:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pg_2x</span> <span class="o">=</span> <span class="n">pg2d</span><span class="o">.</span><span class="n">get_transformed</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">origin</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">grid_out</span><span class="o">=</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
 <span class="n">get_scatter_plot</span><span class="p">(</span><span class="n">pg_2x</span><span class="o">.</span><span class="n">grid_data</span><span class="p">,</span> <span class="n">pg_2x</span><span class="o">.</span><span class="n">lattice</span><span class="p">,</span> <span class="n">skips</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference external image-reference" href="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_5_0.png?raw=true"><img alt="png" src="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_5_0.png?raw=true" />
-</a>
+<p><img alt="png" src="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_5_0.png?raw=true" /></p>
 </section>
 </section>
 <section id="up-sampling-with-fourier-interpolation">
-<h1>Up-sampling with Fourier interpolation<a class="headerlink" href="#up-sampling-with-fourier-interpolation" title="Link to this heading">¶</a></h1>
+<h2>Up-sampling with Fourier interpolation<a class="headerlink" href="#up-sampling-with-fourier-interpolation" title="Link to this heading">¶</a></h2>
 <p>The up-sampling capabilities allow the user to exploit the periodicity of the data to obtain a higher-resolution grid.
 As an example, we can take a sparsely sampled periodic data in 1-D:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">func1</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -341,8 +335,7 @@ As an example, we can take a sparsely sampled periodic data in 1-D:</p>
 <span class="n">get_scatter_plot</span><span class="p">(</span><span class="n">pg1d</span><span class="o">.</span><span class="n">grid_data</span><span class="p">,</span> <span class="n">pg1d</span><span class="o">.</span><span class="n">lattice</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference external image-reference" href="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_7_0.png?raw=true"><img alt="png" src="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_7_0.png?raw=true" />
-</a>
+<p><img alt="png" src="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_7_0.png?raw=true" /></p>
 <p>This does not really resemble the <code class="docutils literal notranslate"><span class="pre">np.sin(6*X)</span></code> function we used to generate the data.
 However, if we use an up-sample factor of 8, we can obtain a more dense representation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pg1d_fine</span> <span class="o">=</span> <span class="n">pg1d</span><span class="o">.</span><span class="n">get_transformed</span><span class="p">(</span>
@@ -355,10 +348,9 @@ However, if we use an up-sample factor of 8, we can obtain a more dense represen
 <span class="n">get_scatter_plot</span><span class="p">(</span><span class="n">pg1d_fine</span><span class="o">.</span><span class="n">grid_data</span><span class="p">,</span> <span class="n">pg1d_fine</span><span class="o">.</span><span class="n">lattice</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference external image-reference" href="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_9_0.png?raw=true"><img alt="png" src="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_9_0.png?raw=true" />
-</a>
+<p><img alt="png" src="https://github.com/materialsproject/pyrho/blob/main/docs/source/_static/img/output_9_0.png?raw=true" /></p>
 <section id="the-chargedensity-class">
-<h2>The ChargeDensity class<a class="headerlink" href="#the-chargedensity-class" title="Link to this heading">¶</a></h2>
+<h3>The ChargeDensity class<a class="headerlink" href="#the-chargedensity-class" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">ChargeDensity</span></code> object can use the <code class="docutils literal notranslate"><span class="pre">from_file</span></code> construction method from <code class="docutils literal notranslate"><span class="pre">pymatgen.io.vasp.outputs.Chgcar</span></code> as shown below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pymatgen.io.vasp</span><span class="w"> </span><span class="kn">import</span> <span class="n">Chgcar</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyrho.charge_density</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChargeDensity</span>
@@ -377,6 +369,8 @@ However, if we use an up-sample factor of 8, we can obtain a more dense represen
     <span class="n">grid_out</span><span class="o">=</span><span class="n">cden_sc</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">,</span>
     <span class="n">up_sample</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
+
+
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">normalized_data</span></code> property contains a dictionary keyed with the same keys as <code class="docutils literal notranslate"><span class="pre">Chgcar.data</span></code> (typically “total” and “diff” for spin charge densities).
@@ -385,9 +379,10 @@ This quantity is the fixed scalar field that should remain fixed after the trans
 <span class="nb">print</span><span class="p">(</span>
     <span class="sa">f</span><span class="s2">"The normalized charge density data is has a range of </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2"> e-/Ang^3"</span>
 <span class="p">)</span>
+
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">normalized</span> <span class="n">charge</span> <span class="n">density</span> <span class="n">data</span> <span class="ow">is</span> <span class="n">has</span> <span class="n">a</span> <span class="nb">range</span> <span class="n">of</span> <span class="o">-</span><span class="mf">0.188</span> <span class="o">--&gt;</span> <span class="mf">0.572</span> <span class="n">e</span><span class="o">-/</span><span class="n">Ang</span><span class="o">^</span><span class="mi">3</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The normalized charge density data is has a range of -0.188 --&gt; 0.572 e-/Ang^3
 </pre></div>
 </div>
 <p>Note that the PAW transformation sometimes results in negative charge densities.</p>
@@ -395,25 +390,28 @@ This quantity is the fixed scalar field that should remain fixed after the trans
 <span class="nb">print</span><span class="p">(</span>
     <span class="sa">f</span><span class="s2">"The transformed normalized charge density data is has a range of </span><span class="si">{</span><span class="n">trans_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">trans_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2"> e-/Ang^3"</span>
 <span class="p">)</span>
+
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">transformed</span> <span class="n">normalized</span> <span class="n">charge</span> <span class="n">density</span> <span class="n">data</span> <span class="ow">is</span> <span class="n">has</span> <span class="n">a</span> <span class="nb">range</span> <span class="n">of</span> <span class="o">-</span><span class="mf">0.188</span> <span class="o">--&gt;</span> <span class="mf">0.572</span> <span class="n">e</span><span class="o">-/</span><span class="n">Ang</span><span class="o">^</span><span class="mi">3</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The transformed normalized charge density data is has a range of -0.188 --&gt; 0.572 e-/Ang^3
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sc_data</span> <span class="o">=</span> <span class="n">cden_sc</span><span class="o">.</span><span class="n">normalized_data</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span>
     <span class="sa">f</span><span class="s2">"The reference normalized charge density data is has a range of </span><span class="si">{</span><span class="n">sc_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">sc_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2"> e-/Ang^3"</span>
 <span class="p">)</span>
+
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">reference</span> <span class="n">normalized</span> <span class="n">charge</span> <span class="n">density</span> <span class="n">data</span> <span class="ow">is</span> <span class="n">has</span> <span class="n">a</span> <span class="nb">range</span> <span class="n">of</span> <span class="o">-</span><span class="mf">0.188</span> <span class="o">--&gt;</span> <span class="mf">0.570</span> <span class="n">e</span><span class="o">-/</span><span class="n">Ang</span><span class="o">^</span><span class="mi">3</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The reference normalized charge density data is has a range of -0.188 --&gt; 0.570 e-/Ang^3
 </pre></div>
 </div>
 </section>
 <section id="credits">
-<h2>Credits<a class="headerlink" href="#credits" title="Link to this heading">¶</a></h2>
+<h3>Credits<a class="headerlink" href="#credits" title="Link to this heading">¶</a></h3>
 <p>Jimmy-Xuan Shen: Project lead</p>
 <p>Wennie Wang: For naming the package</p>
+</section>
 </section>
 </section>
 
